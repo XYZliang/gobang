@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="1.0"
+	xmlns="http://java.sun.com/xml/ns/persistence"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence persistence_1_0.xsd">
+
+	<persistence-unit name="DM8"
+		transaction-type="RESOURCE_LOCAL">
+		<provider>org.hibernate.ejb.HibernatePersistence</provider>
+		<properties>
+			<property name="hibernate.connection.driver_class"
+				value="dm.jdbc.driver.DmDriver" />
+			<property name="hibernate.connection.url"
+				value="jdbc:dm://119.29.1.6:5236/GOBANG" />
+			<property name="hibernate.connection.username"
+				value="SYSDBA" />
+			<property name="hibernate.connection.password"
+				value="zl1424625705" />
+			<property name="hibernate.dialect"
+				value="org.hibernate.dialect.DmDialect" />
+			<property name="hibernate.show_sql" value="true" />
+			<property name="hibernate.format_sql" value="true" />
+			<property name="hibernate.hbm2ddl.auto" value="none" />
+			<property name="hibernate.max_fetch_depth" value="3" />
+			<property name="hibernate.ejb.naming_strategy"
+				value="restful.database.DMServer" />
+			<!-- 请求超时时间 -->
+			<property name="checkoutTimeout" value="300" />
+			<!-- 每300秒检查所有连接池中的空闲连接。默认值: 0，不检查 -->
+			<property name="idleConnectionTestPeriod" value="300" />
+			<!-- 连接池初始化连接数 -->
+			<property name="initialPoolSize" value="3" />
+			<!-- 连接数据库连接池最大空闲时间 -->
+			<property name="maxIdleTime" value="30" />
+			<!--当连接池中的连接耗尽的时候c3p0一次同时获取的连接数。默认值: 3 -->
+			<property name="acquireIncrement" value="5" />
+			<!--最大等待时间，当没有可用连接时，连接池等待连接释放的最大时间，超过该时间限制会抛出异常，如果设置-1表示无限等待（默认为无限，调整为60000ms，避免因线程池不够用，而导致请求被无限制挂起） -->
+			<property name="maxWait" value="60000" />
+			<!--超过removeAbandonedTimeout时间后，是否进 行没用连接（废弃）的回收（默认为false，调整为true) -->
+			<property name="removeAbandoned" value="true" />
+
+			<!-- <mapping resource="restful.entity.LogEntity" /> -->
+		</properties>
+	</persistence-unit>
+</persistence>

@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta name="viewport" content="width=device-width" charset="UTF-8">
+<title>水墨五子棋</title>
+<link href="images/system/icon.png" rel="icon" type="image">
+<style type="text/css">
+@font-face {
+	font-family: 'Semibold';
+	src: url(fonts/Semibold.TTF);
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'LED';
+	src: url(fonts/LcdD.TTF);
+	font-display: swap;
+}
+
+* {
+	border: 0;
+	padding: 0;
+	margin: 0;
+	font-family: 'Semibold';
+	overflow: hidden;
+}
+
+body {
+	background-color: rgb(236, 236, 236);
+	background-image: url(images/system/bg.jpeg);
+	background-repeat: no-repeat;
+	background-size: auto 100%;
+	background-attachment: fixed;
+	background-position: bottom right;
+	width: 100%;
+	height: 100%;
+}
+
+#leftBar {
+	text-align: center;
+	display: block;
+	height: 600px;
+	position: absolute;
+	left: 0;
+	top: 50%;
+	transform: translateY(-50%);
+	width: 150px;
+	float: left;
+	-webkit-transition: all 0.3s ease-out;
+	-moz-transition: all 0.3s ease-out;
+	-o-transition: all 0.3s ease-out;
+	background-color: rgba(255, 255, 255, 0.3);
+}
+
+#logo {
+	display: block;
+	margin-top: 10px;
+	margin-left: 45px;
+	margin-right: 45px;
+	width: 75px;
+	height: 60px;
+}
+
+.leftBot {
+	width: 140px;
+	/*background-color:white;*/
+	float: left;
+	margin-left: 10px;
+}
+
+.leftBotCom {
+	margin-top: 10px;
+	height: 40px;
+	padding: 4px;
+	-webkit-transition: all 0.3s ease-out;
+	-moz-transition: all 0.3s ease-out;
+	-o-transition: all 0.3s ease-out;
+	cursor: pointer;
+}
+
+.leftBotFir {
+	margin-left: 10px;
+	width: 40px;
+	float: left;
+	background-image: url(images/system/bot1.png);
+	background-size: 100% 100%;
+	color: red;
+	font-size: 28px;
+	text-align: right;
+	line-height: 33px;
+}
+
+.leftBotTwo {
+	width: 70px;
+	padding-left: 0;
+	float: left;
+	font-size: 18px;
+	text-align: left;
+	line-height: 40px;
+}
+
+.leftBotFir:hover ~ .leftBotTwo {
+	margin-left: 5px;
+	margin-top: 2px;
+	color: red;
+}
+
+.leftBotTwo:hover {
+	margin-left: 5px;
+	margin-top: 2px;
+	color: red;
+}
+
+/* 登录框样式 */
+.container {
+	position: absolute;
+	width: 400px;
+	right: 50%;
+	top: -50%;
+	transform: translate(50%, -50%);
+	min-height: 400px;
+	background: rgb(207, 216, 216, 0.6);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	backdrop-filter: blur(5px);
+	box-shadow: 0 25px 45px rgba(207, 216, 216, 0.4);
+	border: 1px solid rgba(207, 216, 216, 0.8);
+	border-right: 1px solid rgba(207, 216, 216, 0.5);
+	border-bottom: 1px solid rgba(207, 216, 216, 0.5);
+	border-radius: 20px;
+	color: rgb(85, 86, 79);
+	-webkit-transition: all 0.3s ease-out;
+	-moz-transition: all 0.3s ease-out;
+	-o-transition: all 0.3s ease-out;
+}
+
+.form {
+	position: relative;
+	width: 100%;
+	height: 100%;
+	padding: 50px;
+}
+
+/* 登录标题样式 */
+.form h2 {
+	position: relative;
+	font-size: 24px;
+	font-weight: 600;
+	letter-spacing: 5px;
+	margin-bottom: 30px;
+	cursor: pointer;
+}
+
+/* 登录标题的下划线样式 */
+.form h2::before {
+	content: "";
+	position: absolute;
+	left: 0;
+	bottom: -10px;
+	width: 0;
+	height: 3px;
+	background: #fff;
+	transition: 0.5s;
+}
+
+.form h2:hover:before {
+	width: 53px;
+}
+
+.form .inputBox {
+	width: 100%;
+	margin-top: 20px;
+}
+
+/* 输入框样式 */
+::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+	color: rgb(85, 86, 79) !important;
+}
+
+:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+	color: rgb(85, 86, 79) !important;
+}
+
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+	color: rgb(85, 86, 79) !important;
+}
+
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+	color: rgb(85, 86, 79) !important;
+}
+
+.form .inputBox input {
+	box-sizing: border-box;
+	width: 100%;
+	padding: 10px 20px;
+	background: rgba(144, 165, 165, 0.2);
+	outline: none;
+	border-radius: 30px;
+	border: 1px solid rgba(144, 165, 165, 0.5);
+	border-right: 1px solid rgba(144, 165, 165, 0.2);
+	border-bottom: 1px solid rgba(144, 165, 165, 0.2);
+	font-size: 16px;
+	letter-spacing: 1px;
+	color: rgb(85, 86, 79);
+	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+.form .inputBox input::placeholder {
+	color: #fff;
+}
+
+/* 登录按钮样式 */
+form .inputBox input[type="button"] {
+	background: rgba(255, 255, 255, 0.8);
+	margin-bottom: 20px;
+	font-weight: 600;
+	cursor: pointer;
+}
+
+/* Hide the input */
+#chck {
+	position: absolute;
+	opacity: 0;
+	z-index: -1;
+}
+
+.check-trail {
+	overflow: unset;
+	display: flex;
+	align-items: center;
+	width: 100%;
+	height: 40px;
+	background: #2c3e50;
+	border-radius: 30px;
+	transition: all 0.5s ease;
+	cursor: pointer;
+}
+
+.check-handler {
+	display: flex;
+	margin-left: 0.5em;
+	justify-content: center;
+	align-items: center;
+	width: 64px;
+	height: 64px;
+	background: #34495e;
+	border-radius: 50%;
+	transition: all 0.5s ease;
+	box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+}
+
+.check-handler:before {
+	content: "\00D7";
+	color: white;
+	font-size: 2em;
+	font-weight: bold;
+}
+
+input[type="checkbox"]:checked+.check-trail {
+	background: #16a085;
+}
+
+input[type="checkbox"]:checked+.check-trail .check-handler {
+	margin-left: 40%;
+	background: #1abc9c;
+}
+
+input[type="checkbox"]:checked+.check-trail .check-handler::before {
+	content: "✔";
+}
+
+.forget {
+	margin-top: 6px;
+	color: rgb(85, 86, 79);
+	letter-spacing: 1px;
+}
+
+.forget a {
+	color: rgb(85, 86, 79);
+	font-weight: 600;
+	text-decoration: none;
+	cursor: pointer;
+}
+
+.boxtext {
+	color: rgb(85, 86, 79);
+	font-size: 30px;
+	font-weight: 600;
+	letter-spacing: 5px;
+	margin: auto;
+}
+
+@
+-webkit-keyframes stretchdelay { 0%, 40%, 100% {
+	-webkit-transform: scaleY(0.4)
+}
+
+20
+%
+{
+-webkit-transform
+:
+scaleY(
+1.0
+)
+}
+}
+@
+keyframes stretchdelay { 0%, 40%, 100% {
+	transform: scaleY(0.4);
+	-webkit-transform: scaleY(0.4);
+}
+
+20
+%
+{
+transform
+:
+scaleY(
+1.0
+);
+-webkit-transform
+:
+scaleY(
+1.0
+);
+}
+}
+.errorZHUCE {
+	width: 100%;
+	color: rgb(217, 86, 67);
+	font-size: 14px;
+	font-weight: 600;
+	text-decoration: none;
+	height: 16px;
+	line-height: 16px;
+}
+
+.errorDENGLU {
+	width: 100%;
+	color: rgb(217, 86, 67);
+	font-size: 14px;
+	font-weight: 600;
+	text-decoration: none;
+	height: 16px;
+	line-height: 16px;
+}
+
+#msg {
+	top: -50%;
+	position: absolute;
+	padding: unset !important;
+	width: 400px !important;
+	min-height: 400px !important;
+	max-height: 80% !important;
+	display: flex !important;
+	flex-direction: column !important;
+	background: rgb(217, 20, 17, 0.6);
+	box-shadow: 0 25px 45px rgb(217 20 17/ 40%);
+	border: 1px solid rgba(217, 20, 17, 0.8);
+	border-right: 1px solid rgba(217, 20, 17, 0.5);
+	border-bottom: 1px solid rgba(217, 20, 17, 0.5);
+	color: white;
+}
+
+.ok {
+	background: rgb(128, 150, 136, 0.6) !important;
+	box-shadow: 0 25px 45px rgb(128 150 136/ 40%) !important;
+	border: 1px solid rgba(128, 150, 136, 0.8) !important;
+	border-right: 1px solid rgba(128, 150, 136, 0.5) !important;
+	border-bottom: 1px solid rgba(128, 150, 136, 0.5) !important;
+	color: white;
+}
+
+#msg h2 {
+	text-align: center;
+	padding: 20px;
+	box-sizing: border-box;
+}
+
+#msg input {
+	width: 120px;
+	height: 40px;
+}
+
+#personInfo {
+	top: -50%;
+	flex-direction: column;
+}
+
+#perInfo {
+	height: 175px;
+	width: 100%;
+	padding-top: 50px;
+	box-sizing: border-box;
+}
+
+#perHead {
+	margin: 0 auto;
+	width: 100px;
+	height: 100px;
+	border-radius: 50px;
+	background-color: darkorange;
+	border: 5px solid rgba(255, 255, 255, 0.8);
+	overflow: hidden;
+}
+
+#perImg {
+	width: 100px;
+	height: 100px;
+}
+
+.perInfoA {
+	width: 20px;
+	height: 20px;
+	border-radius: 10px;
+	background-color: white;
+	border: 2px solid rgba(255, 140, 0, 0.8);
+	overflow: hidden;
+}
+
+.perInfoA img {
+	width: 20px;
+	height: 20px;
+}
+
+#perEdit {
+	height: 80px;
+	width: 100%;
+	text-align: center;
+}
+
+#perHis {
+	height: 135px;
+	width: 100%;
+	display: flex;
+}
+
+#perHis div {
+	flex-direction: row;
+	width: 180px;
+	margin: 10px;
+}
+
+#perHis div div {
+	width: 100%;
+	float: left;
+	text-align: center;
+}
+
+.perHisOne {
+	height: 40px;
+	/*line-height:40px;*/
+	font-size: 32px;
+	margin-bottom: 0;
+}
+/*.perHisOne div{*/
+/*    width:50%;*/
+/*    float:left;*/
+/*}*/
+.perHisTwo {
+	margin-top: 0;
+	height: 40px;
+	/*line-height:30px;*/
+}
+
+.perHisTwo div {
+	font-family: 'LED' !important;
+}
+</style>
+</head>
+<body>
+	<div id="leftBar">
+		<a href="/" id="logo"> <img src="images/system/logo.png"
+			width="75px">
+		</a> <a class="leftBot" onclick="HSmenu()">
+			<div class="leftBotFir leftBotCom">隐</div>
+			<div class="leftBotTwo leftBotCom">藏菜单</div>
+		</a> <a class="leftBot" onclick="showWin('zhuce')">
+			<div class="leftBotFir leftBotCom">注</div>
+			<div class="leftBotTwo leftBotCom">册账号</div>
+		</a> <a class="leftBot" onclick="showWin('denglu')">
+			<div class="leftBotFir leftBotCom">登</div>
+			<div class="leftBotTwo leftBotCom">录账号</div>
+		</a> <a class="leftBot">
+			<div class="leftBotFir leftBotCom">开</div>
+			<div class="leftBotTwo leftBotCom">始游戏</div>
+		</a> <a class="leftBot">
+			<div class="leftBotFir leftBotCom">观</div>
+			<div class="leftBotTwo leftBotCom">战游戏</div>
+		</a> <a class="leftBot">
+			<div class="leftBotFir leftBotCom">录</div>
+			<div class="leftBotTwo leftBotCom">像查看</div>
+		</a> <a class="leftBot" onclick="showEdit()">
+			<div class="leftBotFir leftBotCom">个</div>
+			<div class="leftBotTwo leftBotCom">人信息</div>
+		</a> <a class="leftBot">
+			<div class="leftBotFir leftBotCom">管</div>
+			<div class="leftBotTwo leftBotCom">理面板</div>
+		</a> <a class="leftBot" onclick="loginOut()">
+			<div class="leftBotFir leftBotCom">退</div>
+			<div class="leftBotTwo leftBotCom">出登录</div>
+		</a>
+	</div>
+
+	<div class="container">
+		<div class="form" id="win">
+			<!--                登陆窗口-->
+			<form id="box1" method="get" style="display: none">
+				<h2 class="logintxt">登录</h2>
+				<div class="inputBox">
+					<label for="loginName"></label><input id="loginName"
+						name="loginName" placeholder="账号" type="text">
+				</div>
+				<div class="inputBox">
+					<label for="pwd"></label><input id="pwd" name="pwd"
+						placeholder="密码" type="password">
+				</div>
+				<div class="inputBox" style="margin-bottom: 30px; overflow: unset">
+					<!--                        登录按钮-->
+					<input id="dl" style="margin-bottom: 20px;" type="button"
+						value="Login">
+					<!--                        自动登录按钮-->
+					<input id="chck" name="autoLogin" type="checkbox"> <label
+						class="check-trail" for="chck" id="autologin"> <span
+						class="check-handler"></span>
+						<h2
+							style="color: white; margin: 0; font-size: 16px; font-weight: 400; letter-spacing: 3px;">
+							自动登陆</h2>
+					</label>
+				</div>
+				<!--                    用于显示错误-->
+				<div class="errorDENGLU"></div>
+				<div class="errorDENGLU"></div>
+				<div class="errorDENGLU"></div>
+				<div class="errorDENGLU"></div>
+				<p class="forget">
+					<a href="#"> 忘记密码?前往修改——————> </a>
+				</p>
+				<p class="forget">
+					<a onclick="showWin('zhuce')"> 没有账户?前往注册——————> </a>
+				</p>
+			</form>
+			<form id="box4" method="get" style="display: none">
+				<h2 class="logintxt">注册</h2>
+				<div class="inputBox">
+					<label for="ZCloginName"></label><input autocomplete=”off”
+						id="ZCloginName" placeholder="请输入账号,以字母开头,8-15位"
+						style="font-size: 14px" type="text">
+				</div>
+				<div class="inputBox">
+					<label for="ZCpwd"></label><input autocomplete=”off” id="ZCpwd"
+						placeholder="请输入密码,长度8-15位" type="password">
+				</div>
+				<div class="inputBox">
+					<label for="ZCpwdCheck"></label><input autocomplete=”off”
+						id="ZCpwdCheck" placeholder="请再次输入密码" type="password">
+				</div>
+				<div class="inputBox">
+					<label for="ZCName"></label><input autocomplete=”off” id="ZCName"
+						placeholder="请输入昵称">
+				</div>
+				<div class="inputBox">
+					<label for="ZCSex"></label><input id="ZCSex" list="sexlist"
+						placeholder="请选择性别" type="text">
+				</div>
+				<datalist id="sexlist">
+					<option>男</option>
+					<option>女</option>
+				</datalist>
+				<div class="inputBox">
+					<input id="zc" type="button" value="立即注册">
+				</div>
+				<!--                    用于显示错误-->
+				<div class="errorZHUCE"></div>
+				<div class="errorZHUCE"></div>
+				<div class="errorZHUCE"></div>
+				<div class="errorZHUCE"></div>
+				<p class="forget">
+					<a href="#"> 忘记密码?前往修改——————> </a>
+				</p>
+				<p class="forget">
+					<a onclick="showWin('denglu')"> 已有账户?前往登陆——————> </a>
+				</p>
+			</form>
+		</div>
+	</div>
+
+	<div class="form container" id="msg">
+		<h2 id="msgg" style="font-size: 40px; width: 100%; float: left">~~我是一个提醒窗~~</h2>
+		<form>
+			<div class="inputBox">
+				<input id="check" type="button" value="确定" onclick="hideError()">
+			</div>
+		</form>
+	</div>
+
+	<div class="container" id="personInfo">
+		<div id="perInfo">
+			<div id="perHead">
+				<img id="perImg" src="images/system/defaultHead.png" alt="点击修改头像">
+				<div class="perInfoA"
+					style="position: absolute; top: 130px; left: 145px;">
+					<img style="display: block" id="perInfoAU"
+						src="images/system/userIcon.png" alt="游戏用户"> <img
+						style="display: none" id="perInfoAA"
+						src="images/system/adminIcon.png" alt="管理员">
+				</div>
+				<div class="perInfoA"
+					style="position: absolute; top: 130px; left: 235px;">
+					<img style="display: block" id="perInfoAB"
+						src="images/system/boyIcon.png" alt="男"> <img
+						style="display: none" id="perInfoAG"
+						src="images/system/girlIcon.png" alt="女">
+				</div>
+				<div class="perInfoA"
+					style="position: absolute; top: 60px; left: 145px;">
+					<img
+						style="display: block; width: 15px; height: 15px; margin: 2px auto auto;"
+						src="images/system/passIcon.png" alt="修改密码">
+				</div>
+				<div class="perInfoA"
+					style="position: absolute; top: 60px; left: 235px;">
+					<img
+						style="display: block; width: 15px; height: 15px; margin: 3px auto auto;"
+						src="images/system/editIcon.png" alt="修改资料">
+				</div>
+			</div>
+			<!--        //改密 、编辑、管理员、男女-->
+		</div>
+		<div id="perEdit">
+			<p id="nickname" style="font-size: 40px; padding-bottom: 10px;">昵称</p>
+			<p id="username">用户名</p>
+		</div>
+		<div id="perHis">
+			<div>
+				<div class="perHisOne">
+					<div>对战次数</div>
+				</div>
+				<div class="perHisTwo">
+					<div>5201314</div>
+				</div>
+			</div>
+			<div>
+				<div class="perHisOne">
+					<div>胜率</div>
+				</div>
+				<div class="perHisTwo">
+					<div>0%</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script src="js/tools/others/jquery.min.js" type="text/javascript"></script>
+	<script src="js/login/InputErrorCheck.js" type="text/javascript"></script>
+	<script src="js/tools/checkLoginStatus.js" type="text/javascript"></script>
+	<script src="js/tools/ajax.js" type="text/javascript"></script>
+	<script src="js/tools/jiami.js" type="text/javascript"></script>
+	<!--腾讯云验证码-->
+	<script src="https://ssl.captcha.qq.com/TCaptcha.js"></script>
+	<script type="text/javascript">
+    let win = ""
+
+    function HSmenu() {
+        const menu = document.getElementsByClassName("leftBotCom")
+        if (menu[2].style.opacity === "1" || menu[2].style.opacity === '') {
+            menu[0].innerHTML = "显"
+            menu[1].innerHTML = "示菜单"
+            for (let i = 2; i < menu.length; i++) {
+                menu[i].style.opacity = "0"
+                setTimeout(function () {
+                    menu[i].style.visibility = "hidden";
+                }, 300);
+            }
+            document.getElementById("leftBar").style.height = "140px"
+            document.getElementById("leftBar").style.top = "0"
+        } else {
+            menu[0].innerHTML = "隐"
+            menu[1].innerHTML = "藏菜单"
+            for (let i = 2; i < menu.length; i++) {
+                menu[i].style.visibility = "visible"
+            }
+            for (let i = 2; i < menu.length; i++) {
+                menu[i].style.opacity = "1"
+            }
+            document.getElementById("leftBar").style.height = "600px"
+            document.getElementById("leftBar").style.top = "50%"
+        }
+    }
+
+    function showWin(msg) {
+        if (!checkLogin()) {
+            if (document.getElementsByClassName("container")[0].style.top === "50%") {
+                hideAllActionWin()
+                setTimeout(function () {
+                    document.getElementById("box1").style.display = "none"
+                    document.getElementById("box4").style.display = "none"
+                }, 200);
+                if (msg === win) {
+
+                } else {
+                    setTimeout(function () {
+                        showWin(msg)
+                    }, 300);
+                }
+            } else {
+                hideAllActionWin()
+                win = msg
+                if (msg === "denglu")
+                    document.getElementById("box1").style.display = "block"
+                else {
+                    document.getElementById("box4").style.display = "block"
+                }
+                document.getElementsByClassName("container")[0].style.top = "50%"
+            }
+        } else {
+            showError("您已登录，如要继续，请先退出登录")
+        }
+
+    }
+
+    function hideError(){
+        document.getElementsByClassName("container")[1].style.top = "-50%"
+    }
+    function showError(msg,ok) {
+        document.getElementById("msgg").innerHTML = msg
+        if(ok)
+        {
+            document.getElementsByClassName("container")[1].classList.add("ok")
+        }
+        else
+            document.getElementsByClassName("container")[1].classList.remove("ok")
+        document.getElementsByClassName("container")[1].style.top = "50%"
+        setTimeout(function () {
+            hideError()
+        }, 3000);
+    }
+    function clean(){
+        $(':input','#addVoucherType')   //'#addVoucherType'表单id
+            .not(':button')
+            .val('')
+            .removeAttr('checked')
+            .removeAttr('selected');
+    }
+
+    function showEdit(){
+        if (document.getElementsByClassName("container")[2].style.top !== "50%") {
+            hideAllActionWin()
+            document.getElementsByClassName("container")[2].style.top = "50%"
+        }
+        else{
+            document.getElementsByClassName("container")[2].style.top = "-50%"
+        }
+    }
+
+    function hideAllActionWin(){
+        document.getElementsByClassName("container")[2].style.top = "-50%"
+        document.getElementsByClassName("container")[0].style.top = "-50%"
+
+    }
+
+    function setCookie(cname, cvalue, exdays, path) {
+        let d = new Date()
+        document.cookie = "testCookie=true"
+        if (!(getCookie("testCookie") === "true"))
+            console.log("本地运行无法储存Cookie，请使用网页版进行测试！")
+        let cookieString = cname + "=" + cvalue
+        if (exdays) {
+            d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000))
+            let expires = "expires=" + d.toUTCString();
+            cookieString = cookieString + "; " + expires
+        }
+        if (path)
+            cookieString = cookieString + "; " + path
+        document.cookie = cookieString
+    }
+
+    autologin.onclick = function () { //自动登录切换
+        if (chck.value === "false")
+            chck.value = "true"
+        else
+            chck.value = "false"
+    }
+    zc.onmouseup = function () {
+        if (ErrorStatus) //存在错误
+            return;
+        let user = {
+            'Name': noTuiGe(ZCloginName.value),
+            'PASSWORD': noTuiGe(ZCpwd.value),
+            'NICKNAME': noTuiGe(ZCName.value),
+            'SEX':noTuiGe(ZCSex.value)
+        }
+        let captcha1 = new TencentCaptcha('2004603663', function (res) {
+            tools.ajaxGet("http://127.0.0.1:8080/gobang/api/add", user, function () {
+                showError("注册成功！","ok")
+            },function (res){
+                showError("注册失败！"+res)
+            })
+        });
+        captcha1.show();
+    }
+    dl.onmouseup = function () {
+        if (ErrorStatus) //存在错误
+            return;
+        let loginuser = {
+            'password': noTuiGe(pwd.value),
+            'userName': noTuiGe(loginName.value),
+        }
+        let captcha1 = new TencentCaptcha('2004603663', function () {
+            tools.ajaxGet("http://localhost:8080/login", loginuser, function (res) {
+                console.log(res)
+                var jsonObject = JSON.parse(res.data)
+                if (res.status === 0) {
+                    if (chck.value === "true") {
+                        setCookie("loginName", btoa(noTuiGe(jsonObject.username)), "7",
+                            "/") //登陆用户名被编码保存，一方面防止中文存入cookie崩溃，一方面"加密"
+                        setCookie(btoa(btoa(noTuiGe(jsonObject.username))), jiamitoken(jsonObject.username), "7",
+                            "/") //登陆用户名被两次编码进行"加密"，同时保存对应的加密token
+                    } else {
+                        setCookie("loginName", btoa(noTuiGe(jsonObject.username)), "/")
+                        setCookie(btoa(btoa(noTuiGe(jsonObject.username))), jiamitoken(jsonObject.username), "/")
+                    }
+                    showError("登录成功！","ok")
+                } else
+                    showError("登录失败！"+res,"ok")
+            })
+        });
+        captcha1.show();
+    }
+    function loginOut() { //退出按钮
+        setCookie("loginName", "", -7) //将cookie置空，同时过期
+        showError("退出成功！","ok")
+    }
+</script>
+</body>
+</html>
