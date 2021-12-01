@@ -344,6 +344,7 @@
         }
 
         #msg {
+            z-index: 5201314;
             top: -50%;
             position: absolute;
             padding: unset !important;
@@ -400,6 +401,14 @@
             background-color: darkorange;
             border: 5px solid rgba(255, 255, 255, 0.8);
             overflow: hidden;
+        }
+
+        #headUP {
+            width: 100px;
+            height: 100px;
+            opacity: 0;
+            position: absolute;
+            z-index: 888;
         }
 
         #perImg {
@@ -652,6 +661,7 @@
 <div class="container" id="personInfo">
     <div id="perInfo">
         <div id="perHead">
+            <input id="headUP" type="file" accept="image/jpeg,image/jpg,image/png">
             <img alt="点击修改头像" id="perImg" src="images/system/defaultHead.png">
             <div class="perInfoA" style="position:absolute;top:130px;left:145px;">
                 <img alt="游戏用户" id="perInfoAU" src="images/system/userIcon.png" style="display:block">
@@ -879,6 +889,54 @@
         setCookie("loginName", "", -7) //将cookie置空，同时过期
         showError("退出成功！", "ok")
     }
+
+    document.getElementById("headUP").addEventListener("change",function () {
+        const file = document.getElementById('headUP').files[0]
+        const fileMaxSize = 1024*1024*2
+        if (file.size > fileMaxSize) {
+            showError("头像大小不得超过2M，请重新选择！")
+        } else {
+            let reader = new FileReader();
+            reader.readAsDataURL(file);
+            let image64 = ""
+            reader.onload = function (e){
+                image64=e.target.result;
+                let image = new Image()
+                // let reader = new FileReader()
+                // reader.readAsDataURL(file)
+                // let image64=reader.result;
+                image.src= image64;
+                image.onload =function(){
+                    if(image.width===image.height && image.height!==0){
+                        document.getElementById("perImg").src=image64;
+                        const canvas = document.createElement('canvas')
+                        const context = canvas.getContext('2d')
+                        canvas.width=image.width>500?500:image.width;
+                        canvas.height=image.height>500?500:image.height;
+                        context.clearRect(0,0,image.width>500?500:image.width,image.height>500?500:image.height)
+                        context.drawImage(image,0,0,image.width>500?500:image.width,image.height>500?500:image.height)
+                        nowsize = file.size*((500*500)/(canvas.width*canvas.height))
+                        let quality = nowsize > 1024*1024*0.8?(1024*1024*0.8)/nowsize:1
+                        console.log("quality:"+quality)
+                        let base64Str = canvas.toDataURL('image/jpg',quality);
+                        console.log(base64Str);
+                        let imageObject = {
+                            'image' : base64Str,
+                        }
+                        tools.ajaxPost("",imageObject,function(){
+                            showError("图片上传成功！","ok")
+                        },function(res){
+                            showError("图片上传失败！"+res.data,"ok")
+                        })
+                    }
+                    else{
+                        showError("头像长宽需一致，请重新选择！")
+                    }
+                }
+            }
+        }
+    });
+
 </script>
 </body>
 </html>

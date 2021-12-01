@@ -58,6 +58,8 @@ public class ImageBase64Code {
         OutputStream out = null;
         try {
             out = new FileOutputStream(imgFilePath);
+            ImageBase64Code path=new ImageBase64Code();
+            System.out.println(path.getClass().getResource("").getPath()+out);
             // Base64解码
             byte[] b = decoder.decode(imgData);
             for (int i = 0; i < b.length; ++i) {
@@ -82,4 +84,5 @@ public class ImageBase64Code {
             return true;
         }
     }
+   
 }
