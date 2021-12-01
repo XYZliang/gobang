@@ -1,43 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://
-java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
-	<display-name>restful</display-name>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="3.0"
+         xmlns="http://java.sun.com/xml/ns/javaee"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://">
+    <display-name>restful</display-name>
 
-	<context-param>
-		<param-name>resteasy.resources</param-name>
-		<param-value>restful.api.Interface</param-value>
-	</context-param>
+    <context-param>
+        <param-name>resteasy.resources</param-name>
+        <param-value>restful.api.Interface</param-value>
+    </context-param>
 
-	<context-param>
-		<param-name>resteasy.providers</param-name>
-		<param-value></param-value>
-	</context-param>
+    <context-param>
+        <param-name>resteasy.providers</param-name>
+        <param-value></param-value>
+    </context-param>
 
-	<listener>
-		<listener-class>org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap
-		</listener-class>
-	</listener>
-	<servlet>
-		<servlet-name>Resteasy</servlet-name>
-		<servlet-class>org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher
-		</servlet-class>
-	</servlet>
-	<context-param>
-		<param-name>resteasy.servlet.mapping.prefix</param-name>
-		<param-value>/</param-value>
-	</context-param>
-	<servlet-mapping>
-		<servlet-name>Resteasy</servlet-name>
-		<url-pattern>/api/*</url-pattern>
-	</servlet-mapping>
-	<filter>
-		<filter-name>SessionFilter</filter-name>
-		<filter-class>restful.filter.SessionFilter</filter-class>
-	</filter>
-	<filter-mapping>
-		<filter-name>SessionFilter</filter-name>
-		<url-pattern></url-pattern>
-	</filter-mapping>
+    <listener>
+        <listener-class>org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap
+        </listener-class>
+    </listener>
+    <servlet>
+        <servlet-name>Resteasy</servlet-name>
+        <servlet-class>org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher
+        </servlet-class>
+    </servlet>
+    <context-param>
+        <param-name>resteasy.servlet.mapping.prefix</param-name>
+        <param-value>/</param-value>
+    </context-param>
+    <servlet-mapping>
+        <servlet-name>Resteasy</servlet-name>
+        <url-pattern>/api/*</url-pattern>
+    </servlet-mapping>
+    <filter>
+        <filter-name>SessionFilter</filter-name>
+        <filter-class>restful.filter.SessionFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>SessionFilter</filter-name>
+        <url-pattern></url-pattern>
+    </filter-mapping>
 </web-app>

@@ -47,14 +47,14 @@ let tools = {
                     if (isJson === undefined) {
                         isJson = true;
                     }
-                    let res=""
-                    if(isJson) {
+                    let res = ""
+                    if (isJson) {
                         res = ajax.responseText === "" ? '{}' : ajax.responseText
                         res = res.replace('data":"{', 'data":{')
                         console.log(res)
                     }
                     res = isJson ? JSON.parse(res) : ajax.responseText;
-                    if(res.status!==0)
+                    if (res.status !== 0)
                         failCb && failCb(JSON.stringify(res.desc));
                     else
                         succCb && succCb(res);

@@ -663,11 +663,13 @@
             </div>
             <div class="perInfoA" style="position:absolute;top:60px;left:145px;">
                 <img alt="修改密码"
-                     src="images/system/passIcon.png" style="display:block;width:15px;height:15px;margin: 2px auto auto;">
+                     src="images/system/passIcon.png"
+                     style="display:block;width:15px;height:15px;margin: 2px auto auto;">
             </div>
             <div class="perInfoA" style="position:absolute;top:60px;left:235px;">
                 <img alt="修改资料"
-                     src="images/system/editIcon.png" style="display:block;width:15px;height:15px;margin: 3px auto auto;">
+                     src="images/system/editIcon.png"
+                     style="display:block;width:15px;height:15px;margin: 3px auto auto;">
             </div>
         </div>
         <!--        //改密 、编辑、管理员、男女-->
@@ -702,6 +704,10 @@
 <script src="js/tools/jiami.js" type="text/javascript"></script>
 <!--腾讯云验证码-->
 <script src="https://ssl.captcha.qq.com/TCaptcha.js"></script>
+<!--md5加密库-->
+<script src="js/tools/MD5.js"></script>
+<!--用户类操作-->
+<script src="js/tools/UserDB.js"></script>
 <script type="text/javascript">
     let win = ""
 
@@ -852,20 +858,18 @@
         let captcha1 = new TencentCaptcha('2004603663', function () {
             tools.ajaxGet("http://127.0.0.1:8080/gobang/api/login", loginuser, function (res) {
                 console.log(res)
-                var jsonObject = res.data
-                if (res.status === 0) {
-                    if (chck.value === "true") {
-                        setCookie("loginName", btoa(noTuiGe(jsonObject.name)), "7",
-                            "/") //登陆用户名被编码保存，一方面防止中文存入cookie崩溃，一方面"加密"
-                        setCookie(btoa(btoa(noTuiGe(jsonObject.username))), jiamitoken(jsonObject.username), "7",
-                            "/") //登陆用户名被两次编码进行"加密"，同时保存对应的加密token
-                    } else {
-                        setCookie("loginName", btoa(noTuiGe(jsonObject.username)), "/")
-                        setCookie(btoa(btoa(noTuiGe(jsonObject.username))), jiamitoken(jsonObject.username), "/")
-                    }
-                    showError("登录成功！", "ok")
-                } else
-                    showError("登录失败！" + res, "ok")
+                let jsonObject = res.data
+                updateUserInfoFromJson(jsonObject)
+                if (chck.value === "true") {
+                    setCookie("loginName", btoa(noTuiGe(jsonObject.name)), "7",
+                        "/") //登陆用户名被编码保存，一方面防止中文存入cookie崩溃，一方面"加密"
+                    setCookie(btoa(btoa(noTuiGe(jsonObject.name))), jiamitoken(jsonObject.name), "7",
+                        "/") //登陆用户名被两次编码进行"加密"，同时保存对应的加密token
+                } else {
+                    setCookie("loginName", btoa(noTuiGe(jsonObject.name)), "/")
+                    setCookie(btoa(btoa(noTuiGe(jsonObject.name))), jiamitoken(jsonObject.name), "/")
+                }
+                showError("登录成功！", "ok")
             })
         });
         captcha1.show();

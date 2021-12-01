@@ -3,7 +3,7 @@
 
 //错误代码
 let Error = ['0', '0', '0', '0', '0', '0', '0', '0', '0'];
-let ErrorTxt = ['用户名必须以字母开头', '用户名长度需为8-15位', '密码长度需为8-15位', '两次输入的密码不一样', '还没有输入用户名哦', '还没输入密码哦', '请再次输入密码哦', '请输入昵称哦', '请输入姓名哦','请选择性别哦','性别输入不合法']
+let ErrorTxt = ['用户名必须以字母开头', '用户名长度需为8-15位', '密码长度需为8-15位', '两次输入的密码不一样', '还没有输入用户名哦', '还没输入密码哦', '请再次输入密码哦', '请输入昵称哦', '请输入姓名哦', '请选择性别哦', '性别输入不合法']
 let ErrorStatus = false;
 
 //消除字符串首尾多余的空格
@@ -54,13 +54,13 @@ document.getElementById("ZCloginName").addEventListener("keyup", function () { /
     let reg = new RegExp("[a-zA-Z]")
     if (reg.test(str[0]) || str[0].length === 0) { //正则首字符是否为字母
         Error[0] = "0"
-        Error[4]  ="0"
+        Error[4] = "0"
     } else {
         Error[0] = "1"
     }
     if ((str.length >= 8 && str.length <= 15) || str.length === 0) {
         Error[1] = "0"
-        Error[4]  ="0"
+        Error[4] = "0"
     } else {
         Error[1] = "1"
     }
@@ -70,7 +70,7 @@ document.getElementById("ZCpwd").addEventListener("keyup", function () { //密�
     let str = noTuiGe(ZCpwd.value);
     if ((str.length >= 8 && str.length <= 15) || str.length === 0) {
         Error[2] = "0"
-        Error[5]  ="0"
+        Error[5] = "0"
     } else {
         Error[2] = "1"
     }
@@ -80,7 +80,7 @@ document.getElementById("ZCpwdCheck").addEventListener("keyup", function () { //
     let str = noTuiGe(ZCpwd.value)
     let str1 = noTuiGe(ZCpwdCheck.value)
     if (str === str1) {
-        Error[6]  ="0"
+        Error[6] = "0"
         Error[3] = "0"
     } else {
         Error[3] = "1"
@@ -100,13 +100,11 @@ document.getElementById("ZCSex").addEventListener("mouseover", function () { //�
     let str1 = noTuiGe(ZCSex.value)
     if (str1.length > 0) {
         Error[9] = "0"
-        if(str1==="男"||str1==="女")
-        {
+        if (str1 === "男" || str1 === "女") {
             Error[10] = "0"
-        }
-        else{
+        } else {
             Error[10] = "1"
-            ZCSex.value=""
+            ZCSex.value = ""
         }
     } else {
         Error[9] = "1"
@@ -137,13 +135,11 @@ document.getElementById("zc").addEventListener("mouseover", function () { //按�
     let str1 = noTuiGe(ZCSex.value)
     if (str1.length > 0) {
         Error[9] = "0"
-        if(str1==="男"||str1==="女")
-        {
+        if (str1 === "男" || str1 === "女") {
             Error[10] = "0"
-        }
-        else{
+        } else {
             Error[10] = "1"
-            ZCSex.value=""
+            ZCSex.value = ""
         }
     } else {
         Error[9] = "1"
