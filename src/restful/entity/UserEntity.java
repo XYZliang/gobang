@@ -279,5 +279,9 @@ public class UserEntity {
 				+ ISADMIN + ", PASSWORD=" + PASSWORD + ", SALT=" + SALT + ", TOKEN=" + TOKEN + ", TIMES=" + TIMES
 				+ ", WINTIMES=" + WINTIMES + ", LEVEL=" + LEVEL + ", LOGINTIME=" + LOGINTIME + ", UA=" + UA + "]";
 	}
+	
+	public boolean checkPass(String pass) {
+		return (Encryption.getSaltMD5(pass, SALT).toString().equals(PASSWORD));
+	}
 
 }

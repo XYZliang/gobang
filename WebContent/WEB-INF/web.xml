@@ -40,5 +40,4 @@ java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
 		<filter-name>SessionFilter</filter-name>
 		<url-pattern></url-pattern>
 	</filter-mapping>
-	<async-supported>true</async-supported>
 </web-app>

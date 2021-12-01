@@ -1,5 +1,6 @@
 package restful.api;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -83,14 +84,29 @@ public class Interface {
 	
 	@GET
 	@POST
-	@Path("/denglu")
+	@Path("/login")
 	@Consumes("application/json;charset=UTF-8")
 	@Produces("application/json;charset=UTF-8")
-	public String denglu(@QueryParam("Name") String NAME,  
-            @QueryParam("PASSWORD") String PASSWORD) {
-		UserEntity userentity = new UserEntity();
-		tools.commitDB(userentity);
-		String json = tools.makeJSON(userentity);
-		return tools.makeReturn(json);
+	public String denglu(@QueryParam("userName") String NAME,  
+            @QueryParam("password") String PASSWORD) {
+		List<UserEntity> result = EM.getEntityManager().createNamedQuery("UserEntity.findUserByName", UserEntity.class)
+				.setParameter("NAME", NAME).getResultList();
+		if(result.isEmpty())
+			return tools.makeErReturn(ResultCode.USER_NOT_EXISTED);
+		else
+		{
+			UserEntity userentity = result.get(0);
+			if(userentity.checkPass(PASSWORD)) {
+//				HttpServletRequest req = (HttpServletRequest) request;
+//				userentity.setTOKEN(req.getSession().toString());
+				userentity.setLOGINTIME(new Date());
+				tools.commitDB(userentity);
+				return tools.makeReturn(tools.makeJSON(userentity));
+			}
+			else
+			{
+				return tools.makeErReturn(ResultCode.USER_PWD_ERROR);
+			}
+		}
 	}
 }
