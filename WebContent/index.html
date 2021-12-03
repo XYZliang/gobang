@@ -345,7 +345,7 @@
 
         #msg {
             z-index: 5201314;
-            top: -50%;
+            top: 50%;
             position: absolute;
             padding: unset !important;
             width: 400px !important;
@@ -423,6 +423,7 @@
             background-color: white;
             border: 2px solid rgba(255, 140, 0, 0.8);
             overflow: hidden;
+            z-index: 999;
         }
 
         .perInfoA img {
@@ -434,6 +435,35 @@
             height: 80px;
             width: 100%;
             text-align: center;
+            overflow: unset;
+        }
+
+        #starts{
+            width: 100%;
+            height: 15px;
+            background-image: url(images/system/starts.png);
+            background-repeat: no-repeat;
+            background-size: 100px auto;
+            background-position-x: center;
+            overflow: hidden;
+        }
+        .startsZer{
+            background-position-y: -105px;
+        }
+        .startsOne{
+            background-position-y: -84px;
+        }
+        .startsTwo{
+            background-position-y: -63px;
+        }
+        .startsThr{
+            background-position-y: -42px;
+        }
+        .startsFou{
+            background-position-y: -21px;
+        }
+        .startsFiv{
+            background-position-y: -0px;
         }
 
         #perHis {
@@ -478,147 +508,98 @@
 </head>
 <body>
 <div id="leftBar">
-    <a href="/" id="logo">
-        <img src="images/system/logo.png" width="75px">
-    </a>
-    <a class="leftBot" onclick="HSmenu()">
-        <div class="leftBotFir leftBotCom">
-            隐
-        </div>
-        <div class="leftBotTwo leftBotCom">
-            藏菜单
-        </div>
-    </a>
-    <a class="leftBot" onclick="showWin('zhuce')">
-        <div class="leftBotFir leftBotCom">
-            注
-        </div>
-        <div class="leftBotTwo leftBotCom">
-            册账号
-        </div>
-    </a>
-    <a class="leftBot" onclick="showWin('denglu')">
-        <div class="leftBotFir leftBotCom">
-            登
-        </div>
-        <div class="leftBotTwo leftBotCom">
-            录账号
-        </div>
-    </a>
-    <a class="leftBot">
-        <div class="leftBotFir leftBotCom">
-            开
-        </div>
-        <div class="leftBotTwo leftBotCom">
-            始游戏
-        </div>
-    </a>
-    <a class="leftBot">
-        <div class="leftBotFir leftBotCom">
-            观
-        </div>
-        <div class="leftBotTwo leftBotCom">
-            战游戏
-        </div>
-    </a>
-    <a class="leftBot">
-        <div class="leftBotFir leftBotCom">
-            录
-        </div>
-        <div class="leftBotTwo leftBotCom">
-            像查看
-        </div>
-    </a>
-    <a class="leftBot" onclick="showEdit()">
-        <div class="leftBotFir leftBotCom">
-            个
-        </div>
-        <div class="leftBotTwo leftBotCom">
-            人信息
-        </div>
-    </a>
-    <a class="leftBot">
-        <div class="leftBotFir leftBotCom">
-            管
-        </div>
-        <div class="leftBotTwo leftBotCom">
-            理面板
-        </div>
-    </a>
-    <a class="leftBot" onclick="loginOut()">
-        <div class="leftBotFir leftBotCom">
-            退
-        </div>
-        <div class="leftBotTwo leftBotCom">
-            出登录
-        </div>
-    </a>
+    <a href="/" id="logo"> <img src="images/system/logo.png"
+                                width="75px">
+    </a> <a class="leftBot" onclick="HSmenu()">
+    <div class="leftBotFir leftBotCom">隐</div>
+    <div class="leftBotTwo leftBotCom">藏菜单</div>
+</a> <a class="leftBot" onclick="showWin('zhuce')">
+    <div class="leftBotFir leftBotCom">注</div>
+    <div class="leftBotTwo leftBotCom">册账号</div>
+</a> <a class="leftBot" onclick="showWin('denglu')">
+    <div class="leftBotFir leftBotCom">登</div>
+    <div class="leftBotTwo leftBotCom">录账号</div>
+</a> <a class="leftBot">
+    <div class="leftBotFir leftBotCom">开</div>
+    <div class="leftBotTwo leftBotCom">始游戏</div>
+</a> <a class="leftBot">
+    <div class="leftBotFir leftBotCom">观</div>
+    <div class="leftBotTwo leftBotCom">战游戏</div>
+</a> <a class="leftBot">
+    <div class="leftBotFir leftBotCom">录</div>
+    <div class="leftBotTwo leftBotCom">像查看</div>
+</a> <a class="leftBot" onclick="showInfo()">
+    <div class="leftBotFir leftBotCom">个</div>
+    <div class="leftBotTwo leftBotCom">人信息</div>
+</a> <a class="leftBot">
+    <div class="leftBotFir leftBotCom">管</div>
+    <div class="leftBotTwo leftBotCom">理面板</div>
+</a> <a class="leftBot" onclick="loginOut()">
+    <div class="leftBotFir leftBotCom">退</div>
+    <div class="leftBotTwo leftBotCom">出登录</div>
+</a>
 </div>
 
 <div class="container">
     <div class="form" id="win">
         <!--                登陆窗口-->
-        <form id="box1" method="get" style="display:none">
+        <form id="box1" method="get" style="display: none">
             <h2 class="logintxt">登录</h2>
             <div class="inputBox">
-                <label for="loginName"></label><input id="loginName" name="loginName" placeholder="账号"
-                                                      type="text">
+                <label for="loginName"></label><input id="loginName"
+                                                      name="loginName" placeholder="账号" type="text">
             </div>
             <div class="inputBox">
-                <label for="pwd"></label><input id="pwd" name="pwd" placeholder="密码" type="password">
+                <label for="pwd"></label><input id="pwd" name="pwd"
+                                                placeholder="密码" type="password">
             </div>
-            <div class="inputBox" style="margin-bottom: 30px;overflow: unset">
+            <div class="inputBox" style="margin-bottom: 30px; overflow: unset">
                 <!--                        登录按钮-->
-                <input id="dl" style="margin-bottom: 20px;" type="button" value="Login">
+                <input id="dl" style="margin-bottom: 20px;" type="button"
+                       value="Login">
                 <!--                        自动登录按钮-->
-                <input id="chck" name="autoLogin" type="checkbox">
-                <label class="check-trail" for="chck" id="autologin">
-                    <span class="check-handler"></span>
-                    <h2
-                            style="color: white;margin: 0;font-size: 16px;font-weight: 400;letter-spacing: 3px;">
-                        自动登陆</h2>
-                </label>
+                <input id="chck" name="autoLogin" type="checkbox"> <label
+                    class="check-trail" for="chck" id="autologin"> <span
+                    class="check-handler"></span>
+                <h2
+                        style="color: white; margin: 0; font-size: 16px; font-weight: 400; letter-spacing: 3px;">
+                    自动登陆</h2>
+            </label>
             </div>
             <!--                    用于显示错误-->
-            <div class="errorDENGLU">
-
-            </div>
-            <div class="errorDENGLU">
-
-            </div>
-            <div class="errorDENGLU">
-
-            </div>
-            <div class="errorDENGLU">
-
-            </div>
-            <p class="forget"><a href="#">
-                忘记密码?前往修改——————>
-            </a></p>
-            <p class="forget"><a onclick="showWin('zhuce')">
-                没有账户?前往注册——————>
-            </a></p>
+            <div class="errorDENGLU"></div>
+            <div class="errorDENGLU"></div>
+            <div class="errorDENGLU"></div>
+            <div class="errorDENGLU"></div>
+            <p class="forget">
+                <a href="#"> 忘记密码?前往修改——————> </a>
+            </p>
+            <p class="forget">
+                <a onclick="showWin('zhuce')"> 没有账户?前往注册——————> </a>
+            </p>
         </form>
-        <form id="box4" method="get" style="display:none">
+        <form id="box4" method="get" style="display: none">
             <h2 class="logintxt">注册</h2>
             <div class="inputBox">
-                <label for="ZCloginName"></label><input autocomplete=”off” id="ZCloginName"
-                                                        placeholder="请输入账号,以字母开头,8-15位" style="font-size:14px"
-                                                        type="text">
+                <label for="ZCloginName"></label><input autocomplete=”off”
+                                                        id="ZCloginName" placeholder="请输入账号,以字母开头,8-15位"
+                                                        style="font-size: 14px" type="text">
             </div>
             <div class="inputBox">
-                <label for="ZCpwd"></label><input autocomplete=”off” id="ZCpwd" placeholder="请输入密码,长度8-15位"
-                                                  type="password">
+                <label for="ZCpwd"></label><input autocomplete=”off” id="ZCpwd"
+                                                  placeholder="请输入密码,长度8-15位" type="password">
             </div>
             <div class="inputBox">
-                <label for="ZCpwdCheck"></label><input autocomplete=”off” id="ZCpwdCheck"
-                                                       placeholder="请再次输入密码" type="password">
+                <label for="ZCpwdCheck"></label><input autocomplete=”off”
+                                                       id="ZCpwdCheck" placeholder="请再次输入密码" type="password">
             </div>
             <div class="inputBox">
-                <label for="ZCName"></label><input autocomplete=”off” id="ZCName" placeholder="请输入昵称">
+                <label for="ZCName"></label><input autocomplete=”off” id="ZCName"
+                                                   placeholder="请输入昵称">
             </div>
             <div class="inputBox">
-                <label for="ZCSex"></label><input id="ZCSex" list="sexlist" placeholder="请选择性别" type="text">
+                <label for="ZCSex"></label><input id="ZCSex" list="sexlist"
+                                                  placeholder="请选择性别" type="text">
             </div>
             <datalist id="sexlist">
                 <option>男</option>
@@ -628,29 +609,22 @@
                 <input id="zc" type="button" value="立即注册">
             </div>
             <!--                    用于显示错误-->
-            <div class="errorZHUCE">
-
-            </div>
-            <div class="errorZHUCE">
-
-            </div>
-            <div class="errorZHUCE">
-
-            </div>
-            <div class="errorZHUCE">
-
-            </div>
-            <p class="forget"><a href="#">
-                忘记密码?前往修改——————>
-            </a></p>
-            <p class="forget"><a onclick="showWin('denglu')">
-                已有账户?前往登陆——————>
-            </a></p>
+            <div class="errorZHUCE"></div>
+            <div class="errorZHUCE"></div>
+            <div class="errorZHUCE"></div>
+            <div class="errorZHUCE"></div>
+            <p class="forget">
+                <a href="#"> 忘记密码?前往修改——————> </a>
+            </p>
+            <p class="forget">
+                <a onclick="showWin('denglu')"> 已有账户?前往登陆——————> </a>
+            </p>
         </form>
     </div>
 </div>
 
-<div class="form container" id="msg"><h2 id="msgg" style="font-size:40px;width:100%;float:left">~~我是一个提醒窗~~</h2>
+<div class="form container ok" id="msg">
+    <h2 id="msgg" style="font-size: 40px; width: 100%; float: left">连接服务器中</h2>
     <form>
         <div class="inputBox">
             <input id="check" onclick="hideError()" type="button" value="确定">
@@ -661,48 +635,54 @@
 <div class="container" id="personInfo">
     <div id="perInfo">
         <div id="perHead">
-            <input id="headUP" type="file" accept="image/jpeg,image/jpg,image/png">
-            <img alt="点击修改头像" id="perImg" src="images/system/defaultHead.png">
-            <div class="perInfoA" style="position:absolute;top:130px;left:145px;">
-                <img alt="游戏用户" id="perInfoAU" src="images/system/userIcon.png" style="display:block">
-                <img alt="管理员" id="perInfoAA" src="images/system/adminIcon.png" style="display:none">
+            <input accept="image/jpeg,image/jpg,image/png" alt="点击修改头像"
+                   id="headUP" title="点击修改头像" type="file"> <img alt="点击修改头像" id="perImg"
+                                                                 src="images/system/defaultHead.png">
+            <div class="perInfoA"
+                 style="position: absolute; top: 130px; left: 145px;" title="用户类型">
+                <img alt="游戏用户" id="perInfoAU" src="images/system/userIcon.png"
+                     style="display: block"> <img alt="管理员" id="perInfoAA"
+                                                  src="images/system/adminIcon.png" style="display: none">
             </div>
-            <div class="perInfoA" style="position:absolute;top:130px;left:235px;">
-                <img alt="男" id="perInfoAB" src="images/system/boyIcon.png" style="display:block">
-                <img alt="女" id="perInfoAG" src="images/system/girlIcon.png" style="display:none">
+            <div class="perInfoA"
+                 style="position: absolute; top: 130px; left: 235px;" title="性别">
+                <img alt="男" id="perInfoAB" src="images/system/boyIcon.png"
+                     style="display: block"> <img alt="女" id="perInfoAG"
+                                                  src="images/system/girlIcon.png" style="display: none">
             </div>
-            <div class="perInfoA" style="position:absolute;top:60px;left:145px;">
-                <img alt="修改密码"
-                     src="images/system/passIcon.png"
-                     style="display:block;width:15px;height:15px;margin: 2px auto auto;">
+            <div class="perInfoA"
+                 style="position: absolute; top: 60px; left: 145px;" title="点击修改密码">
+                <img alt="修改密码" src="images/system/passIcon.png"
+                     style="display: block; width: 15px; height: 15px; margin: 2px auto auto;">
             </div>
-            <div class="perInfoA" style="position:absolute;top:60px;left:235px;">
-                <img alt="修改资料"
-                     src="images/system/editIcon.png"
-                     style="display:block;width:15px;height:15px;margin: 3px auto auto;">
+            <div class="perInfoA"
+                 style="position: absolute; top: 60px; left: 235px;" title="点击修改个人信息">
+                <img alt="修改资料" src="images/system/editIcon.png"
+                     style="display: block; width: 15px; height: 15px; margin: 3px auto auto;">
             </div>
         </div>
         <!--        //改密 、编辑、管理员、男女-->
     </div>
     <div id="perEdit">
-        <p id="nickname" style="font-size:40px;padding-bottom: 10px;">昵称</p>
-        <p id="username">用户名</p>
+        <div id="starts" title="等级"></div>
+        <p id="nickname" style="font-size: 40px; padding-bottom: 10px;" title="昵称">昵称</p>
+        <p id="username" title="用户名">用户名</p>
     </div>
     <div id="perHis">
         <div>
-            <div class="perHisOne">
+            <div class="perHisOne" title="对战次数">
                 <div>对战次数</div>
             </div>
-            <div class="perHisTwo">
-                <div>5201314</div>
+            <div class="perHisTwo" title="对战次数">
+                <div id="flightTime">5201314</div>
             </div>
         </div>
         <div>
-            <div class="perHisOne">
+            <div class="perHisOne" title="胜率">
                 <div>胜率</div>
             </div>
-            <div class="perHisTwo">
-                <div>0%</div>
+            <div class="perHisTwo" title="胜率">
+                <div id="winTime">0%</div>
             </div>
         </div>
     </div>
@@ -719,6 +699,43 @@
 <!--用户类操作-->
 <script src="js/tools/UserDB.js"></script>
 <script type="text/javascript">
+    window.onload = function () {
+        showError("连接服务器中", true, true)
+        if (checkLogin()) {
+            let user = {
+                'userName': getUserName(),
+            }
+            tools.ajaxGet("http://127.0.0.1:8080/gobang/api/getUser", user, function (res) {
+                setTimeout(function () {
+                    hideError()
+                    if (res.status !== 0) {
+                        showError("登录失效，请重新登陆")
+                        return (res)
+                    }
+                    let jsonObject = res.data
+                    updateUserInfoFromJson(jsonObject)
+                    console.log(jsonObject)
+                }, 1500)
+            }, function (res) {
+                setTimeout(function () {
+                    hideError()
+                    showError("服务器连接失败，请检查网络！")
+                }, 1500)
+            })
+        } else {
+            tools.ajaxGet("http://127.0.0.1:8080/gobang/api/hello", null, function (res) {
+                setTimeout(function () {
+                    hideError()
+                    console.log(res)
+                }, 1500)
+            }, function (res) {
+                setTimeout(function () {
+                    hideError()
+                    showError("服务器连接失败，请检查网络！")
+                }, 1500)
+            })
+        }
+    }
     let win = ""
 
     function HSmenu() {
@@ -783,16 +800,18 @@
         document.getElementsByClassName("container")[1].style.top = "-50%"
     }
 
-    function showError(msg, ok) {
+    function showError(msg, ok, loading) {
         document.getElementById("msgg").innerHTML = msg
-        if (ok) {
+        if (ok || loading) {
             document.getElementsByClassName("container")[1].classList.add("ok")
         } else
             document.getElementsByClassName("container")[1].classList.remove("ok")
         document.getElementsByClassName("container")[1].style.top = "50%"
-        setTimeout(function () {
-            hideError()
-        }, 3000);
+        if (!loading === true) {
+            setTimeout(function () {
+                hideError()
+            }, 3000);
+        }
     }
 
     function clean() {
@@ -852,6 +871,9 @@
         let captcha1 = new TencentCaptcha('2004603663', function (res) {
             tools.ajaxGet("http://127.0.0.1:8080/gobang/api/add", user, function () {
                 showError("注册成功！", "ok")
+                setTimeout(function () {
+                    location.reload();
+                }, 500)
             }, function (res) {
                 showError("服务异常！" + res)
             })
@@ -875,67 +897,119 @@
                         "/") //登陆用户名被编码保存，一方面防止中文存入cookie崩溃，一方面"加密"
                     setCookie(btoa(btoa(noTuiGe(jsonObject.name))), jiamitoken(jsonObject.name), "7",
                         "/") //登陆用户名被两次编码进行"加密"，同时保存对应的加密token
+                    setCookie("autoLogin", "ok", "7") //登陆用户名被两次编码进行"加密"，同时保存对应的加密token
                 } else {
                     setCookie("loginName", btoa(noTuiGe(jsonObject.name)), "/")
                     setCookie(btoa(btoa(noTuiGe(jsonObject.name))), jiamitoken(jsonObject.name), "/")
                 }
                 showError("登录成功！", "ok")
+                setTimeout(function () {
+                    location.reload();
+                }, 500)
             })
         });
         captcha1.show();
     }
 
     function loginOut() { //退出按钮
+        setCookie("autoLogin", "", -7)
         setCookie("loginName", "", -7) //将cookie置空，同时过期
         showError("退出成功！", "ok")
     }
 
-    document.getElementById("headUP").addEventListener("change",function () {
+    document.getElementById("headUP").addEventListener("change", function () {
         const file = document.getElementById('headUP').files[0]
-        const fileMaxSize = 1024*1024*2
+        const fileMaxSize = 1024 * 1024 * 2
         if (file.size > fileMaxSize) {
             showError("头像大小不得超过2M，请重新选择！")
         } else {
             let reader = new FileReader();
             reader.readAsDataURL(file);
             let image64 = ""
-            reader.onload = function (e){
-                image64=e.target.result;
+            reader.onload = function (e) {
+                image64 = e.target.result;
                 let image = new Image()
                 // let reader = new FileReader()
                 // reader.readAsDataURL(file)
                 // let image64=reader.result;
-                image.src= image64;
-                image.onload =function(){
-                    if(image.width===image.height && image.height!==0){
-                        document.getElementById("perImg").src=image64;
+                image.src = image64;
+                image.onload = function () {
+                    if (image.width === image.height && image.height !== 0) {
+                        document.getElementById("perImg").src = image64;
                         const canvas = document.createElement('canvas')
                         const context = canvas.getContext('2d')
-                        canvas.width=image.width>500?500:image.width;
-                        canvas.height=image.height>500?500:image.height;
-                        context.clearRect(0,0,image.width>500?500:image.width,image.height>500?500:image.height)
-                        context.drawImage(image,0,0,image.width>500?500:image.width,image.height>500?500:image.height)
-                        nowsize = file.size*((500*500)/(canvas.width*canvas.height))
-                        let quality = nowsize > 1024*1024*0.8?(1024*1024*0.8)/nowsize:1
-                        console.log("quality:"+quality)
-                        let base64Str = canvas.toDataURL('image/jpg',quality);
+                        canvas.width = image.width > 500 ? 500 : image.width;
+                        canvas.height = image.height > 500 ? 500 : image.height;
+                        context.clearRect(0, 0, image.width > 500 ? 500 : image.width, image.height > 500 ? 500 : image.height)
+                        context.drawImage(image, 0, 0, image.width > 500 ? 500 : image.width, image.height > 500 ? 500 : image.height)
+                        nowsize = file.size * ((500 * 500) / (canvas.width * canvas.height))
+                        let quality = nowsize > 1024 * 1024 * 0.8 ? (1024 * 1024 * 0.8) / nowsize : 1
+                        console.log("quality:" + quality)
+                        let base64Str = canvas.toDataURL('image/png', quality);
                         console.log(base64Str);
                         let imageObject = {
-                            'image' : base64Str,
+                            'userName': getUserName(),
+                            'image': base64Str,
                         }
-                        tools.ajaxPost("",imageObject,function(){
-                            showError("图片上传成功！","ok")
-                        },function(res){
-                            showError("图片上传失败！"+res.data,"ok")
-                        })
-                    }
-                    else{
+                        $.ajax({
+                            type: 'POST',
+                            url: "http://127.0.0.1:8080/gobang/api/updateHead",
+                            data: JSON.stringify(imageObject),
+                            success: function (res) {
+                                showError("图片上传成功！", "ok")
+                            },
+                            contentType: 'application/json',
+                            dataType: 'json',
+                            cache: false,
+                            error: function (res) {
+                                showError("图片上传失败！" + res, "ok")
+                            },
+                        });
+                        // tools.ajaxPost("http://127.0.0.1:8080/gobang/api/updateHead",imageObject,function(){
+                        //     showError("图片上传成功！","ok")
+                        // },function(res){
+                        //     showError("图片上传失败！"+res.data,"ok")
+                        // },false)
+                    } else {
                         showError("头像长宽需一致，请重新选择！")
                     }
                 }
             }
         }
     });
+
+    function showInfo() {
+        if (!checkLogin())
+            showError("请先登录！")
+        else {
+            let perImg = document.getElementById("perImg")
+            perImg.onerror = function () {
+                let perImg = document.getElementById("perImg")
+                perImg.src = "images/system/defaultHead.png"
+                perImg.onerror = null;
+            }
+            perImg.src = "images/headIcons/" + getUserName() + ".png"
+            let user = getUser(getUserName())
+            showEdit()
+            document.getElementById("nickname").innerHTML = user.nickname
+            document.getElementById("username").innerHTML = user.name
+            document.getElementById("flightTime").innerHTML = user.times.toString()
+            if (user.times === 0)
+                document.getElementById("winTime").innerHTML = "0%"
+            else
+                document.getElementById("winTime").innerHTML = (100 * (user.wintimes / user.times)).toFixed(2) + "%"
+            if (user.admin === 1) {
+                document.getElementById("perInfoAU").style.display = "none";
+                document.getElementById("perInfoAA").style.display = "block";
+            }
+            if (user.sex === 0) {
+                document.getElementById("perInfoAB").style.display = "none";
+                document.getElementById("perInfoAG").style.display = "block";
+            }
+            let startList=["startsZer","startsOne","startsTwo","startsThr","startsFou","startsFiv"]
+            document.getElementById("starts").classList.add(startList[user.level])
+        }
+    }
 
 </script>
 </body>

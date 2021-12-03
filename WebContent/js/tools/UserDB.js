@@ -1,5 +1,35 @@
 //利用localStorage模拟一个后端数据库
 
+function getCookie(name) {
+    let prefix = name + "="
+    let start = document.cookie.indexOf(prefix)
+    if (start == -1) {
+        return null;
+    }
+    let end = document.cookie.indexOf(";", start + prefix.length)
+    if (end == -1) {
+        end = document.cookie.length;
+    }
+    let value = document.cookie.substring(start + prefix.length, end)
+    return unescape(value);
+}
+
+function setCookie(cname, cvalue, exdays, path) {
+    let d = new Date()
+    document.cookie = "testCookie=true"
+    if (!(getCookie("testCookie") === "true"))
+        console.log("本地运行无法储存Cookie，请使用网页版进行测试！")
+    let cookieString = cname + "=" + cvalue
+    if (exdays) {
+        d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000))
+        let expires = "expires=" + d.toUTCString();
+        cookieString = cookieString + "; " + expires
+    }
+    if (path)
+        cookieString = cookieString + "; " + path
+    document.cookie = cookieString
+}
+
 function utf8_to_b64(str) {//支持中文的base64加密解密
     if (str === null || str === 'null')
         return null;
@@ -36,7 +66,7 @@ function updateUserInfo(admin, level, name, nickname, sex, times, wintimes) {
 }
 
 function updateUserInfoFromJson(JSON) {
-    updateUserInfo(JSON.admin, JSON.level, JSON.name, JSON.nickname, JSON.sex, JSON.times, JSON.wintims)
+    updateUserInfo(JSON.admin, JSON.level, JSON.name, JSON.nickname, JSON.sex, JSON.times, JSON.wintimes)
 }
 
 // function register(name, id, username, pwd, admin = false, highPermissions = false, check = false) {
@@ -102,26 +132,23 @@ function getName(username) {
     return userObj.name;
 }
 
-function getUser(username) {
-
-    if (username === null || username === 'null')
-        return user;
-    let UserJsonString = localStorage.getItem(utf8_to_b64(username))
-    return JSON.parse(b64_to_utf8(UserJsonString));
-}
-
-function gettype(userOBJ) {
-    if (userOBJ.type === "admin")
-        return "管理员"
-    else if (userOBJ.type === "tea")
-        return "老师"
-    else
-        return "同学"
-}
+// function getUser(username) {
+//
+//     if (username === null || username === 'null')
+//         return user;
+//     let UserJsonString = localStorage.getItem(utf8_to_b64(username))
+//     return JSON.parse(b64_to_utf8(UserJsonString));
+// }
 
 function updateUser(userObj) {
     let UserJsonString = JSON.stringify(userObj);
-    localStorage.setItem(utf8_to_b64(userObj.username), utf8_to_b64(UserJsonString));
+    localStorage.setItem(utf8_to_b64(userObj.name), utf8_to_b64(UserJsonString));
+}
+
+function getUser(userName) {
+    let UserJsonString = localStorage.getItem(utf8_to_b64(userName))
+    let userObj = JSON.parse(b64_to_utf8(UserJsonString));
+    return userObj;
 }
 
 function newMessage(userObj, mes) {

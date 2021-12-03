@@ -1,9 +1,12 @@
 package restful.utils;
 
+import java.util.List;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import restful.database.EM;
 import restful.entity.LogEntity;
+import restful.entity.UserEntity;
 
 public class Logging {
 
@@ -14,6 +17,17 @@ public class Logging {
 
 	public static void Log(String className, String message, Integer user) {
 		LogEntity log = new LogEntity(className, message, user);
+		Do(log);
+	}
+	
+	public static void Log(String className, String message, String username) {
+		List<UserEntity> result = EM.getEntityManager().createNamedQuery("UserEntity.findUserByName", UserEntity.class)
+				.setParameter("NAME", username).getResultList();
+		LogEntity log ;
+		if(result.isEmpty())
+			log=new LogEntity(className, message);
+		else
+			log = new LogEntity(className, message, result.get(0).getID());
 		Do(log);
 	}
 

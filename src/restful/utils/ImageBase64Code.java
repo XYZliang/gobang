@@ -1,20 +1,32 @@
 package restful.utils;
 
+import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URLConnection;
 import java.util.Base64;
 
 public class ImageBase64Code {
     /**
-     * 图片转化成base64字符串
+     * 本地图片转化成js base64字符串
      * @param imgPath
      * @return
      */
     public static String GetImageStr(String imgPath) {// 将图片文件转化为字节数组字符串，并对其进行Base64编码处理
+
+        FileInputStream inputFile = null;
+        String mimeType = "image/png";
+        try {
+            inputFile = new FileInputStream(imgPath);
+            mimeType = URLConnection.guessContentTypeFromStream(new BufferedInputStream(inputFile));
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
         String imgFile = imgPath;// 待处理的图片
         InputStream in = null;
         byte[] data = null;
@@ -33,18 +45,17 @@ public class ImageBase64Code {
             try {
                 in.close();
             } catch (IOException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         }
-        return encode;
+        return "data:"+mimeType+";base64,"+encode;
     }
 
     /**
      * base64字符串转化成图片
      *
      * @param imgData
-     *            图片编码
+     *            js 图片编码
      * @param imgFilePath
      *            存放到本地路径
      * @return
@@ -52,14 +63,16 @@ public class ImageBase64Code {
      */
     @SuppressWarnings("finally")
     public static boolean GenerateImage(String imgData, String imgFilePath){ // 对字节数组字符串进行Base64解码并生成图片
+        imgData=imgData.replaceAll("data:image/jpeg;base64,", "");
+        imgData=imgData.replaceAll("data:image/jpg;base64,", "");
+        imgData=imgData.replaceAll("data:image/png;base64,", "");
+//        System.out.println(imgData);
         if (imgData == null) // 图像数据为空
             return false;
         Base64.Decoder decoder = Base64.getDecoder();
         OutputStream out = null;
         try {
             out = new FileOutputStream(imgFilePath);
-            ImageBase64Code path=new ImageBase64Code();
-            System.out.println(path.getClass().getResource("").getPath()+out);
             // Base64解码
             byte[] b = decoder.decode(imgData);
             for (int i = 0; i < b.length; ++i) {
@@ -84,5 +97,4 @@ public class ImageBase64Code {
             return true;
         }
     }
-   
 }

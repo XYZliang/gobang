@@ -63,6 +63,7 @@
     function md5cmn(q, a, b, x, s, t) {
         return safeAdd(bitRotateLeft(safeAdd(safeAdd(a, q), safeAdd(x, t)), s), b)
     }
+
     /**
      * Basic operation the algorithm uses.
      *
@@ -78,6 +79,7 @@
     function md5ff(a, b, c, d, x, s, t) {
         return md5cmn((b & c) | (~b & d), a, b, x, s, t)
     }
+
     /**
      * Basic operation the algorithm uses.
      *
@@ -93,6 +95,7 @@
     function md5gg(a, b, c, d, x, s, t) {
         return md5cmn((b & d) | (c & ~d), a, b, x, s, t)
     }
+
     /**
      * Basic operation the algorithm uses.
      *
@@ -108,6 +111,7 @@
     function md5hh(a, b, c, d, x, s, t) {
         return md5cmn(b ^ c ^ d, a, b, x, s, t)
     }
+
     /**
      * Basic operation the algorithm uses.
      *
@@ -337,6 +341,7 @@
     function rawMD5(s) {
         return rstrMD5(str2rstrUTF8(s))
     }
+
     /**
      * Encodes input string as Hex encoded string
      *
@@ -346,6 +351,7 @@
     function hexMD5(s) {
         return rstr2hex(rawMD5(s))
     }
+
     /**
      * Calculates the raw HMAC-MD5 for the given key and data
      *
@@ -356,6 +362,7 @@
     function rawHMACMD5(k, d) {
         return rstrHMACMD5(str2rstrUTF8(k), str2rstrUTF8(d))
     }
+
     /**
      * Calculates the Hex encoded HMAC-MD5 for the given key and data
      *

@@ -10,6 +10,7 @@ public enum ResultCode {
 
 	/* 参数错误：10001-19999 */
 	PARAM_IS_INVALID(10001, "参数无效"),
+	PARAM_IS_MISS(10002, "缺少参数"),
 
 	/* 用户错误：20001-29999 */
 	USER_HAS_EXISTED(20001, "用户名已存在，请更换用户名"),
