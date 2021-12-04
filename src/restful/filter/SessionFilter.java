@@ -16,6 +16,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
+
 public class SessionFilter implements Filter {
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
@@ -25,7 +26,7 @@ public class SessionFilter implements Filter {
 		if (req.getHeader("Sec-WebSocket-Extensions") != null) {
 			requestWrapper.addHeader("Sec-WebSocket-Extensions", "permessage-deflate");
 		}
-		System.out.println(""+req.getSession());
+		System.out.println("" + req.getSession());
 //		CommonTools.setSession(req.getSession());
 		chain.doFilter(requestWrapper, response);
 	}

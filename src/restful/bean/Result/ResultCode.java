@@ -9,14 +9,11 @@ public enum ResultCode {
 	SYSTEM_ERROR(10000, "系统异常，请稍后重试"),
 
 	/* 参数错误：10001-19999 */
-	PARAM_IS_INVALID(10001, "参数无效"),
-	PARAM_IS_MISS(10002, "缺少参数"),
+	PARAM_IS_INVALID(10001, "参数无效"), PARAM_IS_MISS(10002, "缺少参数"),
 
 	/* 用户错误：20001-29999 */
-	USER_HAS_EXISTED(20001, "用户名已存在，请更换用户名"),
-	USER_NOT_EXISTED(20002, "用户不存在"), 
-	USER_PWD_ERROR(20003, "用户密码错误"),
-	USER_UA_CHANGE(20004, "用户设备变更");
+	USER_HAS_EXISTED(20001, "用户名已存在，请更换用户名"), USER_NOT_EXISTED(20002, "用户不存在"), USER_PWD_ERROR(20003, "用户密码错误"),
+	USER_UA_CHANGE(20004, "用户设备变更"), USER_OPWD_ERROR(20003, "用户原密码错误"), USER_PER_LOW(20004, "用户权限不足");
 
 	private Integer code;
 

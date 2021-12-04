@@ -109,7 +109,7 @@ public class BeautifyReasult {
 		re = StringEscapeUtils.unescapeJavaScript(re);
 		re = re.replace("data\":\"[{", "data\": [{");
 		re = re.replace("}]\"}", "}]}");
-		re = StringEscapeUtils.unescapeJavaScript(re); 
+		re = StringEscapeUtils.unescapeJavaScript(re);
 		re = re.replace("\": \"{", "\": {");
 		re = re.replace("}\"}", "}}");
 		re = StringEscapeUtils.unescapeJavaScript(re);
@@ -130,5 +130,5 @@ public class BeautifyReasult {
 		}
 		return Do(re);
 	}
-	
+
 }

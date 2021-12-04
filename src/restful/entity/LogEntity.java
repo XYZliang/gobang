@@ -72,7 +72,7 @@ public class LogEntity {
 		DESCRIPTION = dESCRIPTION;
 		USERID = uSERID;
 		TIME = new Date();
-		USERID=4;
+		USERID = 4;
 
 	}
 
@@ -81,7 +81,7 @@ public class LogEntity {
 		CLASSPATH = cLASSPATH;
 		DESCRIPTION = dESCRIPTION;
 		TIME = new Date();
-		USERID=4;
+		USERID = 4;
 	}
 
 	public LogEntity() {
@@ -93,7 +93,5 @@ public class LogEntity {
 		return "LogEntity [ID=" + ID + ", USERID=" + USERID + ", CLASSPATH=" + CLASSPATH + ", DESCRIPTION="
 				+ DESCRIPTION + ", TIME=" + TIME + "]";
 	}
-	
-	
 
 }

@@ -87,7 +87,7 @@ document.getElementById("ZCpwdCheck").addEventListener("keyup", function () { //
     }
     flushError("errorZHUCE")
 })
-document.getElementById("ZCName").addEventListener("keyup", function () { //第二个密码
+document.getElementById("ZCName").addEventListener("keyup", function () {
     let str1 = noTuiGe(ZCName.value)
     if (str1.length > 0) {
         Error[7] = "0"
@@ -188,4 +188,36 @@ document.getElementById("dl").addEventListener("mousedown", function () { //按�
             Error[4 + i] = "0"
     }
     flushError("errorDENGLU")
+})
+
+document.getElementById("changePassOpwd").addEventListener("keyup", function () { //密码
+    let str = noTuiGe(changePassOpwd.value);
+    if ((str.length >= 8 && str.length <= 15) || str.length === 0) {
+        Error[2] = "0"
+        Error[5] = "0"
+    } else {
+        Error[2] = "1"
+    }
+    flushError("errorChange")
+})
+document.getElementById("changePassPwd").addEventListener("keyup", function () { //密码
+    let str = noTuiGe(changePassPwd.value);
+    if ((str.length >= 8 && str.length <= 15) || str.length === 0) {
+        Error[2] = "0"
+        Error[5] = "0"
+    } else {
+        Error[2] = "1"
+    }
+    flushError("errorChange")
+})
+document.getElementById("changePassPwdCheck").addEventListener("keyup", function () { //第二个密码
+    let str = noTuiGe(changePassPwd.value)
+    let str1 = noTuiGe(changePassPwdCheck.value)
+    if (str === str1) {
+        Error[6] = "0"
+        Error[3] = "0"
+    } else {
+        Error[3] = "1"
+    }
+    flushError("errorChange")
 })

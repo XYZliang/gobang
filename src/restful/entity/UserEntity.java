@@ -20,7 +20,7 @@ import restful.utils.Encryption;
 @NamedQueries({ @NamedQuery(name = "UserEntity.findUserAll", query = "SELECT u FROM UserEntity u"),
 		@NamedQuery(name = "UserEntity.findUserByName", query = "SELECT u FROM UserEntity u where u.NAME like :NAME") })
 public class UserEntity {
-	@JsonIgnoreProperties(value={"ID", "PASSWORD", "SALT", "TOKEN", "LOGINTIME", "UA"})
+	@JsonIgnoreProperties(value = { "ID", "PASSWORD", "SALT", "TOKEN", "LOGINTIME", "UA" })
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@JsonIgnore
@@ -42,6 +42,7 @@ public class UserEntity {
 	private Date LOGINTIME;
 	@JsonIgnore
 	private String UA;
+	private String DISABLE;
 
 	/**
 	 * @return iD
@@ -239,6 +240,20 @@ public class UserEntity {
 		TIMES = tIMES;
 	}
 
+	/**
+	 * @return dISABLE
+	 */
+	public String getDISABLE() {
+		return DISABLE;
+	}
+
+	/**
+	 * @param dISABLE 要设置的 dISABLE
+	 */
+	public void setDISABLE(String dISABLE) {
+		DISABLE = dISABLE;
+	}
+
 	public void initZHUCE() {
 
 	}
@@ -247,9 +262,9 @@ public class UserEntity {
 		super();
 		NAME = nAME;
 		NICKNAME = nICKNAME;
-		if (sEX=="男")
+		if (sEX == "男")
 			SEX = 1;
-		else if(sEX=="%E7%94%B7")
+		else if (sEX == "%E7%94%B7")
 			SEX = 1;
 		else
 			SEX = 0;
@@ -270,8 +285,8 @@ public class UserEntity {
 
 	@Override
 	public String toString() {
-		return "UserEntity [NAME=" + NAME + ", NICKNAME=" + NICKNAME + ", SEX=" + SEX + ", ADMIN="
-				+ ISADMIN + ", TIMES=" + TIMES + ", WINTIMES=" + WINTIMES + ", LEVEL=" + LEVEL + "]";
+		return "UserEntity [NAME=" + NAME + ", NICKNAME=" + NICKNAME + ", SEX=" + SEX + ", ADMIN=" + ISADMIN
+				+ ", TIMES=" + TIMES + ", WINTIMES=" + WINTIMES + ", LEVEL=" + LEVEL + "]";
 	}
 
 	public String show() {
@@ -279,7 +294,7 @@ public class UserEntity {
 				+ ISADMIN + ", PASSWORD=" + PASSWORD + ", SALT=" + SALT + ", TOKEN=" + TOKEN + ", TIMES=" + TIMES
 				+ ", WINTIMES=" + WINTIMES + ", LEVEL=" + LEVEL + ", LOGINTIME=" + LOGINTIME + ", UA=" + UA + "]";
 	}
-	
+
 	public boolean checkPass(String pass) {
 		return (Encryption.getSaltMD5(pass, SALT).toString().equals(PASSWORD));
 	}

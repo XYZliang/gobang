@@ -20,7 +20,7 @@ public class GetClassName {
 			}
 		}.getClassName();
 		System.out.println(clazzName3);
-		//方法4：通过Thread的方法getStackTrace()
+		// 方法4：通过Thread的方法getStackTrace()
 		String clazzName4 = Thread.currentThread().getStackTrace()[2].getClassName();
 		System.out.println(clazzName4);
 	}

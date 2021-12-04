@@ -19,13 +19,13 @@ public class Logging {
 		LogEntity log = new LogEntity(className, message, user);
 		Do(log);
 	}
-	
+
 	public static void Log(String className, String message, String username) {
 		List<UserEntity> result = EM.getEntityManager().createNamedQuery("UserEntity.findUserByName", UserEntity.class)
 				.setParameter("NAME", username).getResultList();
-		LogEntity log ;
-		if(result.isEmpty())
-			log=new LogEntity(className, message);
+		LogEntity log;
+		if (result.isEmpty())
+			log = new LogEntity(className, message);
 		else
 			log = new LogEntity(className, message, result.get(0).getID());
 		Do(log);
@@ -41,7 +41,7 @@ public class Logging {
 	}
 
 	private static void sendDatabase(LogEntity log) {
-		System.out.println("log"+log);
+		System.out.println("log" + log);
 		log = EM.getEntityManager().merge(log);
 		EM.getEntityManager().persist(log);
 		EM.getEntityManager().getTransaction().commit();

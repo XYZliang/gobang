@@ -46,7 +46,8 @@ let tools = {
                     // isJson默认值为true，要解析json
                     if (isJson === undefined) {
                         isJson = true;
-                    }
+                    } else if (isJson === false)
+                        return succCb && succCb(ajax.responseText);
                     let res = ""
                     if (isJson) {
                         res = ajax.responseText === "" ? '{}' : ajax.responseText

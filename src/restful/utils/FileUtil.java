@@ -5,7 +5,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
-
 /**
  * 
  * 文件处理工具类,实现文件的复制、移动、查找、追加内容等。
@@ -98,6 +97,7 @@ public class FileUtil {
 
 		} finally {
 
+			return true;
 //			ReflectUtil.close(fd);
 
 		}
@@ -276,6 +276,16 @@ public class FileUtil {
 
 			return result;
 
+		}
+
+	}
+
+	public static boolean renameFile(String oldPath, String newPath) {
+		File file = new File(oldPath);
+		if (file.renameTo(new File(newPath))) {
+			return true;
+		} else {
+			return false;
 		}
 
 	}

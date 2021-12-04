@@ -78,9 +78,9 @@ public class Encryption {
 	 */
 	public static String makeSalt(Date date) {
 		final double d = Math.random();
-		final int id = (int)(d*1000);
+		final int id = (int) (d * 1000);
 		// 生成一个16位的随机数
-		String saltone = String.valueOf(Math.abs(date.getTime() * id *123456));
+		String saltone = String.valueOf(Math.abs(date.getTime() * id * 123456));
 		String salttwo = saltone.substring(0, 16);
 		return String.format("%016d", Long.parseLong(salttwo));
 		// 生成最终的加密盐

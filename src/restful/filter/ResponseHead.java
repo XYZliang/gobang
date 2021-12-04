@@ -5,7 +5,7 @@ import java.io.IOException;
 import javax.ws.rs.WebApplicationException;
 
 import org.jboss.resteasy.spi.interception.MessageBodyWriterContext;
-import org.jboss.resteasy.spi.interception.MessageBodyWriterInterceptor;  
+import org.jboss.resteasy.spi.interception.MessageBodyWriterInterceptor;
 
 //@SuppressWarnings("deprecation")  
 //
@@ -24,34 +24,34 @@ import org.jboss.resteasy.spi.interception.MessageBodyWriterInterceptor;
 //}  
 
 @SuppressWarnings("deprecation")
-public class ResponseHead implements MessageBodyWriterInterceptor{  
-	
-	private void addHead(MessageBodyWriterContext context,String arg1,String arg2) {
-		context.getHeaders().add(arg1, arg2);  
+public class ResponseHead implements MessageBodyWriterInterceptor {
+
+	private void addHead(MessageBodyWriterContext context, String arg1, String arg2) {
+		context.getHeaders().add(arg1, arg2);
 	}
-  
-    public void write(MessageBodyWriterContext context) throws WebApplicationException, IOException{  
-    			// 基础设置
-    	addHead(context, "X-Powered-By", "jxufe");
 
-				// 跨域设置
-    	addHead(context, "Access-Control-Allow-Origin", "*");
-    	addHead(context, "Access-Control-Allow-Credentials", "true");
-    	addHead(context,"Access-Control-Allow-Methods", "POST, GET, PATCH, DELETE, PUT");
-    	addHead(context, "Access-Control-Max-Age", "3600");
+	public void write(MessageBodyWriterContext context) throws WebApplicationException, IOException {
+		// 基础设置
+		addHead(context, "X-Powered-By", "jxufe");
 
-				// 禁止对api进行缓存
-				// 禁止客户端对该次响应的内容复制至缓存区域
-    	addHead(context,"Cache-Control", "no-store");
-				// 客户端下一次请求进行缓存有效度验证时，不使用该次的相应结果
-    	addHead(context, "Cache-Control", "no-cache");
-				// 设置缓存有效期是0，客户端下一次请求不使用缓存
-    	addHead(context, "Cache-Control", "max-age=0");
-				// 客户端下一次请求时，必须对缓存有效性进行重新验证再使用
-    	addHead(context,"Cache-Control", "must-revalidate");
-        context.proceed();  
-    }  
-}  
+		// 跨域设置
+		addHead(context, "Access-Control-Allow-Origin", "*");
+		addHead(context, "Access-Control-Allow-Credentials", "true");
+		addHead(context, "Access-Control-Allow-Methods", "POST, GET, PATCH, DELETE, PUT");
+		addHead(context, "Access-Control-Max-Age", "3600");
+
+		// 禁止对api进行缓存
+		// 禁止客户端对该次响应的内容复制至缓存区域
+		addHead(context, "Cache-Control", "no-store");
+		// 客户端下一次请求进行缓存有效度验证时，不使用该次的相应结果
+		addHead(context, "Cache-Control", "no-cache");
+		// 设置缓存有效期是0，客户端下一次请求不使用缓存
+		addHead(context, "Cache-Control", "max-age=0");
+		// 客户端下一次请求时，必须对缓存有效性进行重新验证再使用
+		addHead(context, "Cache-Control", "must-revalidate");
+		context.proceed();
+	}
+}
 
 //public class ResponseHead implements Filter {
 //

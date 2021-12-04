@@ -343,6 +343,16 @@
             line-height: 16px;
         }
 
+        .errorChange {
+            width: 100%;
+            color: rgb(217, 86, 67);
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            height: 16px;
+            line-height: 16px;
+        }
+
         #msg {
             z-index: 5201314;
             top: 50%;
@@ -438,7 +448,7 @@
             overflow: unset;
         }
 
-        #starts{
+        #starts {
             width: 100%;
             height: 15px;
             background-image: url(images/system/starts.png);
@@ -447,22 +457,28 @@
             background-position-x: center;
             overflow: hidden;
         }
-        .startsZer{
+
+        .startsZer {
             background-position-y: -105px;
         }
-        .startsOne{
+
+        .startsOne {
             background-position-y: -84px;
         }
-        .startsTwo{
+
+        .startsTwo {
             background-position-y: -63px;
         }
-        .startsThr{
+
+        .startsThr {
             background-position-y: -42px;
         }
-        .startsFou{
+
+        .startsFou {
             background-position-y: -21px;
         }
-        .startsFiv{
+
+        .startsFiv {
             background-position-y: -0px;
         }
 
@@ -504,6 +520,135 @@
         .perHisTwo div {
             font-family: 'LED' !important;
         }
+
+        #ManDiv {
+            max-height: 600px;
+            width: 100%;
+            min-height: 400px;
+            overflow: auto;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        #ManDivSen {
+            margin-left: 35px;
+            margin-right: 35px;
+            /*padding-top:65px;*/
+            /*position: absolute;*/
+            /*left: 50%;*/
+            /*transform: translate(-50%,0%);*/
+            /*height:400px;*/
+            width: 100%;
+        }
+
+        .ManTable {
+            position: absolute;
+            left: 50%;
+            transform: translate(-50%, 0%);
+            margin-left: 1px;
+        }
+
+        #management {
+            min-width: 1000px;
+            top: -50%;
+            display: block;
+            right: 45%;
+        }
+
+        #management table {
+        }
+
+        .ManHold {
+            height: 20px;
+        }
+
+        .ManTitle {
+            font-size: 20px;
+            height: 45px;
+            line-height: 45px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .ManColor {
+            background: rgba(163, 180, 180, 0.6);
+            box-shadow: 0 25px 45px rgba(163, 180, 180, 0.4);
+            border: 1px solid rgba(163, 180, 180, 0.8);
+            border-right: 1px solid rgba(163, 180, 180, 0.5);
+            border-bottom: 1px solid rgba(163, 180, 180, 0.5);
+        }
+
+        .ManColorB {
+            background: rgba(255, 255, 255, 0.6);
+            box-shadow: 0 25px 45px rgba(255, 255, 255, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            border-right: 1px solid rgba(255, 255, 255, 0.5);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .ManInfo {
+            line-height: 16px;
+            font-size: 16px
+        }
+
+        .ManInfo img {
+            width: 50px;
+            height: 50px;
+        }
+
+        .ManTitleTh1 {
+            min-width: 75px;
+        }
+
+        .ManTitleTh2 {
+            min-width: 75px;
+        }
+
+        .ManTitleTh3 {
+            min-width: 125px;
+            max-width: 125px;
+        }
+
+        .ManTitleTh4 {
+            min-width: 125px;
+            max-width: 125px;
+        }
+
+        .ManTitleTh5 {
+            min-width: 75px;
+        }
+
+        .ManTitleTh6 {
+            min-width: 75px;
+        }
+
+        .ManTitleTh7 {
+            min-width: 125px;
+            max-width: 125px;
+        }
+
+        .ManTitleTh8 {
+            min-width: 90px;
+        }
+
+        .ManTitleTh9 {
+            min-width: 90px;
+        }
+
+        .ManTitleTh10 {
+            min-width: 184px;
+        }
+
+        .ManInfo input {
+            width: 60px;
+            height: 40px;
+            border-radius: 20px;
+            background: rgba(254, 124, 109, 0.9);
+            box-shadow: 0 25px 45px rgba(254, 124, 109, 0.4);
+            border: 1px solid rgba(254, 124, 109, 0.8);
+            border-right: 1px solid rgba(254, 124, 109, 0.5);
+            border-bottom: 1px solid rgba(254, 124, 109, 0.5);
+        }
     </style>
 </head>
 <body>
@@ -531,7 +676,7 @@
 </a> <a class="leftBot" onclick="showInfo()">
     <div class="leftBotFir leftBotCom">个</div>
     <div class="leftBotTwo leftBotCom">人信息</div>
-</a> <a class="leftBot">
+</a> <a class="leftBot" onclick="openAdmin()">
     <div class="leftBotFir leftBotCom">管</div>
     <div class="leftBotTwo leftBotCom">理面板</div>
 </a> <a class="leftBot" onclick="loginOut()">
@@ -637,7 +782,7 @@
         <div id="perHead">
             <input accept="image/jpeg,image/jpg,image/png" alt="点击修改头像"
                    id="headUP" title="点击修改头像" type="file"> <img alt="点击修改头像" id="perImg"
-                                                                 src="images/system/defaultHead.png">
+                                                                src="images/system/defaultHead.png">
             <div class="perInfoA"
                  style="position: absolute; top: 130px; left: 145px;" title="用户类型">
                 <img alt="游戏用户" id="perInfoAU" src="images/system/userIcon.png"
@@ -651,12 +796,12 @@
                                                   src="images/system/girlIcon.png" style="display: none">
             </div>
             <div class="perInfoA"
-                 style="position: absolute; top: 60px; left: 145px;" title="点击修改密码">
+                 onclick="openChange()" style="position: absolute; top: 60px; left: 145px;" title="点击修改密码">
                 <img alt="修改密码" src="images/system/passIcon.png"
                      style="display: block; width: 15px; height: 15px; margin: 2px auto auto;">
             </div>
             <div class="perInfoA"
-                 style="position: absolute; top: 60px; left: 235px;" title="点击修改个人信息">
+                 onclick="openChangeInfo()" style="position: absolute; top: 60px; left: 235px;" title="点击修改个人信息">
                 <img alt="修改资料" src="images/system/editIcon.png"
                      style="display: block; width: 15px; height: 15px; margin: 3px auto auto;">
             </div>
@@ -687,6 +832,143 @@
         </div>
     </div>
 </div>
+
+<div class="container" style="z-index: 1000">
+    <div class="form" id="changePassWin">
+        <form id="box5" method="get">
+            <h2 class="logintxt" id="ChangePwdTxt">用户密码自行修改</h2>
+            <h2 id="ChangePwdUser" style="display:none">用户</h2>
+            <div class="inputBox">
+                <label for="ZCpwd"></label><input autocomplete=”off” id="changePassOpwd"
+                                                  placeholder="请输入原密码,长度8-15位" type="password">
+            </div>
+            <div class="inputBox">
+                <label for="ZCpwd"></label><input autocomplete=”off” id="changePassPwd"
+                                                  placeholder="请输入密码,长度8-15位" type="password">
+            </div>
+            <div class="inputBox">
+                <label for="ZCpwdCheck"></label><input autocomplete=”off”
+                                                       id="changePassPwdCheck" placeholder="请再次输入密码" type="password">
+            </div>
+            <div class="inputBox">
+                <input id="changePass" onclick="changePwd()" type="button" value="确认修改">
+            </div>
+            <div class="inputBox">
+                <input id="changePassRe" onclick="openChange()" type="button" value="取消修改">
+            </div>
+            <!--                    用于显示错误-->
+            <div class="errorChange"></div>
+            <div class="errorChange"></div>
+            <div class="errorChange"></div>
+            <div class="errorChange"></div>
+        </form>
+    </div>
+</div>
+
+<div class="container" style="z-index: 1000">
+    <div class="form" id="changeInfoWin">
+        <form id="box6" method="get">
+            <h2 class="logintxt" id="ChangeInfoTxt">用户信息自行修改</h2>
+            <h2 id="ChangeInfoUser" style="display:none">用户</h2>
+            <div class="inputBox" >
+                <label for="InfoLoginName"></label><input autocomplete=”off”
+                                                          id="InfoLoginName" placeholder="请输入账号,以字母开头,8-15位"
+                                                          style="font-size: 14px;display:none;" type="text">
+            </div>
+            <div class="inputBox">
+                <label for="InfoName"></label><input autocomplete=”off” id="InfoName"
+                                                     placeholder="昵称">
+            </div>
+            <div class="inputBox">
+                <label for="InfoSex"></label><input id="InfoSex" list="InfoSexlist"
+                                                    placeholder="性别" type="text">
+            </div>
+            <datalist id="InfoSexlist">
+                <option>男</option>
+                <option>女</option>
+            </datalist>
+            <div class="inputBox">
+                <label for="InfoSex"></label><input id="InfoAdmin" list="InfoAdminlist"
+                                                    placeholder="身份" type="text">
+            </div>
+            <datalist id="InfoAdminlist">
+                <option>是</option>
+                <option>否</option>
+            </datalist>
+            <div class="inputBox">
+                <input id="changeInfo" onclick="changeUserInfo()" type="button" value="确认修改">
+            </div>
+            <div class="inputBox">
+                <input id="changeInfoRe" onclick="openChangeInfo()" type="button" value="取消修改">
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="container" id="management">
+    <div id="ManDiv">
+        <table class="ManTable" style="z-index: 1000;background: rgb(207, 216, 216);">
+            <tr class="ManTitle ManColor" style="background: rgba(163,180,180);">
+                <th class="ManTitleTh1">主键ID</th>
+                <th class="ManTitleTh2">头像</th>
+                <th class="ManTitleTh3">用户名</th>
+                <th class="ManTitleTh4">昵称</th>
+                <th class="ManTitleTh5">性别</th>
+                <th class="ManTitleTh6">身份</th>
+                <th class="ManTitleTh8">游戏场次</th>
+                <th class="ManTitleTh9">胜利场次</th>
+                <th class="ManTitleTh10" colspan="3">操作</th>
+                <!--            <th>是否在线</th>-->
+            </tr>
+        </table>
+        <div id="ManDivSen">
+            <table class="">
+                <!--            <tr class="ManHold">-->
+                <!--                <th></th>-->
+                <!--                <th></th>-->
+                <!--                <th></th>-->
+                <!--                <th></th>-->
+                <!--                <th></th>-->
+                <!--                <th></th>-->
+                <!--                <th></th>-->
+                <!--                <th></th>-->
+                <!--                <th></th>-->
+                <!--                &lt;!&ndash;            <th>是否在线</th>&ndash;&gt;-->
+                <!--            </tr>-->
+                <tr class="ManTitle ManColor">
+                    <th class="ManTitleTh1">主键ID</th>
+                    <th class="ManTitleTh2">头像</th>
+                    <th class="ManTitleTh3">用户名</th>
+                    <th class="ManTitleTh4">昵称</th>
+                    <th class="ManTitleTh5">性别</th>
+                    <th class="ManTitleTh6">身份</th>
+                    <th class="ManTitleTh8">游戏场次</th>
+                    <th class="ManTitleTh9">胜利场次</th>
+                    <th class="ManTitleTh10" colspan="3">操作</th>
+                    <!--            <th>是否在线</th>-->
+                </tr>
+                <!--            <tr class="ManInfo ManColorB">-->
+                <!--                <th>4444</th>-->
+                <!--                <th><img alt="头像" src="images/system/defaultHead.png"></th>-->
+                <!--                <th>123456789123456</th>-->
+                <!--                <th>123456789123456</th>-->
+                <!--                <th>男</th>-->
+                <!--                <th>普通用户</th>-->
+                <!--                <th>5201314</th>-->
+                <!--                <th>5201314</th>-->
+                <!--                <th><input type="button" value="修改密码" title="修改密码" onclick="AdminChangePWD()"></th>-->
+                <!--                <th><input type="button" value="修改头像" title="修改头像" onclick="AdminChangeHead()"></th>-->
+                <!--                <th><input type="button" value="修改资料" title="修改资料" onclick="AdminChangeInfo()"></th>-->
+                <!--                &lt;!&ndash;            <th>是否在线</th>&ndash;&gt;-->
+                <!--            </tr>-->
+                <tr class="ManColor" id="TableButton">
+                    <th colspan="11">已经到底啦</th>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+
 <script src="js/tools/others/jquery.min.js" type="text/javascript"></script>
 <script src="js/login/InputErrorCheck.js" type="text/javascript"></script>
 <script src="js/tools/checkLoginStatus.js" type="text/javascript"></script>
@@ -715,25 +997,25 @@
                     let jsonObject = res.data
                     updateUserInfoFromJson(jsonObject)
                     console.log(jsonObject)
-                }, 1500)
+                }, 1000)
             }, function (res) {
                 setTimeout(function () {
                     hideError()
                     showError("服务器连接失败，请检查网络！")
-                }, 1500)
+                }, 1000)
             })
         } else {
             tools.ajaxGet("http://127.0.0.1:8080/gobang/api/hello", null, function (res) {
                 setTimeout(function () {
                     hideError()
                     console.log(res)
-                }, 1500)
+                }, 1000)
             }, function (res) {
                 setTimeout(function () {
                     hideError()
                     showError("服务器连接失败，请检查网络！")
-                }, 1500)
-            })
+                }, 1000)
+            }, false)
         }
     }
     let win = ""
@@ -834,7 +1116,7 @@
     function hideAllActionWin() {
         document.getElementsByClassName("container")[2].style.top = "-50%"
         document.getElementsByClassName("container")[0].style.top = "-50%"
-
+        document.getElementsByClassName("container")[3].style.top = "-50%"
     }
 
     function setCookie(cname, cvalue, exdays, path) {
@@ -870,12 +1152,12 @@
         }
         let captcha1 = new TencentCaptcha('2004603663', function (res) {
             tools.ajaxGet("http://127.0.0.1:8080/gobang/api/add", user, function () {
-                showError("注册成功！", "ok")
+                showError("注册成功！即将刷新！", "ok")
                 setTimeout(function () {
                     location.reload();
-                }, 500)
+                }, 2500)
             }, function (res) {
-                showError("服务异常！" + res)
+                showError("服务异常！" + res.desc+res.data)
             })
         });
         captcha1.show();
@@ -902,22 +1184,30 @@
                     setCookie("loginName", btoa(noTuiGe(jsonObject.name)), "/")
                     setCookie(btoa(btoa(noTuiGe(jsonObject.name))), jiamitoken(jsonObject.name), "/")
                 }
-                showError("登录成功！", "ok")
+                showError("登录成功！即将刷新！", "ok")
                 setTimeout(function () {
                     location.reload();
-                }, 500)
+                }, 2500)
+            }, function (res) {
+                showError("服务异常！" + res.desc+res.data)
             })
         });
         captcha1.show();
     }
 
-    function loginOut() { //退出按钮
+    function loginOut(noshow) { //退出按钮
         setCookie("autoLogin", "", -7)
         setCookie("loginName", "", -7) //将cookie置空，同时过期
-        showError("退出成功！", "ok")
+        if (noshow === false)
+            showError("退出成功！即将刷新！", "ok")
+        setTimeout(function () {
+            location.reload();
+        }, 2500)
     }
 
-    document.getElementById("headUP").addEventListener("change", function () {
+    let adminDo = false
+
+    function UpHead() {
         const file = document.getElementById('headUP').files[0]
         const fileMaxSize = 1024 * 1024 * 2
         if (file.size > fileMaxSize) {
@@ -935,7 +1225,8 @@
                 image.src = image64;
                 image.onload = function () {
                     if (image.width === image.height && image.height !== 0) {
-                        document.getElementById("perImg").src = image64;
+                        if (adminDo === false)
+                            document.getElementById("perImg").src = image64;
                         const canvas = document.createElement('canvas')
                         const context = canvas.getContext('2d')
                         canvas.width = image.width > 500 ? 500 : image.width;
@@ -947,9 +1238,19 @@
                         console.log("quality:" + quality)
                         let base64Str = canvas.toDataURL('image/png', quality);
                         console.log(base64Str);
+                        let userName = ""
+                        let fromAdmin = ""
+                        if (adminDo === false) {
+                            userName = getUserName()
+                            fromAdmin = null
+                        } else {
+                            userName = adminDo
+                            fromAdmin = getUserName()
+                        }
                         let imageObject = {
-                            'userName': getUserName(),
+                            'userName': userName,
                             'image': base64Str,
+                            'fromAdmin': fromAdmin,
                         }
                         $.ajax({
                             type: 'POST',
@@ -957,12 +1258,18 @@
                             data: JSON.stringify(imageObject),
                             success: function (res) {
                                 showError("图片上传成功！", "ok")
+                                if(adminDo!==false){
+                                    showError("修改成功!正在刷新用户信息！", "ok")
+                                    getInfos()
+                                }
+                                adminDo=false
                             },
                             contentType: 'application/json',
                             dataType: 'json',
                             cache: false,
                             error: function (res) {
                                 showError("图片上传失败！" + res, "ok")
+                                adminDo=false
                             },
                         });
                         // tools.ajaxPost("http://127.0.0.1:8080/gobang/api/updateHead",imageObject,function(){
@@ -976,6 +1283,10 @@
                 }
             }
         }
+    }
+
+    document.getElementById("headUP").addEventListener("change", function () {
+        UpHead(false)
     });
 
     function showInfo() {
@@ -1006,11 +1317,265 @@
                 document.getElementById("perInfoAB").style.display = "none";
                 document.getElementById("perInfoAG").style.display = "block";
             }
-            let startList=["startsZer","startsOne","startsTwo","startsThr","startsFou","startsFiv"]
+            let startList = ["startsZer", "startsOne", "startsTwo", "startsThr", "startsFou", "startsFiv"]
             document.getElementById("starts").classList.add(startList[user.level])
         }
     }
 
+    function openChange(name, admin) {
+        if (name === undefined)
+            name = getUserName()
+        document.getElementById("ChangePwdUser").innerHTML = name;
+        let user = getUser(getUserName())
+        if (user.admin === 1 && admin) {
+            document.getElementById("ChangePwdTxt").innerHTML = "修改" + name + "用户密码"
+            document.getElementById("changePassOpwd").style.display = "none"
+        } else {
+            document.getElementById("changePassOpwd").style.display = "block"
+            document.getElementById("ChangePwdTxt").innerHTML = name + "修改密码"
+        }
+        if (document.getElementsByClassName("container")[3].style.top !== "50%") {
+            document.getElementsByClassName("container")[3].style.top = "50%"
+        } else {
+            document.getElementsByClassName("container")[3].style.top = "-50%"
+        }
+    }
+
+    function openChangeInfo(name, admin, nickname, sex, isadmin) {
+        if (name === undefined) {
+            name = getUserName()
+            let user = getUser(name)
+            nickname = user.nickname
+            sex = user.sex
+            isadmin = user.admin
+        }
+        if (sex === 1)
+            sex = "男"
+        else if (sex === 0)
+            sex = "女"
+        document.getElementById("ChangeInfoUser").innerHTML = name;
+        let user = getUser(getUserName())
+        if (user.admin === 1 && admin) {
+            document.getElementById("ChangeInfoTxt").innerHTML = "修改" + name + "用户信息"
+            document.getElementById("InfoLoginName").style.display = "block"
+            document.getElementById("InfoAdmin").style.display = "block"
+        } else {
+            document.getElementById("InfoLoginName").style.display = "none"
+            document.getElementById("InfoAdmin").style.display = "none"
+            document.getElementById("ChangeInfoTxt").innerHTML = name + "信息修改"
+        }
+        if (document.getElementsByClassName("container")[4].style.top !== "50%") {
+            document.getElementsByClassName("container")[4].style.top = "50%"
+            document.getElementById("InfoLoginName").placeholder = "用户名：" + name
+            document.getElementById("InfoName").placeholder = "昵称：" + nickname
+            document.getElementById("InfoSex").placeholder = "性别：" + sex
+            if (isadmin === 1)
+                document.getElementById("InfoAdmin").placeholder = "身份：管理员"
+            else
+                document.getElementById("InfoAdmin").placeholder = "身份：非管理员普通用户"
+        } else {
+            document.getElementsByClassName("container")[4].style.top = "-50%"
+        }
+    }
+
+    function changePwd() {
+        let fromUser=null
+        if (adminDo === false) {
+            fromUser = null
+        } else {
+            fromUser = getUserName()
+        }
+        let changePwduser = {
+            'Opassword': noTuiGe(changePassOpwd.value),
+            'Npassword': noTuiGe(changePassPwd.value),
+            'userName': document.getElementById("ChangePwdUser").innerHTML,
+            'fromUser': fromUser,
+        }
+        tools.ajaxGet("http://127.0.0.1:8080/gobang/api/CPWD", changePwduser, function (res) {
+            console.log(res)
+            if (res.status === 0) {
+                openChange()
+                if(adminDo===false) {
+                    showError("修改成功！请重新登录", "ok")
+                    loginOut(false)
+                }
+            } else {
+                showError("修改失败！" + res.desc+res.data)
+                adminDo=false
+            }
+            adminDo=false
+        }, function () {
+            showError("系统异常！")
+            adminDo=false
+        })
+    }
+
+    function changeUserInfo() {
+        let fromUser=null
+        if (adminDo === false) {
+            fromUser = null
+        } else {
+            fromUser = getUserName()
+        }
+
+        let changeinfouser = {
+            'sex': noTuiGe(InfoSex.value),
+            'nickname': noTuiGe(InfoName.value),
+            'userName': document.getElementById("ChangeInfoUser").innerHTML,
+            'newUserName': noTuiGe(InfoLoginName.value),
+            'fromUser': fromUser,
+            'admin': noTuiGe(InfoAdmin.value),
+        }
+        tools.ajaxGet("http://127.0.0.1:8080/gobang/api/CInfo", changeinfouser, function (res) {
+            console.log(res)
+            if (res.status === 0) {
+                openChangeInfo()
+                if(adminDo===false) {
+                    showError("修改成功!即将刷新！", "ok")
+                    setTimeout(function () {
+                        location.reload();
+                    }, 2500)
+                }
+                else{
+                    showError("修改成功!正在刷新用户信息！", "ok")
+                    getInfos()
+                }
+                adminDo=false
+            } else {
+                showError("修改失败！" + res.desc+res.data)
+                adminDo=false
+            }
+        }, function () {
+            showError("系统异常！"+ res.desc+res.data)
+            adminDo=false
+        })
+    }
+
+    function utf8_to_b64(str) {//支持中文的base64加密解密
+        if (str === null || str === 'null')
+            return null;
+        return window.btoa(unescape(encodeURIComponent(str)));
+    }
+
+    function b64_to_utf8(str) {
+        if (str === null || str === 'null')
+            return null;
+        return decodeURIComponent(escape(window.atob(str)));
+    }
+
+    function getInfos() {
+        let all
+        tools.ajaxGet("http://127.0.0.1:8080/gobang/api/getAllUsers", null, function (res) {
+            all = res
+            if (res.status !== 0) {
+                showError("请求拒绝：" + res.desc)
+                return
+            }
+            let userList=document.getElementsByClassName("ManInfo")
+            for(let i=userList.length-1;i>=0;i--) {
+                userList[i].parentNode.removeChild(userList[i])
+            }
+            localStorage.setItem(utf8_to_b64("所有用户"), utf8_to_b64(JSON.stringify(res.data)));
+            let botton = document.getElementById("TableButton");
+            let now=0;
+            for (let i = 0; i < res.data.length; i++) {
+                if (res.data[i].disable !== "1") {
+                    let person = document.createElement("tr");
+                    if (now % 2 === 1)
+                        person.setAttribute("class", "ManInfo ManColorB");
+                    else
+                        person.setAttribute("class", "ManInfo ManColor");
+                    now=now+1
+                    person.innerHTML += "<th>" + res.data[i].id + "</th>"
+                    person.innerHTML += "<th>" + "<img src=\"images/headIcons/" + res.data[i].name + ".png\" onerror=\"javascript:this.src='images/system/defaultHead.png';\">" + "</th>"
+                    person.innerHTML += "<th>" + res.data[i].name + "</th>"
+                    person.innerHTML += "<th>" + res.data[i].nickname + "</th>"
+                    if (res.data[i].sex === 1)
+                        person.innerHTML += "<th>男</th>"
+                    else
+                        person.innerHTML += "<th>女</th>"
+                    if (res.data[i].isadmin === 0)
+                        person.innerHTML += "<th>普通用户</th>"
+                    else
+                        person.innerHTML += "<th>管理员</th>"
+                    person.innerHTML += "<th>" + res.data[i].times + "</th>"
+                    person.innerHTML += "<th>" + res.data[i].wintimes + "</th>"
+                    person.innerHTML += "<th>" + "<input type=\"button\" value=\"修改密码\" title=\"修改密码\" onclick=\"AdminChangePWD(" + res.data[i].id + ")\">" + "</th>"
+                    person.innerHTML += "<th>" + "<input type=\"button\" value=\"修改头像\" title=\"修改头像\" onclick=\"AdminChangeHead(" + res.data[i].id + ")\">" + "</th>"
+                    person.innerHTML += "<th>" + "<input type=\"button\" value=\"修改资料\" title=\"修改资料\" onclick=\"AdminChangeInfo(" + res.data[i].id + ")\">" + "</th>"
+                    botton.parentNode.insertBefore(person, botton)
+                }
+            }
+            if (now % 2 === 1)
+                botton.setAttribute("class", "ManColorB");
+            else
+                botton.setAttribute("class", "ManColor");
+
+        }, function (res) {
+            showError("服务器异常" + res)
+        });
+    }
+
+    function readUser(id) {
+        let UserJsonString = localStorage.getItem(utf8_to_b64("所有用户"))
+        let users = JSON.parse(b64_to_utf8(UserJsonString));
+        for (let i = 0; i < users.length; i++) {
+            if (users[i].id === id) {
+                let user = {
+                    "admin": users.admin,
+                    "name": users.name,
+                    "nickname": users.nickname,
+                    "sex": users.sex,
+                }
+                return users[i]
+            }
+        }
+        return null
+    }
+
+    function AdminChangePWD(id) {
+        let user = readUser(id)
+        if (user === null) {
+            showError("内部错误，无此用户id")
+        } else {
+            adminDo = user.name
+            openChange(user.name, true)
+        }
+    }
+
+    function AdminChangeHead(id) {
+        let user = readUser(id)
+        if (user === null) {
+            showError("内部错误，无此用户id")
+        } else {
+            adminDo = user.name
+            document.getElementById("headUP").click()
+        }
+    }
+
+    function AdminChangeInfo(id) {
+        let user = readUser(id)
+        if (user === null) {
+            showError("内部错误，无此用户id")
+        } else {
+            adminDo = user.name
+            openChangeInfo(user.name, true, user.nickname, user.sex, user.admin)
+        }
+    }
+
+    function openAdmin() {
+        if (document.getElementsByClassName("container")[5].style.top !== "50%") {
+            let user = getUser(getUserName())
+            if (user.admin !== 1) {
+                showError("此功能仅限管理员使用")
+                return
+            }
+            document.getElementsByClassName("container")[5].style.top = "50%"
+            getInfos()
+        } else {
+            document.getElementsByClassName("container")[5].style.top = "-50%"
+        }
+    }
 </script>
 </body>
 </html>
