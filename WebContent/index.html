@@ -981,6 +981,13 @@
 <!--用户类操作-->
 <script src="js/tools/UserDB.js"></script>
 <script type="text/javascript">
+    function makeString(value){
+        if(value===undefined || value===null){
+            return ""
+        }else{
+            return value
+        }
+    }
     window.onload = function () {
         showError("连接服务器中", true, true)
         if (checkLogin()) {
@@ -990,31 +997,27 @@
             tools.ajaxGet("http://127.0.0.1:8080/gobang/api/getUser", user, function (res) {
                 setTimeout(function () {
                     hideError()
-                    if (res.status !== 0) {
-                        showError("登录失效，请重新登陆")
-                        return (res)
-                    }
                     let jsonObject = res.data
                     updateUserInfoFromJson(jsonObject)
                     console.log(jsonObject)
-                }, 1000)
+                }, 500)
             }, function (res) {
                 setTimeout(function () {
                     hideError()
-                    showError("服务器连接失败，请检查网络！")
-                }, 1000)
+                    showError("登录失效，请重新登陆")
+                }, 500)
             })
         } else {
             tools.ajaxGet("http://127.0.0.1:8080/gobang/api/hello", null, function (res) {
                 setTimeout(function () {
                     hideError()
                     console.log(res)
-                }, 1000)
+                }, 500)
             }, function (res) {
                 setTimeout(function () {
                     hideError()
                     showError("服务器连接失败，请检查网络！")
-                }, 1000)
+                }, 500)
             }, false)
         }
     }
@@ -1157,7 +1160,7 @@
                     location.reload();
                 }, 2500)
             }, function (res) {
-                showError("服务异常！" + res.desc+res.data)
+                showError("注册失败！" + makeString(res.desc)+makeString(res.data))
             })
         });
         captcha1.show();
@@ -1172,7 +1175,7 @@
         let captcha1 = new TencentCaptcha('2004603663', function () {
             tools.ajaxGet("http://127.0.0.1:8080/gobang/api/login", loginuser, function (res) {
                 console.log(res)
-                let jsonObject = res.data
+                let jsonObject = makeString(res.data)
                 updateUserInfoFromJson(jsonObject)
                 if (chck.value === "true") {
                     setCookie("loginName", btoa(noTuiGe(jsonObject.name)), "7",
@@ -1189,7 +1192,7 @@
                     location.reload();
                 }, 2500)
             }, function (res) {
-                showError("服务异常！" + res.desc+res.data)
+                showError("登录失败！" + makeString(res.desc)+makeString(res.data))
             })
         });
         captcha1.show();
@@ -1198,8 +1201,7 @@
     function loginOut(noshow) { //退出按钮
         setCookie("autoLogin", "", -7)
         setCookie("loginName", "", -7) //将cookie置空，同时过期
-        if (noshow === false)
-            showError("退出成功！即将刷新！", "ok")
+        showError("退出成功！即将刷新！", "ok")
         setTimeout(function () {
             location.reload();
         }, 2500)
@@ -1400,7 +1402,7 @@
                     loginOut(false)
                 }
             } else {
-                showError("修改失败！" + res.desc+res.data)
+                showError("修改失败！" + makeString(res.desc)+makeString(res.data))
                 adminDo=false
             }
             adminDo=false
@@ -1442,11 +1444,11 @@
                 }
                 adminDo=false
             } else {
-                showError("修改失败！" + res.desc+res.data)
+                showError("修改失败！" + makeString(res.desc)+makeString(res.data))
                 adminDo=false
             }
         }, function () {
-            showError("系统异常！"+ res.desc+res.data)
+            showError("系统异常！"+ makeString(res.desc)+makeString(res.data))
             adminDo=false
         })
     }
@@ -1468,7 +1470,7 @@
         tools.ajaxGet("http://127.0.0.1:8080/gobang/api/getAllUsers", null, function (res) {
             all = res
             if (res.status !== 0) {
-                showError("请求拒绝：" + res.desc)
+                showError("请求拒绝：" + makeString(res.desc))
                 return
             }
             let userList=document.getElementsByClassName("ManInfo")

@@ -7,7 +7,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import dm.jdbc.filter.stat.json.JSONArray;
 import dm.jdbc.filter.stat.json.JSONObject;
-import restful.bean.Result.BeautifyReasult;
 import restful.bean.Result.ResResult;
 import restful.bean.Result.ResultCode;
 import restful.database.EM;
@@ -36,7 +35,7 @@ public class InterfaceTools {
 		} catch (JsonProcessingException e) {
 			Logging.Log(this.getClass().getName(), e.toString());
 		}
-		System.out.println(json);
+//		System.out.println(json);
 		return IgnoreKeys(json);
 	}
 

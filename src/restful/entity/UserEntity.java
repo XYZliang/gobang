@@ -13,7 +13,7 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import restful.utils.Encryption;
+import restful.utils.MD5Encryption;
 
 @Entity
 @Table(name = "GOBANGUSER")
@@ -270,8 +270,8 @@ public class UserEntity {
 			SEX = 0;
 		LOGINTIME = new Date();
 		ISADMIN = 0;
-		SALT = Encryption.makeSalt(LOGINTIME);
-		PASSWORD = Encryption.getSaltMD5(pASSWORD, SALT);
+		SALT = MD5Encryption.makeSalt(LOGINTIME);
+		PASSWORD = MD5Encryption.getSaltMD5(pASSWORD, SALT);
 		TOKEN = "";
 		TIMES = 0;
 		WINTIMES = 0;
@@ -296,7 +296,7 @@ public class UserEntity {
 	}
 
 	public boolean checkPass(String pass) {
-		return (Encryption.getSaltMD5(pass, SALT).toString().equals(PASSWORD));
+		return (MD5Encryption.getSaltMD5(pass, SALT).toString().equals(PASSWORD));
 	}
 
 }

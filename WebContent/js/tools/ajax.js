@@ -56,12 +56,16 @@ let tools = {
                     }
                     res = isJson ? JSON.parse(res) : ajax.responseText;
                     if (res.status !== 0)
-                        failCb && failCb(JSON.stringify(res.desc));
+                        failCb && failCb(res);
                     else
                         succCb && succCb(res);
                 } else {
                     // 请求失败
-                    failCb && failCb();
+                    let ress={
+                        'desc': '服务器连接异常',
+                            'userName': ajax.status,
+                    }
+                    failCb && failCb(ress);
                 }
             }
         }

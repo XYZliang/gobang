@@ -7,8 +7,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import restful.bean.Result.BeautifyReasult;
-
 public class Object2JSON {
 	/*
 	 * 001.json转换成对象
