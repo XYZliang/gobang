@@ -665,7 +665,7 @@
             -moz-transition: all 0.3s ease-out;
             -o-transition: all 0.3s ease-out;
             min-width: 1000px;
-            top: 50%;
+            /*top: 50%;*/
             display: block;
             right: 45%;
             min-height:500px;
@@ -816,6 +816,7 @@
         .UserInfoRight{
             margin-left: 0px;
         }
+        .
     </style>
 </head>
 <body>
@@ -831,7 +832,7 @@
 </a> <a class="leftBot" onclick="showWin('denglu')">
     <div class="leftBotFir leftBotCom">登</div>
     <div class="leftBotTwo leftBotCom">录账号</div>
-</a> <a class="leftBot">
+</a> <a class="leftBot" onclick="openRoom()">
     <div class="leftBotFir leftBotCom">开</div>
     <div class="leftBotTwo leftBotCom">始游戏</div>
 </a> <a class="leftBot">
@@ -1138,88 +1139,77 @@
 
 <div class="container" id="gameRoom">
     <div id="roomBox">
-        <div class="roomDiv">
-            <div class="gameInfo">
-                <div class="gameHead gameHeadLeft">
-                    <img class="gameHeadImg" src="images/system/defaultHead.png">
-                    <div class="gameInfoA" title="性别">
-                        <img alt="男" class="gameInfoAB" src="images/system/boyIcon.png"
-                             style="display: block;width: 20px;height: 20px;">
-                        <img alt="女" class="gameInfoAG" src="images/system/girlIcon.png"
-                             style="display: none;width: 20px;height: 20px;">
-                    </div>
-                </div>
-                <div class="gameInfoTime">
-                    <p class="danTime">
-                        60
-                    </p>
-                    <p class="totalTime">
-                        600
-                    </p>
-                </div>
-                <div class="gameHead gameHeadRight">
-                    <img class="gameHeadImg" src="images/system/defaultHead.png">
-                    <div class="gameInfoA gameInfoARight" title="性别">
-                        <img alt="男" class="gameInfoAB" src="images/system/boyIcon.png"
-                             style="display: block;">
-                        <img alt="女" class="gameInfoAG" src="images/system/girlIcon.png"
-                             style="display: none;">
-                    </div>
-                </div>
+<!--        <div class="roomDiv">-->
+<!--            <div class="gameInfo">-->
+<!--                <div class="gameHead gameHeadLeft">-->
+<!--                    <img class="gameHeadImg" src="images/system/defaultHead.png">-->
+<!--                    <div class="gameInfoA" title="性别">-->
+<!--                        <img alt="男" class="gameInfoAB" src="images/system/boyIcon.png"-->
+<!--                             style="display: block;width: 20px;height: 20px;">-->
+<!--                        <img alt="女" class="gameInfoAG" src="images/system/girlIcon.png"-->
+<!--                             style="display: none;width: 20px;height: 20px;">-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="gameInfoTime">-->
+<!--                    <p class="danTime">-->
+<!--                        60-->
+<!--                    </p>-->
+<!--                    <p class="totalTime">-->
+<!--                        600-->
+<!--                    </p>-->
+<!--                </div>-->
+<!--                <div class="gameHead gameHeadRight">-->
+<!--                    <img class="gameHeadImg" src="images/system/noUserHead.png">-->
+<!--                    <div class="gameInfoA gameInfoARight" title="性别" style="display: none;>-->
+<!--                        <img alt="男" class="gameInfoAB" src="images/system/boyIcon.png"-->
+<!--                             style="display: none;">-->
+<!--                        <img alt="女" class="gameInfoAG" src="images/system/girlIcon.png"-->
+<!--                             style="display: none;">-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="gameInfo2">-->
+<!--                <div class="UserInfo">-->
+<!--                    <div class="gameStarts" title="等级"></div>-->
+<!--                    <p class="gameNickname" title="昵称">昵称</p>-->
+<!--                </div>-->
+<!--                <div class="gameButton">-->
+<!--                    <div class="gameButton1">-->
+<!--                        邀-->
+<!--                    </div>-->
+<!--                    <div class="gameButton2">-->
+<!--                        开-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="UserInfo UserInfoRight">-->
+<!--                    <div class="gameStarts" title="等级" style="display: none"></div>-->
+<!--                    <p class="gameNickname" title="昵称"></p>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="roomDiv"></div>-->
+<!--        <div class="roomDiv"></div>-->
+        <div class="roomDiv" id="newRoom" onclick="javascript:document.getElementsByClassName('container')[7].style.top='50%'"><p id="newRoomTxt">+</p></div>
+    </div>
+</div>
+<div class="container" style="z-index: 1000">
+    <div class="form" id="newRoomFrom">
+        <form id="box7" method="get">
+            <h2 class="logintxt">新建游戏</h2>
+            <div class="inputBox">
+                <label for="Dan"></label><input id="Dan"
+                                                  placeholder="请输入单手时长，最长600s" type="number">
             </div>
-            <div class="gameInfo2">
-                <div class="UserInfo">
-                    <div class="gameStarts" title="等级"></div>
-                    <p class="gameNickname" title="昵称">昵称</p>
-                </div>
-                <div class="gameButton">
-                    <div class="gameButton1">
-                        邀
-                    </div>
-                    <div class="gameButton2">
-                        开
-                    </div>
-                </div>
-                <div class="UserInfo UserInfoRight">
-                    <div class="gameStarts" title="等级"></div>
-                    <p class="gameNickname" title="昵称">昵称</p>
-                </div>
+            <div class="inputBox">
+                <label for="Total"></label><input id="Total" placeholder="请输入最大游戏时长，最长3600s" type="number">
             </div>
-        </div>
-        <div class="roomDiv">
-            <div class="gameInfo">
-                <div class="gameHead gameHeadLeft">
-                    <img class="gameHeadImg" src="images/system/defaultHead.png">
-                    <div class="gameInfoA" title="性别">
-                        <img alt="男" class="gameInfoAB" src="images/system/boyIcon.png"
-                             style="display: block;width: 20px;height: 20px;">
-                        <img alt="女" class="gameInfoAG" src="images/system/girlIcon.png"
-                             style="display: none;width: 20px;height: 20px;">
-                    </div>
-                </div>
-                <div class="gameInfoTime">
-                    <p class="danTime">
-                        60
-                    </p>
-                    <p class="totalTime">
-                        600
-                    </p>
-                </div>
-                <div class="gameHead gameHeadRight">
-                    <img class="gameHeadImg" src="images/system/defaultHead.png">
-                    <div class="gameInfoA gameInfoARight" title="性别">
-                        <img alt="男" class="gameInfoAB" src="images/system/boyIcon.png"
-                             style="display: block;">
-                        <img alt="女" class="gameInfoAG" src="images/system/girlIcon.png"
-                             style="display: none;">
-                    </div>
-                </div>
+            <div class="inputBox">
+                <input onclick="makeNewRoom()" type="button" value="确认新建">
             </div>
-        </div>
-        <div class="roomDiv"></div>
-        <div class="roomDiv"></div>
-        <div class="roomDiv"></div>
-        <div class="roomDiv" id="newRoom"><p id="newRoomTxt">+</p></div>
+            <div class="inputBox" style="margin-top: 0">
+                <input onclick="javascript:document.getElementsByClassName('container')[7].style.top='-50%'" type="button" value="取消新建">
+            </div>
+        </form>
     </div>
 </div>
 
@@ -1234,8 +1224,10 @@
 <script src="js/tools/MD5.js"></script>
 <!--用户类操作-->
 <script src="js/tools/UserDB.js"></script>
+<!--游戏房间-->
+<script src="js/gameRoom.js"></script>
 <script type="text/javascript">
-    const debug=true;
+    const debug=false;
     function makeString(value){
         if(value===undefined || value===null){
             return ""
@@ -1706,7 +1698,7 @@
                 showError("修改失败！" + makeString(res.desc)+makeString(res.data))
                 adminDo=false
             }
-        }, function () {
+        }, function (res) {
             showError("系统异常！"+ makeString(res.desc)+makeString(res.data))
             adminDo=false
         })
@@ -1724,7 +1716,7 @@
         return decodeURIComponent(escape(window.atob(str)));
     }
 
-    function getInfos() {
+    function getInfos(show) {
         let all
         tools.ajaxGet("http://127.0.0.1:8080/gobang/api/getAllUsers", null, function (res) {
             all = res
@@ -1737,6 +1729,8 @@
                 userList[i].parentNode.removeChild(userList[i])
             }
             localStorage.setItem(utf8_to_b64("所有用户"), utf8_to_b64(JSON.stringify(res.data)));
+            if(show===false)
+                return;
             let botton = document.getElementById("TableButton");
             let now=0;
             for (let i = 0; i < res.data.length; i++) {
@@ -1825,12 +1819,16 @@
     }
 
     function openAdmin() {
+        if (!checkLogin()){
+            showError("请先登录！")
+            return;
+        }
+        let user = getUser(getUserName())
+        if (user.admin !== 1) {
+            showError("此功能仅限管理员使用")
+            return
+        }
         if (document.getElementsByClassName("container")[5].style.top !== "50%") {
-            let user = getUser(getUserName())
-            if (user.admin !== 1) {
-                showError("此功能仅限管理员使用")
-                return
-            }
             document.getElementsByClassName("container")[5].style.top = "50%"
             getInfos()
         } else {

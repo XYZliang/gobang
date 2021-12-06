@@ -14,29 +14,33 @@ import restful.entity.UserEntity;
 
 public class InterfaceTools {
 
-	public String makeJSON(UserEntity user) {
+	public String makeJSON(Object obj) {
 		ObjectMapper mapper = new ObjectMapper();
 		String json = null;
 		try {
-			json = mapper.writeValueAsString(user);
+			json = mapper.writeValueAsString(obj);
 		} catch (JsonProcessingException e) {
 			Logging.Log(this.getClass().getName(), e.toString());
 		}
+		if(obj instanceof UserEntity) {
 		json = IgnoreKey(json);
 		json = json.replace("\": \"{", "\": {").replace("}\"}", "}}");
+		}
 		return json;
 	}
 
-	public String makeJSON(List<UserEntity> users) {
+	public String makeJSON(List<Object> obj) {
 		ObjectMapper mapper = new ObjectMapper();
 		String json = null;
 		try {
-			json = mapper.writeValueAsString(users);
+			json = mapper.writeValueAsString(obj);
 		} catch (JsonProcessingException e) {
 			Logging.Log(this.getClass().getName(), e.toString());
 		}
 //		System.out.println(json);
-		return IgnoreKeys(json);
+		if(obj.get(0) instanceof UserEntity)
+			return IgnoreKeys(json);
+		return json;
 	}
 
 	public String makeReturn(String json) {
@@ -55,9 +59,9 @@ public class InterfaceTools {
 		return BeautifyReasult.Do(ResResult.fail(resultCode));
 	}
 
-	public void commitDB(UserEntity userentity) {
-		userentity = EM.getEntityManager().merge(userentity);
-		EM.getEntityManager().persist(userentity);
+	public void commitDB(Object entity) {
+		entity = EM.getEntityManager().merge(entity);
+		EM.getEntityManager().persist(entity);
 		EM.getEntityManager().getTransaction().commit();
 	}
 

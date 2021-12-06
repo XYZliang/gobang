@@ -61,9 +61,9 @@ let tools = {
                         succCb && succCb(res);
                 } else {
                     // 请求失败
-                    let ress={
+                    let ress = {
                         'desc': '服务器连接异常',
-                            'userName': ajax.status,
+                        'userName': ajax.status,
                     }
                     failCb && failCb(ress);
                 }

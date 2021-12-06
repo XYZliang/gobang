@@ -150,7 +150,3 @@ function getUser(userName) {
     let userObj = JSON.parse(b64_to_utf8(UserJsonString));
     return userObj;
 }
-
-function newMessage(userObj, mes) {
-
-}

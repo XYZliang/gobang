@@ -1,6 +1,8 @@
 package restful.api;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +22,7 @@ import dm.jdbc.filter.stat.json.JSONObject;
 import restful.bean.Result.ResultCode;
 import restful.bean.Token.Token;
 import restful.database.EM;
+import restful.entity.GameEntity;
 import restful.entity.UserEntity;
 import restful.utils.CookieTools;
 import restful.utils.FileUtil;
@@ -327,11 +330,58 @@ public class Interface {
 	public static String Check(String username,HttpServletRequest request) {
 		if(username==null)
 		{
-			return tools.makeErReturn(ResultCode.USER_TOKEN_MISS);
+			username = getUsernameFromCookie(request);
+			if(username== null)
+				return tools.makeErReturn(ResultCode.USER_TOKEN_MISS);
 		}
 		if(!Token.checkToken(username, CookieTools.getCookie("token", request))) {
 			return tools.makeErReturn(ResultCode.USER_TOKEN_ERROR);
 		}
 		return "ok";
+	}
+	
+	public static String getUsernameFromCookie(HttpServletRequest request) {
+		String text =CookieTools.getCookie("loginName", request);
+		String username = null;
+		if(text== null)
+			return null;
+		Base64.Decoder decoder = Base64.getDecoder();
+		byte[] textByte = null;
+		try {
+			username = new String(decoder.decode(text), "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			return null;
+		}
+		return username;
+	}
+	
+	@GET
+	@Path("/makeNewGame")
+	@Consumes("application/json;charset=UTF-8")
+	@Produces("application/json;charset=UTF-8")
+	public String makeNewGame(@QueryParam("Dan") int Dan, @QueryParam("Total") int Total) {
+		String username = getUsernameFromCookie(request);
+		if(username== null)
+			return tools.makeErReturn(ResultCode.USER_TOKEN_ERROR);
+		String check = Check(username,request);
+		if(!check.equals("ok")) {
+			return check;
+		}
+		List<UserEntity> result = EM.getEntityManager().createNamedQuery("UserEntity.findUserByName", UserEntity.class)
+				.setParameter("NAME", username).getResultList();
+		UserEntity userentity = result.get(0);
+		if (result.isEmpty())
+			return tools.makeErReturn(ResultCode.USER_NOT_EXISTED);
+		else {
+			List<GameEntity> games = EM.getEntityManager().createNamedQuery("GameEntity.findGameAll", GameEntity.class)
+					.getResultList();
+			GameEntity game = games.get(games.size()-1);
+			GameEntity gameEntity=new GameEntity(userentity.getID(),Dan,Total);
+			gameEntity.setID(game.getID()+1);
+			tools.commitDB(gameEntity);
+			String json = tools.makeJSON(gameEntity);
+			return tools.makeReturn(json);
+		}
+		
 	}
 }
