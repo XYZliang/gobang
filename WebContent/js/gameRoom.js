@@ -6,11 +6,39 @@ function openRoom() {
         }
     }
     if (document.getElementsByClassName("container")[6].style.top !== "50%") {
-        document.getElementsByClassName("container")[6].style.top = "50%"
-        getInfos(false)
+        getInfos(true)
     } else {
         document.getElementsByClassName("container")[6].style.top = "-50%"
     }
+}
+
+function openRoom2(){
+    document.getElementsByClassName("container")[6].style.top = "50%"
+    let id= findUserByUsername(getUserName()).id
+    let info = {
+        "id": id,
+    }
+    tools.ajaxGet("http://127.0.0.1:8080/gobang/api/getMyGame",info,function (res){
+        if (res.status !== 0) {
+            showError("请求失败：" + makeString(res.desc))
+            return
+        }
+        let roomDiv=document.getElementsByClassName("roomDiv")
+        for(let i=roomDiv.length-2;i>=0;i--){
+            roomDiv[i].parentNode.removeChild(roomDiv[i])
+        }
+        let data=res.data
+        for(let i=0;i<data.length;i++){
+            if(data[i].user2ID===0){
+                addNewRoom(getUserName(),data[i].onetime,data[i].totaltime,data[i].id)
+            }
+            // else{
+            //
+            // }
+        }
+    }, function (res) {
+        showError("服务器异常" + res)
+    })
 }
 
 function findUserByUsername(userName) {
@@ -19,6 +47,7 @@ function findUserByUsername(userName) {
     for (let i = 0; i < users.length; i++) {
         if (userName === users[i].name) {
             let user = {
+                "id": users[i].id,
                 "admin": users[i].isadmin,
                 "level": users[i].level,
                 "name": users[i].name,
@@ -80,7 +109,7 @@ function addNewRoom(userName1, dan, total,id) {
         "                    </p>\n" +
         "                </div>\n" +
         "                <div class=\"gameHead gameHeadRight\">\n" +
-        "                    <img class=\"gameHeadImg\" src=\"images/system/noUserHead.png\">\n" +
+        "                    <img class=\"gameHeadImg\" src=\"images/system/noUserHead.png\" onerror=\"javascript:this.src='images/system/defaultHead.png';\">\n" +
         "                    <div class=\"gameInfoA gameInfoARight\" title=\"性别\" style=\"display: none;\">\n" +
         "                        <img alt=\"男\" class=\"gameInfoAB\" src=\"images/system/boyIcon.png\"\n" +
         "                             style=\"display: none;\">\n" +
@@ -115,6 +144,12 @@ function addNewRoom(userName1, dan, total,id) {
     b.style.visibility = "hidden";
     b.style.width = "0px";
     nowRoomDiv.getElementsByClassName('gameID')[0].innerHTML = id
+    let Linfo = nowRoomDiv.getElementsByClassName("gameInfo2")[0]
+    Linfo = Linfo.getElementsByClassName("UserInfo")[0]
+    let start = Linfo.getElementsByClassName("gameStarts")[0]
+    start.style.display = ""
+    let startList = ["startsZer", "startsOne", "startsTwo", "startsThr", "startsFou", "startsFiv"]
+    start.classList.add(startList[user1.level])
 }
 
 function makeNewRoom() {
@@ -134,4 +169,53 @@ function makeNewRoom() {
         showError("系统异常！" + makeString(res.desc) + makeString(res.data))
         adminDo = false
     })
+}
+
+function newRoomAdd(userId,roomId){
+    let newUser=findUserById(userId)
+    let room=document.getElementsByClassName("roomDiv")
+    let roomNum=room.length
+    let roomDiv=null
+    if(roomId===null || roomId===undefined)
+        roomDiv=room[roomNum-2]
+    else
+    {
+        for(let i=0;i<room.length;i++){
+            if(room[i].getElementsByClassName("gameID")[0].innerHTML==roomId)
+            {
+                roomDiv=room[i]
+            }
+        }
+    }
+    if(roomDiv===null){
+        showError("系统错误！游戏房间不存在!")
+    }
+    let head=roomDiv.getElementsByClassName("gameHeadImg")[0]
+    // head.onerror=function () {
+    //     let perImg = document.getElementById("perImg")
+    //     perImg.src = "images/system/defaultHead.png"
+    // }
+    head.src="images/headIcons/"+newUser.name+".png"
+    let sex=roomDiv.getElementsByClassName("gameInfoARight")[0]
+    sex.style.display = ""
+    if(newUser.sex===1)
+    {
+        sex.getElementsByClassName("gameInfoAB")[0].style.display = ""
+    }
+    else {
+        sex.getElementsByClassName("gameInfoAG")[0].style.display = ""
+    }
+    let Rinfo = roomDiv.getElementsByClassName("gameInfo2")[0]
+    Rinfo = Rinfo.getElementsByClassName("UserInfoRight")[0]
+    let start = Rinfo.getElementsByClassName("gameStarts")[0]
+    start.style.display = ""
+    let startList = ["startsZer", "startsOne", "startsTwo", "startsThr", "startsFou", "startsFiv"]
+    start.classList.add(startList[newUser.level])
+    let nick=Rinfo.getElementsByClassName("gameNickname")[0]
+    nick.innerHTML = newUser.nickname
+    let gameButton2=roomDiv.getElementsByClassName("gameButton2")[0]
+    gameButton2.style.opacity="unset"
+    gameButton2.style.visibility="unset"
+    gameButton2.style.width="40px"
+    roomDiv.getElementsByClassName("gameButton1")[0].innerHTML="踢"
 }

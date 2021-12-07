@@ -382,6 +382,30 @@ public class Interface {
 			String json = tools.makeJSON(gameEntity);
 			return tools.makeReturn(json);
 		}
-		
+	}
+	
+	@GET
+	@Path("/getMyGame")
+	@Consumes("application/json;charset=UTF-8")
+	@Produces("application/json;charset=UTF-8")
+	public String getMyGame(@QueryParam("id") int id) {
+		String username = getUsernameFromCookie(request);
+		if(username== null)
+			return tools.makeErReturn(ResultCode.USER_TOKEN_ERROR);
+		String check = Check(username,request);
+		if(!check.equals("ok")) {
+			return check;
+		}
+		List<UserEntity> result = EM.getEntityManager().createNamedQuery("UserEntity.findUserByName", UserEntity.class)
+				.setParameter("NAME", username).getResultList();
+		UserEntity userentity = result.get(0);
+		if (result.isEmpty())
+			return tools.makeErReturn(ResultCode.USER_NOT_EXISTED);
+		else {
+			List<GameEntity> games = EM.getEntityManager().createNamedQuery("GameEntity.findGameByUserid", GameEntity.class)
+					.setParameter("USERID", id).getResultList();
+			String json = tools.makeJSON(games);
+			return tools.makeReturn(json);
+		}
 	}
 }

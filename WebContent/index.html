@@ -816,7 +816,28 @@
         .UserInfoRight{
             margin-left: 0px;
         }
-        .
+        .gameButton1{
+            width: 40px;
+            color: rgb(0,0,0);
+            background-color: rgba(255,255,255,1);
+        }
+        .gameButton1:hover{
+            width: 50px;
+            color: rgb(231,0,0);
+            background-color: rgba(255,255,255,0.6);
+        }
+
+        .gameButton2{
+            width: 40px;
+            color: rgb(0,0,0);
+            background-color: rgba(255,255,255,1);
+        }
+        .gameButton2:hover{
+            width: 50px;
+            color: rgb(231,0,0);
+            background-color: rgba(255,255,255,0.6);
+        }
+
     </style>
 </head>
 <body>
@@ -1716,7 +1737,7 @@
         return decodeURIComponent(escape(window.atob(str)));
     }
 
-    function getInfos(show) {
+    function getInfos(getRoom) {
         let all
         tools.ajaxGet("http://127.0.0.1:8080/gobang/api/getAllUsers", null, function (res) {
             all = res
@@ -1729,8 +1750,11 @@
                 userList[i].parentNode.removeChild(userList[i])
             }
             localStorage.setItem(utf8_to_b64("所有用户"), utf8_to_b64(JSON.stringify(res.data)));
-            if(show===false)
+            if(getRoom===true)
+            {
+                openRoom2()
                 return;
+            }
             let botton = document.getElementById("TableButton");
             let now=0;
             for (let i = 0; i < res.data.length; i++) {

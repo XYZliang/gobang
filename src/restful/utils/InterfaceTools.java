@@ -73,8 +73,8 @@ public class InterfaceTools {
 
 	private String IgnoreKey(String json) {
 		JSONObject jsonArray = new JSONObject(json);
-		jsonArray.remove("id");
-		jsonArray.remove("logintime");
+//		jsonArray.remove("id");
+//		jsonArray.remove("logintime");
 		jsonArray.remove("salt");
 		jsonArray.remove("ua");
 		jsonArray.remove("token");
