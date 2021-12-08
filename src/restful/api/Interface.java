@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.util.Base64;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,12 +25,14 @@ import restful.bean.Token.Token;
 import restful.database.EM;
 import restful.entity.GameEntity;
 import restful.entity.UserEntity;
+import restful.utils.ChatTools;
 import restful.utils.CookieTools;
 import restful.utils.FileUtil;
 import restful.utils.ImageBase64Code;
 import restful.utils.InterfaceTools;
 import restful.utils.Logging;
 import restful.utils.MD5Encryption;
+import restful.websocket.WebSocketProcess;
 
 @Path("/api")
 public class Interface {
@@ -407,5 +410,63 @@ public class Interface {
 			String json = tools.makeJSON(games);
 			return tools.makeReturn(json);
 		}
+	}
+	
+	@GET
+	@Path("/initWS")
+	@Consumes("application/json;charset=UTF-8")
+	@Produces("application/json;charset=UTF-8")
+	public String initWS(){
+		String username = getUsernameFromCookie(request);
+		if(username== null)
+			return tools.makeErReturn(ResultCode.NEED_LOGIN);
+		String check = Check(username,request);
+		if(!check.equals("ok")) {
+			return check;
+		}
+		return ChatTools.setCurUser(request.getSession(), username);
+	}
+	
+	@GET
+	@Path("/OLuser")
+	@Consumes("application/json;charset=UTF-8")
+	@Produces("application/json;charset=UTF-8")
+	public String OLuser(){
+		String user = "";
+		for (String key : ChatTools.getClients().keySet()) {
+			if(user.length()==0)
+				user = key;
+			else
+				user=user+";"+key;
+		}
+		 
+		return tools.makeReturn(user);
+	}
+	@GET
+	@Path("/talk")
+	@Consumes("application/json;charset=UTF-8")
+	@Produces("application/json;charset=UTF-8")
+	public String talk(@QueryParam("type") String type,@QueryParam("TO") String to,@QueryParam("msg") String message){	
+		String username = getUsernameFromCookie(request);
+		if(username== null)
+			return tools.makeErReturn(ResultCode.NEED_LOGIN);
+		String check = Check(username,request);
+		if(!check.equals("ok")) {
+			return check;
+		}
+		 HashMap<String, Object> msg = new HashMap<>();
+
+		if(type.equals("agree")) {
+			
+		}
+		else if(type.equals("makeqi")) {
+			
+		}
+		else {
+			 msg.put("type", type);
+			 msg.put("msg", message);
+			 msg.put("from", username);
+		}
+		return WebSocketProcess.sendMessageToUser(to, new JSONObject(msg).toString());
 	}
 }

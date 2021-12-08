@@ -12,25 +12,25 @@ function openRoom() {
     }
 }
 
-function openRoom2(){
+function openRoom2() {
     document.getElementsByClassName("container")[6].style.top = "50%"
-    let id= findUserByUsername(getUserName()).id
+    let id = findUserByUsername(getUserName()).id
     let info = {
         "id": id,
     }
-    tools.ajaxGet("http://127.0.0.1:8080/gobang/api/getMyGame",info,function (res){
+    tools.ajaxGet("http://127.0.0.1:8080/gobang/api/getMyGame", info, function (res) {
         if (res.status !== 0) {
             showError("请求失败：" + makeString(res.desc))
             return
         }
-        let roomDiv=document.getElementsByClassName("roomDiv")
-        for(let i=roomDiv.length-2;i>=0;i--){
+        let roomDiv = document.getElementsByClassName("roomDiv")
+        for (let i = roomDiv.length - 2; i >= 0; i--) {
             roomDiv[i].parentNode.removeChild(roomDiv[i])
         }
-        let data=res.data
-        for(let i=0;i<data.length;i++){
-            if(data[i].user2ID===0){
-                addNewRoom(getUserName(),data[i].onetime,data[i].totaltime,data[i].id)
+        let data = res.data
+        for (let i = 0; i < data.length; i++) {
+            if (data[i].user2ID === 0) {
+                addNewRoom(getUserName(), data[i].onetime, data[i].totaltime, data[i].id)
             }
             // else{
             //
@@ -83,7 +83,7 @@ function findUserById(id) {
     return null
 }
 
-function addNewRoom(userName1, dan, total,id) {
+function addNewRoom(userName1, dan, total, id) {
     if (userName1 === null) {
         userName1 = getUserName()
     }
@@ -124,7 +124,7 @@ function addNewRoom(userName1, dan, total,id) {
         "                    <p class=\"gameNickname\" title=\"昵称\">" + user1.nickname + "</p>\n" +
         "                </div>\n" +
         "                <div class=\"gameButton\">\n" +
-        "                    <div class=\"gameButton1\">\n" +
+        "                    <div class=\"gameButton1\" onclick='yaoqing(this.parentNode.parentNode.parentNode.getElementsByClassName(\"gameID\")[0].innerHTML,this.innerHTML)'>\n" +
         "                        邀\n" +
         "                    </div>\n" +
         "                    <div class=\"gameButton2\">\n" +
@@ -160,8 +160,8 @@ function makeNewRoom() {
     tools.ajaxGet("http://127.0.0.1:8080/gobang/api/makeNewGame", game, function (res) {
         if (res.status === 0) {
             addNewRoom(getUserName(), noTuiGe(Dan.value), noTuiGe(Total.value), res.data.id)
-            document.getElementsByClassName('container')[7].style.top='-50%'
-            msg("创建成功！","ok")
+            document.getElementsByClassName('container')[7].style.top = '-50%'
+            msg("创建成功！", "ok")
         } else {
             showError("创建失败" + makeString(res.desc) + makeString(res.data))
         }
@@ -171,38 +171,34 @@ function makeNewRoom() {
     })
 }
 
-function newRoomAdd(userId,roomId){
-    let newUser=findUserById(userId)
-    let room=document.getElementsByClassName("roomDiv")
-    let roomNum=room.length
-    let roomDiv=null
-    if(roomId===null || roomId===undefined)
-        roomDiv=room[roomNum-2]
-    else
-    {
-        for(let i=0;i<room.length;i++){
-            if(room[i].getElementsByClassName("gameID")[0].innerHTML==roomId)
-            {
-                roomDiv=room[i]
+function newRoomAdd(userId, roomId) {
+    let newUser = findUserById(userId)
+    let room = document.getElementsByClassName("roomDiv")
+    let roomNum = room.length
+    let roomDiv = null
+    if (roomId === null || roomId === undefined)
+        roomDiv = room[roomNum - 2]
+    else {
+        for (let i = 0; i < room.length; i++) {
+            if (room[i].getElementsByClassName("gameID")[0].innerHTML == roomId) {
+                roomDiv = room[i]
             }
         }
     }
-    if(roomDiv===null){
+    if (roomDiv === null) {
         showError("系统错误！游戏房间不存在!")
     }
-    let head=roomDiv.getElementsByClassName("gameHeadImg")[0]
+    let head = roomDiv.getElementsByClassName("gameHeadImg")[0]
     // head.onerror=function () {
     //     let perImg = document.getElementById("perImg")
     //     perImg.src = "images/system/defaultHead.png"
     // }
-    head.src="images/headIcons/"+newUser.name+".png"
-    let sex=roomDiv.getElementsByClassName("gameInfoARight")[0]
+    head.src = "images/headIcons/" + newUser.name + ".png"
+    let sex = roomDiv.getElementsByClassName("gameInfoARight")[0]
     sex.style.display = ""
-    if(newUser.sex===1)
-    {
+    if (newUser.sex === 1) {
         sex.getElementsByClassName("gameInfoAB")[0].style.display = ""
-    }
-    else {
+    } else {
         sex.getElementsByClassName("gameInfoAG")[0].style.display = ""
     }
     let Rinfo = roomDiv.getElementsByClassName("gameInfo2")[0]
@@ -211,11 +207,134 @@ function newRoomAdd(userId,roomId){
     start.style.display = ""
     let startList = ["startsZer", "startsOne", "startsTwo", "startsThr", "startsFou", "startsFiv"]
     start.classList.add(startList[newUser.level])
-    let nick=Rinfo.getElementsByClassName("gameNickname")[0]
+    let nick = Rinfo.getElementsByClassName("gameNickname")[0]
     nick.innerHTML = newUser.nickname
-    let gameButton2=roomDiv.getElementsByClassName("gameButton2")[0]
-    gameButton2.style.opacity="unset"
-    gameButton2.style.visibility="unset"
-    gameButton2.style.width="40px"
-    roomDiv.getElementsByClassName("gameButton1")[0].innerHTML="踢"
+    let gameButton2 = roomDiv.getElementsByClassName("gameButton2")[0]
+    gameButton2.style.opacity = "unset"
+    gameButton2.style.visibility = "unset"
+    gameButton2.style.width = "40px"
+    roomDiv.getElementsByClassName("gameButton1")[0].innerHTML = "踢"
+}
+
+function newRoomT(roomId) {
+    let room = document.getElementsByClassName("roomDiv")
+    let roomNum = room.length
+    let roomDiv = null
+    if (roomId === null || roomId === undefined)
+        roomDiv = room[roomNum - 2]
+    else {
+        for (let i = 0; i < room.length; i++) {
+            if (room[i].getElementsByClassName("gameID")[0].innerHTML == roomId) {
+                roomDiv = room[i]
+            }
+        }
+    }
+    if (roomDiv === null) {
+        showError("系统错误！游戏房间不存在!")
+    }
+    let head = roomDiv.getElementsByClassName("gameHeadImg")[0]
+    // head.onerror=function () {
+    //     let perImg = document.getElementById("perImg")
+    //     perImg.src = "images/system/defaultHead.png"
+    // }
+    head.src = "images/system/noUserHead.png"
+    let sex = roomDiv.getElementsByClassName("gameInfoARight")[0]
+    sex.style.display = "none"
+    sex.getElementsByClassName("gameInfoAB")[0].style.display = "none"
+    sex.getElementsByClassName("gameInfoAG")[0].style.display = "none"
+    let Rinfo = roomDiv.getElementsByClassName("gameInfo2")[0]
+    Rinfo = Rinfo.getElementsByClassName("UserInfoRight")[0]
+    let start = Rinfo.getElementsByClassName("gameStarts")[0]
+    start.style.display = "none"
+    let nick = Rinfo.getElementsByClassName("gameNickname")[0]
+    nick.innerHTML = ""
+    let gameButton2 = roomDiv.getElementsByClassName("gameButton2")[0]
+    gameButton2.style.opacity = "0"
+    gameButton2.style.visibility = "hidden"
+    gameButton2.style.width = "0"
+    roomDiv.getElementsByClassName("gameButton1")[0].innerHTML = "邀"
+}
+
+function yaoqing(roomID, word) {
+    if (word.indexOf("邀") >= 0) {
+        tools.ajaxGet("http://127.0.0.1:8080/gobang/api/OLuser",null, function (res) {
+            if (res.status !== 0) {
+                showError("请求拒绝：" + makeString(res.desc))
+                return
+            }
+            openYQ(res.data)
+        }, function (res) {
+            showError("服务器异常" + res)
+        })
+    }
+}
+
+function openYQ(data) {
+    if (document.getElementsByClassName("container")[8].style.top !== "50%") {
+        let userList = document.getElementsByClassName("ManInfo")
+        for (let i = userList.length - 1; i >= 0; i--) {
+            userList[i].parentNode.removeChild(userList[i])
+        }
+
+        let datas=data.split(";")
+        if(datas.length===1){
+            document.getElementById('yaoqingDiv').style.display = "none"
+            document.getElementById('noOL').style.display = "block"
+        }
+        else{
+            document.getElementById('yaoqingDiv').style.display = "block"
+            document.getElementById('noOL').style.display = "none"
+        }
+        for(let i=0;i<datas.length; i++){
+            if(data[i].name!==getUserName())
+                addOLuser(findUserByUsername(datas[i],i))
+        }
+        document.getElementsByClassName("container")[8].style.top = "50%"
+    } else {
+        document.getElementsByClassName("container")[8].style.top = "-50%"
+    }
+}
+
+function addOLuser(user, now) {
+    let botton = document.getElementById("YQTableButton");
+    let person = document.createElement("tr");
+    if (now % 2 === 1)
+        person.setAttribute("class", "ManInfo ManColorB");
+    else
+        person.setAttribute("class", "ManInfo ManColor");
+    person.innerHTML += "<th>" + "<img src=\"images/headIcons/" + user.name + ".png\" onerror=\"javascript:this.src='images/system/defaultHead.png';\">" + "</th>"
+    person.innerHTML += "<th  style=\"display: none\">" + user.name + "</th>"
+    person.innerHTML += "<th>" + user.nickname + "</th>"
+    person.innerHTML += "<th>" + "<input type=\"button\" value=\"邀请用户\" title=\"邀请用户\" onclick=\"sendYQ(\'" + user.name + "\')\">" + "</th>"
+    botton.parentNode.insertBefore(person, botton)
+}
+
+function sendYQ(user) {
+    if (websocket.readyState === websocket.OPEN) {
+        let msg = {
+            'TO': user,
+            'type': 'try',
+        }
+        tools.ajaxGet("http://127.0.0.1:8080/gobang/api/talk",msg,function (res){
+            if (res.status !== 0) {
+                showError("发送失败：" + makeString(res.desc))
+                return
+            }
+            showError("成功邀请，请等待对方回应！","ok")
+        }, function (res) {
+            showError("服务器异常" + res)
+        })
+    } else {
+        showError("服务器异常")
+    }
+}
+
+function getYQ(data){
+    document.getElementsByClassName("container")[9].style.top = "50%"
+    document.getElementById("YQFrom").innerHTML=data.from
+    document.getElementById("YQTxtx").innerHTML=data.from+"邀请您加入游戏"
+}
+
+function agreeGame(){
+
 }

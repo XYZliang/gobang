@@ -43,7 +43,7 @@ function b64_to_utf8(str) {
 }
 
 let user = {
-    "id":0,
+    "id": 0,
     "admin": 0,
     "level": 0,
     "name": "nologin",
@@ -53,7 +53,7 @@ let user = {
     "wintimes": 0
 }
 
-function updateUserInfo(admin, level, name, nickname, sex, times, wintimes,id) {
+function updateUserInfo(admin, level, name, nickname, sex, times, wintimes, id) {
     let userObj = user;
     userObj.name = name;
     userObj.nickname = nickname;
@@ -62,13 +62,13 @@ function updateUserInfo(admin, level, name, nickname, sex, times, wintimes,id) {
     userObj.sex = sex;
     userObj.times = times;
     userObj.wintimes = wintimes;
-    userObj.id=id;
+    userObj.id = id;
     console.log(userObj)
     updateUser(userObj)
 }
 
 function updateUserInfoFromJson(JSON) {
-    updateUserInfo(JSON.admin, JSON.level, JSON.name, JSON.nickname, JSON.sex, JSON.times, JSON.wintimes,JSON.id)
+    updateUserInfo(JSON.admin, JSON.level, JSON.name, JSON.nickname, JSON.sex, JSON.times, JSON.wintimes, JSON.id)
 }
 
 // function register(name, id, username, pwd, admin = false, highPermissions = false, check = false) {

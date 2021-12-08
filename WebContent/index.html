@@ -225,7 +225,7 @@
         }
 
         /* 登录按钮样式 */
-        form .inputBox input[type="button"] {
+        .form .inputBox input[type="button"] {
             background: rgba(255, 255, 255, 0.8);
             margin-bottom: 20px;
             font-weight: 600;
@@ -668,26 +668,26 @@
             /*top: 50%;*/
             display: block;
             right: 45%;
-            min-height:500px;
+            min-height: 500px;
             overflow: auto;
         }
 
-        #roomBox{
+        #roomBox {
             width: 980px;
             position: absolute;
             left: 50%;
             transform: translate(-50%, 0%);
-            margin-top:10px;
+            margin-top: 10px;
             padding-bottom: 10px;
         }
 
-        .roomDiv{
+        .roomDiv {
             position: sticky;
             margin: 4px;
             border-radius: 20px;
-            width:480px;
-            height:200px;
-            float:left;
+            width: 480px;
+            height: 200px;
+            float: left;
             background: rgba(163, 180, 180, 0.6);
             box-shadow: 0 25px 45px rgba(163, 180, 180, 0.4);
             border: 1px solid rgba(163, 180, 180, 0.8);
@@ -695,27 +695,30 @@
             border-bottom: 1px solid rgba(163, 180, 180, 0.5);
         }
 
-        #newRoom{
-            background: rgba(127,151,151, 0.6);
-            box-shadow: 0 25px 45px rgba(127,151,151, 0.4);
-            border: 1px solid rgba(127,151,151, 0.8);
-            border-right: 1px solid rgba(127,151,151, 0.5);
-            border-bottom: 1px solid rgba(127,151,151, 0.5);
+        #newRoom {
+            background: rgba(127, 151, 151, 0.6);
+            box-shadow: 0 25px 45px rgba(127, 151, 151, 0.4);
+            border: 1px solid rgba(127, 151, 151, 0.8);
+            border-right: 1px solid rgba(127, 151, 151, 0.5);
+            border-bottom: 1px solid rgba(127, 151, 151, 0.5);
         }
-        #newRoomTxt{
-            width:480px;
-            height:200px;
+
+        #newRoomTxt {
+            width: 480px;
+            height: 200px;
             font-family: 'ShuiMo';
             line-height: 200px;
             font-size: 98px;
             text-align: center;
         }
-        .gameInfo{
+
+        .gameInfo {
             width: 100%;
             padding-top: 20px;
             box-sizing: border-box;
         }
-        .gameHead{
+
+        .gameHead {
             margin: 0;
             width: 100px;
             height: 100px;
@@ -724,11 +727,13 @@
             border: 5px solid rgba(255, 255, 255, 0.8);
             overflow: hidden;
         }
-        .gameHeadImg{
+
+        .gameHeadImg {
             width: 100px;
             height: 100px;
         }
-        .gameInfoA{
+
+        .gameInfoA {
             width: 20px;
             height: 20px;
             border-radius: 10px;
@@ -740,37 +745,48 @@
             top: 110px;
             left: 130px;
         }
-        .gameInfoAB{
-            width: 20px;height: 20px;
+
+        .gameInfoAB {
+            width: 20px;
+            height: 20px;
         }
-        .gameInfoAG{
-            width: 20px;height: 20px;
+
+        .gameInfoAG {
+            width: 20px;
+            height: 20px;
         }
-        .gameHeadLeft{
+
+        .gameHeadLeft {
             float: left;
             margin-left: 40px;
         }
-        .gameHeadRight{
+
+        .gameHeadRight {
             float: right;
             margin-right: 40px;
         }
-        .gameInfoARight{
+
+        .gameInfoARight {
             left: unset;
             right: 40px;
         }
-        .gameInfoTime{
+
+        .gameInfoTime {
             width: 180px;
             margin: 0 auto;
             float: left;
             text-align: center;
         }
-        .gameInfoTime p{
+
+        .gameInfoTime p {
             font-family: ShuiMo;
             font-size: 58px;
         }
-        .gameInfo2{
+
+        .gameInfo2 {
             width: 100%;
         }
+
         .gameStarts {
             width: 100%;
             height: 15px;
@@ -780,32 +796,36 @@
             background-position-x: center;
             overflow: hidden;
         }
-        .UserInfo{
-            width:110px;
+
+        .UserInfo {
+            width: 110px;
             margin-top: 5px;
             margin-left: 40px;
-            float:left;
+            float: left;
         }
-        .gameNickname{
+
+        .gameNickname {
             margin-top: 5px;
             text-align: center;
             font-size: 20px;
         }
-        .gameButton{
+
+        .gameButton {
             padding-top: 6px;
-            width:180px;
+            width: 180px;
             float: left;
             display: inline-flex;
             justify-content: center;
             align-items: center;
         }
-        .gameButton div{
+
+        .gameButton div {
             margin: 0 10px;
-            width:40px;
-            height:40px;
-            border-radius:20px;
+            width: 40px;
+            height: 40px;
+            border-radius: 20px;
             background-color: white;
-            line-height:40px;
+            line-height: 40px;
             font-size: 22px;
             float: left;
             -webkit-transition: all 0.3s ease-out;
@@ -813,31 +833,73 @@
             -o-transition: all 0.3s ease-out;
             text-align: center;
         }
-        .UserInfoRight{
+
+        .UserInfoRight {
             margin-left: 0px;
         }
-        .gameButton1{
+
+        .gameButton1 {
             width: 40px;
-            color: rgb(0,0,0);
-            background-color: rgba(255,255,255,1);
-        }
-        .gameButton1:hover{
-            width: 50px;
-            color: rgb(231,0,0);
-            background-color: rgba(255,255,255,0.6);
+            color: rgb(0, 0, 0);
+            background-color: rgba(255, 255, 255, 1);
         }
 
-        .gameButton2{
-            width: 40px;
-            color: rgb(0,0,0);
-            background-color: rgba(255,255,255,1);
-        }
-        .gameButton2:hover{
+        .gameButton1:hover {
             width: 50px;
-            color: rgb(231,0,0);
-            background-color: rgba(255,255,255,0.6);
+            color: rgb(231, 0, 0);
+            background-color: rgba(255, 255, 255, 0.6);
         }
 
+        .gameButton2 {
+            width: 40px;
+            color: rgb(0, 0, 0);
+            background-color: rgba(255, 255, 255, 1);
+        }
+
+        .gameButton2:hover {
+            width: 50px !important;
+            color: rgb(231, 0, 0);
+            background-color: rgba(255, 255, 255, 0.6);
+        }
+
+        #yaoqing {
+            min-width: 401px;
+            top: -50%;
+            display: block;
+            right: 45%;
+            min-height: unset;
+        }
+
+        #yaoqingDiv {
+            max-height: 600px;
+            width: 100%;
+            overflow: auto;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        #yaoqingDivSen table {
+            margin: 0 auto;
+        }
+
+        #yaoqingDivSen img {
+            border-radius: 50%;
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+
+        .ManTitleTh11 {
+            min-width: 75px;
+        }
+
+        #noOL {
+            height: 40px;
+            font-size: 28px;
+            color: indianred;
+            text-align: center;
+            line-height: 40px;
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -1059,7 +1121,7 @@
         <form id="box6" method="get">
             <h2 class="logintxt" id="ChangeInfoTxt">用户信息自行修改</h2>
             <h2 id="ChangeInfoUser" style="display:none">用户</h2>
-            <div class="inputBox" >
+            <div class="inputBox">
                 <label for="InfoLoginName"></label><input autocomplete=”off”
                                                           id="InfoLoginName" placeholder="请输入账号,以字母开头,8-15位"
                                                           style="font-size: 14px;display:none;" type="text">
@@ -1107,23 +1169,10 @@
                 <th class="ManTitleTh8">游戏场次</th>
                 <th class="ManTitleTh9">胜利场次</th>
                 <th class="ManTitleTh10" colspan="3">操作</th>
-                <!--            <th>是否在线</th>-->
             </tr>
         </table>
         <div id="ManDivSen">
             <table class="">
-                <!--            <tr class="ManHold">-->
-                <!--                <th></th>-->
-                <!--                <th></th>-->
-                <!--                <th></th>-->
-                <!--                <th></th>-->
-                <!--                <th></th>-->
-                <!--                <th></th>-->
-                <!--                <th></th>-->
-                <!--                <th></th>-->
-                <!--                <th></th>-->
-                <!--                &lt;!&ndash;            <th>是否在线</th>&ndash;&gt;-->
-                <!--            </tr>-->
                 <tr class="ManTitle ManColor">
                     <th class="ManTitleTh1">主键ID</th>
                     <th class="ManTitleTh2">头像</th>
@@ -1134,22 +1183,7 @@
                     <th class="ManTitleTh8">游戏场次</th>
                     <th class="ManTitleTh9">胜利场次</th>
                     <th class="ManTitleTh10" colspan="3">操作</th>
-                    <!--            <th>是否在线</th>-->
                 </tr>
-                <!--            <tr class="ManInfo ManColorB">-->
-                <!--                <th>4444</th>-->
-                <!--                <th><img alt="头像" src="images/system/defaultHead.png"></th>-->
-                <!--                <th>123456789123456</th>-->
-                <!--                <th>123456789123456</th>-->
-                <!--                <th>男</th>-->
-                <!--                <th>普通用户</th>-->
-                <!--                <th>5201314</th>-->
-                <!--                <th>5201314</th>-->
-                <!--                <th><input type="button" value="修改密码" title="修改密码" onclick="AdminChangePWD()"></th>-->
-                <!--                <th><input type="button" value="修改头像" title="修改头像" onclick="AdminChangeHead()"></th>-->
-                <!--                <th><input type="button" value="修改资料" title="修改资料" onclick="AdminChangeInfo()"></th>-->
-                <!--                &lt;!&ndash;            <th>是否在线</th>&ndash;&gt;-->
-                <!--            </tr>-->
                 <tr class="ManColor" id="TableButton">
                     <th colspan="11">已经到底啦</th>
                 </tr>
@@ -1160,57 +1194,59 @@
 
 <div class="container" id="gameRoom">
     <div id="roomBox">
-<!--        <div class="roomDiv">-->
-<!--            <div class="gameInfo">-->
-<!--                <div class="gameHead gameHeadLeft">-->
-<!--                    <img class="gameHeadImg" src="images/system/defaultHead.png">-->
-<!--                    <div class="gameInfoA" title="性别">-->
-<!--                        <img alt="男" class="gameInfoAB" src="images/system/boyIcon.png"-->
-<!--                             style="display: block;width: 20px;height: 20px;">-->
-<!--                        <img alt="女" class="gameInfoAG" src="images/system/girlIcon.png"-->
-<!--                             style="display: none;width: 20px;height: 20px;">-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--                <div class="gameInfoTime">-->
-<!--                    <p class="danTime">-->
-<!--                        60-->
-<!--                    </p>-->
-<!--                    <p class="totalTime">-->
-<!--                        600-->
-<!--                    </p>-->
-<!--                </div>-->
-<!--                <div class="gameHead gameHeadRight">-->
-<!--                    <img class="gameHeadImg" src="images/system/noUserHead.png">-->
-<!--                    <div class="gameInfoA gameInfoARight" title="性别" style="display: none;>-->
-<!--                        <img alt="男" class="gameInfoAB" src="images/system/boyIcon.png"-->
-<!--                             style="display: none;">-->
-<!--                        <img alt="女" class="gameInfoAG" src="images/system/girlIcon.png"-->
-<!--                             style="display: none;">-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            <div class="gameInfo2">-->
-<!--                <div class="UserInfo">-->
-<!--                    <div class="gameStarts" title="等级"></div>-->
-<!--                    <p class="gameNickname" title="昵称">昵称</p>-->
-<!--                </div>-->
-<!--                <div class="gameButton">-->
-<!--                    <div class="gameButton1">-->
-<!--                        邀-->
-<!--                    </div>-->
-<!--                    <div class="gameButton2">-->
-<!--                        开-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--                <div class="UserInfo UserInfoRight">-->
-<!--                    <div class="gameStarts" title="等级" style="display: none"></div>-->
-<!--                    <p class="gameNickname" title="昵称"></p>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--        <div class="roomDiv"></div>-->
-<!--        <div class="roomDiv"></div>-->
-        <div class="roomDiv" id="newRoom" onclick="javascript:document.getElementsByClassName('container')[7].style.top='50%'"><p id="newRoomTxt">+</p></div>
+        <!--        <div class="roomDiv">-->
+        <!--            <div class="gameInfo">-->
+        <!--                <div class="gameHead gameHeadLeft">-->
+        <!--                    <img class="gameHeadImg" src="images/system/defaultHead.png">-->
+        <!--                    <div class="gameInfoA" title="性别">-->
+        <!--                        <img alt="男" class="gameInfoAB" src="images/system/boyIcon.png"-->
+        <!--                             style="display: block;width: 20px;height: 20px;">-->
+        <!--                        <img alt="女" class="gameInfoAG" src="images/system/girlIcon.png"-->
+        <!--                             style="display: none;width: 20px;height: 20px;">-->
+        <!--                    </div>-->
+        <!--                </div>-->
+        <!--                <div class="gameInfoTime">-->
+        <!--                    <p class="danTime">-->
+        <!--                        60-->
+        <!--                    </p>-->
+        <!--                    <p class="totalTime">-->
+        <!--                        600-->
+        <!--                    </p>-->
+        <!--                </div>-->
+        <!--                <div class="gameHead gameHeadRight">-->
+        <!--                    <img class="gameHeadImg" src="images/system/noUserHead.png">-->
+        <!--                    <div class="gameInfoA gameInfoARight" title="性别" style="display: none;>-->
+        <!--                        <img alt="男" class="gameInfoAB" src="images/system/boyIcon.png"-->
+        <!--                             style="display: none;">-->
+        <!--                        <img alt="女" class="gameInfoAG" src="images/system/girlIcon.png"-->
+        <!--                             style="display: none;">-->
+        <!--                    </div>-->
+        <!--                </div>-->
+        <!--            </div>-->
+        <!--            <div class="gameInfo2">-->
+        <!--                <div class="UserInfo">-->
+        <!--                    <div class="gameStarts" title="等级"></div>-->
+        <!--                    <p class="gameNickname" title="昵称">昵称</p>-->
+        <!--                </div>-->
+        <!--                <div class="gameButton">-->
+        <!--                    <div class="gameButton1">-->
+        <!--                        邀-->
+        <!--                    </div>-->
+        <!--                    <div class="gameButton2">-->
+        <!--                        开-->
+        <!--                    </div>-->
+        <!--                </div>-->
+        <!--                <div class="UserInfo UserInfoRight">-->
+        <!--                    <div class="gameStarts" title="等级" style="display: none"></div>-->
+        <!--                    <p class="gameNickname" title="昵称"></p>-->
+        <!--                </div>-->
+        <!--            </div>-->
+        <!--        </div>-->
+        <!--        <div class="roomDiv"></div>-->
+        <!--        <div class="roomDiv"></div>-->
+        <div class="roomDiv" id="newRoom"
+             onclick="javascript:document.getElementsByClassName('container')[7].style.top='50%'"><p id="newRoomTxt">
+            +</p></div>
     </div>
 </div>
 <div class="container" style="z-index: 1000">
@@ -1219,7 +1255,7 @@
             <h2 class="logintxt">新建游戏</h2>
             <div class="inputBox">
                 <label for="Dan"></label><input id="Dan"
-                                                  placeholder="请输入单手时长，最长600s" type="number">
+                                                placeholder="请输入单手时长，最长600s" type="number">
             </div>
             <div class="inputBox">
                 <label for="Total"></label><input id="Total" placeholder="请输入最大游戏时长，最长3600s" type="number">
@@ -1228,12 +1264,58 @@
                 <input onclick="makeNewRoom()" type="button" value="确认新建">
             </div>
             <div class="inputBox" style="margin-top: 0">
-                <input onclick="javascript:document.getElementsByClassName('container')[7].style.top='-50%'" type="button" value="取消新建">
+                <input onclick="javascript:document.getElementsByClassName('container')[7].style.top='-50%'"
+                       type="button" value="取消新建">
             </div>
         </form>
     </div>
 </div>
-
+<div class="container" id="yaoqing">
+    <div id="yaoqingDiv">
+        <table class="ManTable" style="z-index: 1000;background: rgb(207, 216, 216);">
+            <tr class="ManTitle ManColor" style="background: rgba(163,180,180);">
+                <th class="ManTitleTh2">头像</th>
+                <th class="ManTitleTh3" style="display: none">用户名</th>
+                <th class="ManTitleTh4">昵称</th>
+                <th class="ManTitleTh11">操作</th>
+            </tr>
+        </table>
+        <div id="yaoqingDivSen">
+            <table class="">
+                <tr class="ManTitle ManColor">
+                    <th class="ManTitleTh2">头像</th>
+                    <th class="ManTitleTh3" style="display: none">用户名</th>
+                    <th class="ManTitleTh4">昵称</th>
+                    <th class="ManTitleTh11">操作</th>
+                </tr>
+                <tr class="ManColor" id="YQTableButton">
+                    <th colspan="4">已经到底啦</th>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div id="noOL">当前无在线用户！</div>
+    <div class="form" style="padding: 0px;margin: 0 50px;}">
+    <div class="inputBox" style="padding-top:0 ">
+        <input style="width:283px" onclick="openYQ()" type="button" value="取消邀请">
+    </div>
+</div>
+</div>
+<div class="container" style="z-index: 1000">
+    <div class="form" id="getYQWin" style="padding-bottom: 0;}">
+        <form id="box8" method="get">
+            <h2 class="logintxt" id="YQTxt">用户邀请</h2>
+            <h2 class="logintxt" style="display: none" id="YQFrom">用户邀请</h2>
+            <h2 class="logintxt" id="YQTxtx">xx邀请</h2>
+            <div class="inputBox">
+                <input onclick="agreeGame()" type="button" value="加入游戏">
+            </div>
+            <div class="inputBox">
+                <input onclick="document.getElementsByClassName('container')[8].style.top = '-50%'" type="button" value="拒绝邀请">
+            </div>
+        </form>
+    </div>
+</div>
 <script src="js/tools/others/jquery.min.js" type="text/javascript"></script>
 <script src="js/InputErrorCheck.js" type="text/javascript"></script>
 <script src="js/tools/checkLoginStatus.js" type="text/javascript"></script>
@@ -1247,17 +1329,22 @@
 <script src="js/tools/UserDB.js"></script>
 <!--游戏房间-->
 <script src="js/gameRoom.js"></script>
+<!--webSocket-->
+<script src="js/ws.js"></script>
+<script src="js/tools/others/websocket.js"></script>
 <script type="text/javascript">
-    const debug=false;
-    function makeString(value){
-        if(value===undefined || value===null){
+    const debug = false;
+
+    function makeString(value) {
+        if (value === undefined || value === null) {
             return ""
-        }else{
+        } else {
             return value
         }
     }
+
     window.onload = function () {
-        if(debug) {
+        if (debug) {
             hideError()
             return
         }
@@ -1271,6 +1358,7 @@
                     hideError()
                     let jsonObject = res.data
                     updateUserInfoFromJson(jsonObject)
+                    initWebSocket()
                     console.log(jsonObject)
                 }, 500)
             }, function (res) {
@@ -1432,7 +1520,7 @@
                     location.reload();
                 }, 2500)
             }, function (res) {
-                showError("注册失败！" + makeString(res.desc)+makeString(res.data))
+                showError("注册失败！" + makeString(res.desc) + makeString(res.data))
             })
         });
         captcha1.show();
@@ -1464,7 +1552,7 @@
                     location.reload();
                 }, 2500)
             }, function (res) {
-                showError("登录失败！" + makeString(res.desc)+makeString(res.data))
+                showError("登录失败！" + makeString(res.desc) + makeString(res.data))
             })
         });
         captcha1.show();
@@ -1532,18 +1620,18 @@
                             data: JSON.stringify(imageObject),
                             success: function (res) {
                                 showError("图片上传成功！", "ok")
-                                if(adminDo!==false){
+                                if (adminDo !== false) {
                                     showError("修改成功!正在刷新用户信息！", "ok")
                                     getInfos()
                                 }
-                                adminDo=false
+                                adminDo = false
                             },
                             contentType: 'application/json',
                             dataType: 'json',
                             cache: false,
                             error: function (res) {
                                 showError("图片上传失败！" + res, "ok")
-                                adminDo=false
+                                adminDo = false
                             },
                         });
                         // tools.ajaxPost("http://127.0.0.1:8080/gobang/api/updateHead",imageObject,function(){
@@ -1653,7 +1741,7 @@
     }
 
     function changePwd() {
-        let fromUser=null
+        let fromUser = null
         if (adminDo === false) {
             fromUser = null
         } else {
@@ -1669,23 +1757,23 @@
             console.log(res)
             if (res.status === 0) {
                 openChange()
-                if(adminDo===false) {
+                if (adminDo === false) {
                     showError("修改成功！请重新登录", "ok")
                     loginOut(false)
                 }
             } else {
-                showError("修改失败！" + makeString(res.desc)+makeString(res.data))
-                adminDo=false
+                showError("修改失败！" + makeString(res.desc) + makeString(res.data))
+                adminDo = false
             }
-            adminDo=false
+            adminDo = false
         }, function () {
             showError("系统异常！")
-            adminDo=false
+            adminDo = false
         })
     }
 
     function changeUserInfo() {
-        let fromUser=null
+        let fromUser = null
         if (adminDo === false) {
             fromUser = null
         } else {
@@ -1704,24 +1792,23 @@
             console.log(res)
             if (res.status === 0) {
                 openChangeInfo()
-                if(adminDo===false) {
+                if (adminDo === false) {
                     showError("修改成功!即将刷新！", "ok")
                     setTimeout(function () {
                         location.reload();
                     }, 2500)
-                }
-                else{
+                } else {
                     showError("修改成功!正在刷新用户信息！", "ok")
                     getInfos()
                 }
-                adminDo=false
+                adminDo = false
             } else {
-                showError("修改失败！" + makeString(res.desc)+makeString(res.data))
-                adminDo=false
+                showError("修改失败！" + makeString(res.desc) + makeString(res.data))
+                adminDo = false
             }
         }, function (res) {
-            showError("系统异常！"+ makeString(res.desc)+makeString(res.data))
-            adminDo=false
+            showError("系统异常！" + makeString(res.desc) + makeString(res.data))
+            adminDo = false
         })
     }
 
@@ -1745,18 +1832,17 @@
                 showError("请求拒绝：" + makeString(res.desc))
                 return
             }
-            let userList=document.getElementsByClassName("ManInfo")
-            for(let i=userList.length-1;i>=0;i--) {
+            let userList = document.getElementsByClassName("ManInfo")
+            for (let i = userList.length - 1; i >= 0; i--) {
                 userList[i].parentNode.removeChild(userList[i])
             }
             localStorage.setItem(utf8_to_b64("所有用户"), utf8_to_b64(JSON.stringify(res.data)));
-            if(getRoom===true)
-            {
+            if (getRoom === true) {
                 openRoom2()
                 return;
             }
             let botton = document.getElementById("TableButton");
-            let now=0;
+            let now = 0;
             for (let i = 0; i < res.data.length; i++) {
                 if (res.data[i].disable !== "1") {
                     let person = document.createElement("tr");
@@ -1764,7 +1850,7 @@
                         person.setAttribute("class", "ManInfo ManColorB");
                     else
                         person.setAttribute("class", "ManInfo ManColor");
-                    now=now+1
+                    now = now + 1
                     person.innerHTML += "<th>" + res.data[i].id + "</th>"
                     person.innerHTML += "<th>" + "<img src=\"images/headIcons/" + res.data[i].name + ".png\" onerror=\"javascript:this.src='images/system/defaultHead.png';\">" + "</th>"
                     person.innerHTML += "<th>" + res.data[i].name + "</th>"
@@ -1843,7 +1929,7 @@
     }
 
     function openAdmin() {
-        if (!checkLogin()){
+        if (!checkLogin()) {
             showError("请先登录！")
             return;
         }
@@ -1859,6 +1945,7 @@
             document.getElementsByClassName("container")[5].style.top = "-50%"
         }
     }
+
 </script>
 </body>
 </html>
