@@ -22,9 +22,9 @@ public class InterfaceTools {
 		} catch (JsonProcessingException e) {
 			Logging.Log(this.getClass().getName(), e.toString());
 		}
-		if(obj instanceof UserEntity) {
-		json = IgnoreKey(json);
-		json = json.replace("\": \"{", "\": {").replace("}\"}", "}}");
+		if (obj instanceof UserEntity) {
+			json = IgnoreKey(json);
+			json = json.replace("\": \"{", "\": {").replace("}\"}", "}}");
 		}
 		return json;
 	}
@@ -38,7 +38,7 @@ public class InterfaceTools {
 			Logging.Log(this.getClass().getName(), e.toString());
 		}
 //		System.out.println(json);
-		if(obj.get(0) instanceof UserEntity)
+		if (obj.get(0) instanceof UserEntity)
 			return IgnoreKeys(json);
 		return json;
 	}

@@ -5,14 +5,14 @@ function openRoom() {
             return;
         }
     }
-    if (document.getElementsByClassName("container")[6].style.top !== "50%") {
+    if (document.getElementsByClassName("container")[6].style.top !== "-50%") {
         getInfos(true)
     } else {
         document.getElementsByClassName("container")[6].style.top = "-50%"
     }
 }
 
-function openRoom2() {
+function openRoom2(update) {
     document.getElementsByClassName("container")[6].style.top = "50%"
     let id = findUserByUsername(getUserName()).id
     let info = {
@@ -23,6 +23,11 @@ function openRoom2() {
             showError("请求失败：" + makeString(res.desc))
             return
         }
+        localStorage.setItem(utf8_to_b64("房间数据"), utf8_to_b64(JSON.stringify(res.data)));
+        if(update===true){
+
+            return;
+        }
         let roomDiv = document.getElementsByClassName("roomDiv")
         for (let i = roomDiv.length - 2; i >= 0; i--) {
             roomDiv[i].parentNode.removeChild(roomDiv[i])
@@ -30,11 +35,18 @@ function openRoom2() {
         let data = res.data
         for (let i = 0; i < data.length; i++) {
             if (data[i].user2ID === 0) {
-                addNewRoom(getUserName(), data[i].onetime, data[i].totaltime, data[i].id)
+                addNewRoom(getUserName(), data[i].onetime, data[i].totaltime, data[i].id,false)
             }
-            // else{
-            //
-            // }
+            else{
+                // addNewRoom(getUserName(), data[i].onetime, data[i].totaltime, data[i].id)
+                // newRoomAdd(data[i].user2ID, data[i].id)
+                if(data[i].user===findUserByUsername(getUserName()).id)
+                    addNewRoom(findUserById(data[i].userid).name, data[i].onetime, data[i].totaltime, data[i].id,findUserById(data[i].user2ID).name,false)
+                else if(data[i].user2ID===findUserByUsername(getUserName()).id)
+                    addNewRoom(findUserById(data[i].userid).name, data[i].onetime, data[i].totaltime, data[i].id,findUserById(data[i].user2ID).name,true)
+                else
+                    addNewRoom(findUserById(data[i].userid).name, data[i].onetime, data[i].totaltime, data[i].id,findUserById(data[i].user2ID).name)
+            }
         }
     }, function (res) {
         showError("服务器异常" + res)
@@ -83,9 +95,13 @@ function findUserById(id) {
     return null
 }
 
-function addNewRoom(userName1, dan, total, id) {
+function addNewRoom(userName1, dan, total, id,userName2) {
     if (userName1 === null) {
         userName1 = getUserName()
+    }
+    let user2
+    if (userName2 !== undefined) {
+        user2 = findUserByUsername(userName2)
     }
     let user1 = findUserByUsername(userName1)
     let newRoomDiv = document.getElementById('newRoom')
@@ -150,6 +166,18 @@ function addNewRoom(userName1, dan, total, id) {
     start.style.display = ""
     let startList = ["startsZer", "startsOne", "startsTwo", "startsThr", "startsFou", "startsFiv"]
     start.classList.add(startList[user1.level])
+    // let img=newRoomDiv.get
+    // ElementsByTagName("img")
+    // for(let i=0;i<img.length;i++)
+    // {
+    //     img[i].addEventListener("error",function () {
+    //         this.src='images/system/defaultHead.png'
+    //     })
+    // }
+    if(user2!==undefined && user2!==null)
+    {
+        newRoomAdd(user2.id,id)
+    }
 }
 
 function makeNewRoom() {
@@ -161,7 +189,7 @@ function makeNewRoom() {
         if (res.status === 0) {
             addNewRoom(getUserName(), noTuiGe(Dan.value), noTuiGe(Total.value), res.data.id)
             document.getElementsByClassName('container')[7].style.top = '-50%'
-            msg("创建成功！", "ok")
+            showError("创建成功！", "ok")
         } else {
             showError("创建失败" + makeString(res.desc) + makeString(res.data))
         }
@@ -171,7 +199,7 @@ function makeNewRoom() {
     })
 }
 
-function newRoomAdd(userId, roomId) {
+function newRoomAdd(userId, roomId,Be) {
     let newUser = findUserById(userId)
     let room = document.getElementsByClassName("roomDiv")
     let roomNum = room.length
@@ -179,9 +207,10 @@ function newRoomAdd(userId, roomId) {
     if (roomId === null || roomId === undefined)
         roomDiv = room[roomNum - 2]
     else {
-        for (let i = 0; i < room.length; i++) {
+        for (let i = 0; i < room.length-1; i++) {
             if (room[i].getElementsByClassName("gameID")[0].innerHTML == roomId) {
                 roomDiv = room[i]
+                break
             }
         }
     }
@@ -213,17 +242,31 @@ function newRoomAdd(userId, roomId) {
     gameButton2.style.opacity = "unset"
     gameButton2.style.visibility = "unset"
     gameButton2.style.width = "40px"
-    roomDiv.getElementsByClassName("gameButton1")[0].innerHTML = "踢"
+    let gameButton1=roomDiv.getElementsByClassName("gameButton1")[0]
+    let roomOwner = getRoom(roomId)
+    let roomOwnerId = roomOwner.userid
+
+    if(findUserById(roomOwnerId).name===getUserName() || Be===false){
+        gameButton1.innerHTML = "踢"
+        // gameButton1.style.opacity = "0"
+        // gameButton1.style.visibility = "hidden"
+        // gameButton1.style.width = "0px"
+    }
+    else if(Be===true){
+        gameButton1.innerHTML = "退"
+    }
 }
 
-function newRoomT(roomId) {
+function newRoomT(roomId,exit) {
+    if(exit===undefined)
+        exit = false
     let room = document.getElementsByClassName("roomDiv")
     let roomNum = room.length
     let roomDiv = null
     if (roomId === null || roomId === undefined)
         roomDiv = room[roomNum - 2]
     else {
-        for (let i = 0; i < room.length; i++) {
+        for (let i = 0; i < room.length-1; i++) {
             if (room[i].getElementsByClassName("gameID")[0].innerHTML == roomId) {
                 roomDiv = room[i]
             }
@@ -232,27 +275,32 @@ function newRoomT(roomId) {
     if (roomDiv === null) {
         showError("系统错误！游戏房间不存在!")
     }
-    let head = roomDiv.getElementsByClassName("gameHeadImg")[0]
-    // head.onerror=function () {
-    //     let perImg = document.getElementById("perImg")
-    //     perImg.src = "images/system/defaultHead.png"
-    // }
-    head.src = "images/system/noUserHead.png"
-    let sex = roomDiv.getElementsByClassName("gameInfoARight")[0]
-    sex.style.display = "none"
-    sex.getElementsByClassName("gameInfoAB")[0].style.display = "none"
-    sex.getElementsByClassName("gameInfoAG")[0].style.display = "none"
-    let Rinfo = roomDiv.getElementsByClassName("gameInfo2")[0]
-    Rinfo = Rinfo.getElementsByClassName("UserInfoRight")[0]
-    let start = Rinfo.getElementsByClassName("gameStarts")[0]
-    start.style.display = "none"
-    let nick = Rinfo.getElementsByClassName("gameNickname")[0]
-    nick.innerHTML = ""
-    let gameButton2 = roomDiv.getElementsByClassName("gameButton2")[0]
-    gameButton2.style.opacity = "0"
-    gameButton2.style.visibility = "hidden"
-    gameButton2.style.width = "0"
-    roomDiv.getElementsByClassName("gameButton1")[0].innerHTML = "邀"
+    if(exit!==true) {
+        let head = roomDiv.getElementsByClassName("gameHeadImg")[0]
+        // head.onerror=function () {
+        //     let perImg = document.getElementById("perImg")
+        //     perImg.src = "images/system/defaultHead.png"
+        // }
+        head.src = "images/system/noUserHead.png"
+        let sex = roomDiv.getElementsByClassName("gameInfoARight")[0]
+        sex.style.display = "none"
+        sex.getElementsByClassName("gameInfoAB")[0].style.display = "none"
+        sex.getElementsByClassName("gameInfoAG")[0].style.display = "none"
+        let Rinfo = roomDiv.getElementsByClassName("gameInfo2")[0]
+        Rinfo = Rinfo.getElementsByClassName("UserInfoRight")[0]
+        let start = Rinfo.getElementsByClassName("gameStarts")[0]
+        start.style.display = "none"
+        let nick = Rinfo.getElementsByClassName("gameNickname")[0]
+        nick.innerHTML = ""
+        let gameButton2 = roomDiv.getElementsByClassName("gameButton2")[0]
+        gameButton2.style.opacity = "0"
+        gameButton2.style.visibility = "hidden"
+        gameButton2.style.width = "0"
+        roomDiv.getElementsByClassName("gameButton1")[0].innerHTML = "退"
+    }
+    else{
+
+    }
 }
 
 function yaoqing(roomID, word) {
@@ -262,14 +310,20 @@ function yaoqing(roomID, word) {
                 showError("请求拒绝：" + makeString(res.desc))
                 return
             }
-            openYQ(res.data)
+            openYQ(res.data,roomID)
         }, function (res) {
             showError("服务器异常" + res)
         })
     }
+    else if(word.indexOf("踢")){
+        newRoomT(roomID)
+    }
+    else if(word.indexOf("退")){
+        newRoomT(roomID,true)
+    }
 }
 
-function openYQ(data) {
+function openYQ(data,roomid) {
     if (document.getElementsByClassName("container")[8].style.top !== "50%") {
         let userList = document.getElementsByClassName("ManInfo")
         for (let i = userList.length - 1; i >= 0; i--) {
@@ -277,7 +331,7 @@ function openYQ(data) {
         }
 
         let datas=data.split(";")
-        if(datas.length===1){
+        if(datas.length<=1){
             document.getElementById('yaoqingDiv').style.display = "none"
             document.getElementById('noOL').style.display = "block"
         }
@@ -286,8 +340,8 @@ function openYQ(data) {
             document.getElementById('noOL').style.display = "none"
         }
         for(let i=0;i<datas.length; i++){
-            if(data[i].name!==getUserName())
-                addOLuser(findUserByUsername(datas[i],i))
+            if(datas[i].name!==getUserName())
+                addOLuser(findUserByUsername(datas[i]),i,roomid)
         }
         document.getElementsByClassName("container")[8].style.top = "50%"
     } else {
@@ -295,7 +349,7 @@ function openYQ(data) {
     }
 }
 
-function addOLuser(user, now) {
+function addOLuser(user, now,roomid) {
     let botton = document.getElementById("YQTableButton");
     let person = document.createElement("tr");
     if (now % 2 === 1)
@@ -305,15 +359,16 @@ function addOLuser(user, now) {
     person.innerHTML += "<th>" + "<img src=\"images/headIcons/" + user.name + ".png\" onerror=\"javascript:this.src='images/system/defaultHead.png';\">" + "</th>"
     person.innerHTML += "<th  style=\"display: none\">" + user.name + "</th>"
     person.innerHTML += "<th>" + user.nickname + "</th>"
-    person.innerHTML += "<th>" + "<input type=\"button\" value=\"邀请用户\" title=\"邀请用户\" onclick=\"sendYQ(\'" + user.name + "\')\">" + "</th>"
+    person.innerHTML += "<th>" + "<input type=\"button\" value=\"邀请用户\" title=\"邀请用户\" onclick=\"sendYQ(\'" + user.name + "\',\'" + roomid + "\')\">" + "</th>"
     botton.parentNode.insertBefore(person, botton)
 }
 
-function sendYQ(user) {
+function sendYQ(user,room) {
     if (websocket.readyState === websocket.OPEN) {
         let msg = {
             'TO': user,
             'type': 'try',
+            'room':room,
         }
         tools.ajaxGet("http://127.0.0.1:8080/gobang/api/talk",msg,function (res){
             if (res.status !== 0) {
@@ -321,6 +376,7 @@ function sendYQ(user) {
                 return
             }
             showError("成功邀请，请等待对方回应！","ok")
+            document.getElementsByClassName("container")[8].style.top = "-50%"
         }, function (res) {
             showError("服务器异常" + res)
         })
@@ -333,8 +389,58 @@ function getYQ(data){
     document.getElementsByClassName("container")[9].style.top = "50%"
     document.getElementById("YQFrom").innerHTML=data.from
     document.getElementById("YQTxtx").innerHTML=data.from+"邀请您加入游戏"
+    document.getElementById("YQID").innerHTML=data.room
 }
 
-function agreeGame(){
+function agreeGame(Re,username,room){
+    if(room===undefined)
+        room=document.getElementById("YQID").innerHTML
+    if(Re === true ||Re===undefined){
+        if(username==null){
+            username=document.getElementById("YQFrom").innerHTML
+        }
+        let id=findUserByUsername(getUserName()).id
+        let user=findUserByUsername(username)
+        let msg = {
+            'TO': user.name,
+            'type': 'agree',
+            'room':room,
+            'myid':id,
+        }
+        tools.ajaxGet("http://127.0.0.1:8080/gobang/api/talk",msg,function (res){
+            document.getElementsByClassName("container")[9].style.top = "-50%"
+            if (res.status !== 0) {
+                showError("发送失败：" + makeString(res.desc))
+                return
+            }
+            openRoom2()
+        }, function (res) {
+            showError("服务器异常" + res)
+            document.getElementsByClassName("container")[9].style.top = "-50%"
+        })
+    }
+    else{
+        showError("对方已接受邀请！","ok")
+        let auser=findUserByUsername(username)
+        newRoomAdd(auser.id, room,false)
+    }
+}
 
+function getRoom(roomId) {
+        let JsonString = b64_to_utf8(localStorage.getItem(utf8_to_b64("房间数据")))
+        let rooms = JSON.parse(JsonString);
+        for (let i = 0; i < rooms.length; i++) {
+            if (rooms[i].id === roomId) {
+                let room = {
+                    "id": rooms[i].id,
+                    "userid": rooms[i].userid,
+                    "user2ID": rooms[i].user2ID,
+                    "data": rooms[i].data,
+                    "onetime": rooms[i].onetime,
+                    "status": rooms[i].status,
+                    "totaltime": rooms[i].totaltime,
+                }
+                return room
+            }
+        }
 }

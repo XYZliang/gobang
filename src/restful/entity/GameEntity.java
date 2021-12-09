@@ -11,8 +11,8 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "GOBANGGAME")
 @NamedQueries({ @NamedQuery(name = "GameEntity.findGameAll", query = "SELECT u FROM GameEntity u"),
-		@NamedQuery(name = "GameEntity.findGameByUserid", query = "SELECT u FROM GameEntity u where u.USERID like :USERID"),
-})
+		@NamedQuery(name = "GameEntity.findGameByUserid", query = "SELECT u FROM GameEntity u where (u.USERID like :USERID) or (u.USER2ID like :USERID)"),
+		@NamedQuery(name = "GameEntity.findGameById", query = "SELECT u FROM GameEntity u where u.ID like :ID"), })
 public class GameEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -23,93 +23,109 @@ public class GameEntity {
 	private int ONETIME;
 	private int TOTALTIME;
 	private int STATUS;
+
 	/**
 	 * @return iD
 	 */
 	public int getID() {
 		return ID;
 	}
+
 	/**
 	 * @param iD 要设置的 iD
 	 */
 	public void setID(int iD) {
 		ID = iD;
 	}
+
 	/**
 	 * @return uSERID
 	 */
 	public int getUSERID() {
 		return USERID;
 	}
+
 	/**
 	 * @param uSERID 要设置的 uSERID
 	 */
 	public void setUSERID(int uSERID) {
 		USERID = uSERID;
 	}
+
 	/**
 	 * @return uSER2ID
 	 */
 	public int getUSER2ID() {
 		return USER2ID;
 	}
+
 	/**
 	 * @param uSER2ID 要设置的 uSER2ID
 	 */
 	public void setUSER2ID(int uSER2ID) {
 		USER2ID = uSER2ID;
 	}
+
 	/**
 	 * @return dATA
 	 */
 	public String getDATA() {
 		return DATA;
 	}
+
 	/**
 	 * @param dATA 要设置的 dATA
 	 */
 	public void setDATA(String dATA) {
 		DATA = dATA;
 	}
+
 	/**
 	 * @return oNETIME
 	 */
 	public int getONETIME() {
 		return ONETIME;
 	}
+
 	/**
 	 * @param oNETIME 要设置的 oNETIME
 	 */
 	public void setONETIME(int oNETIME) {
 		ONETIME = oNETIME;
 	}
+
 	/**
 	 * @return tOTALTIME
 	 */
 	public int getTOTALTIME() {
 		return TOTALTIME;
 	}
+
 	/**
 	 * @param tOTALTIME 要设置的 tOTALTIME
 	 */
 	public void setTOTALTIME(int tOTALTIME) {
 		TOTALTIME = tOTALTIME;
 	}
+
 	/**
 	 * @return sTATUS
 	 */
 	public int getSTATUS() {
 		return STATUS;
 	}
+
 	/**
 	 * @param sTATUS 要设置的 sTATUS
 	 */
 	public void setSTATUS(int sTATUS) {
 		STATUS = sTATUS;
 	}
+
 	public GameEntity() {
 		super();
 	}
+
 	public GameEntity(int uSERID, int oNETIME, int tOTALTIME) {
 		super();
 		USERID = uSERID;

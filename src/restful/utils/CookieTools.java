@@ -14,7 +14,7 @@ public class CookieTools {
 
 	public static String getCookie(String key, HttpServletRequest request) {
 		Cookie[] cookies = request.getCookies();
-		if(cookies==null)
+		if (cookies == null)
 			return "";
 		for (Cookie cookie : cookies) {// 遍历数组
 			String name = cookie.getName();

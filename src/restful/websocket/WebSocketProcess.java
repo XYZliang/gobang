@@ -16,15 +16,13 @@ import restful.utils.ChatTools;
 import restful.utils.InterfaceTools;
 import restful.utils.Logging;
 
-
-@ServerEndpoint(value="/ws/action", configurator = GetHttpSessionConfigurator.class)
+@ServerEndpoint(value = "/ws/action", configurator = GetHttpSessionConfigurator.class)
 public class WebSocketProcess extends Endpoint {
 	private final static Logger LOGGER = LoggerFactory.getLogger(WebSocketProcess.class);
 	private final static InterfaceTools tools = new InterfaceTools();
 	private Session session;
 	private String chatUser;
-	
-	
+
 	// 增加用户session
 	@Override
 	public void onOpen(Session session, EndpointConfig endpointConfig) {
@@ -33,11 +31,11 @@ public class WebSocketProcess extends Endpoint {
 		String chatUser = (String) httpSession.getAttribute("chatUser");
 		System.out.println(httpSession);
 		this.session = session;
-		this.chatUser = chatUser;		
+		this.chatUser = chatUser;
 		ChatTools.getClients().put(chatUser, this);
-		LOGGER.info("用户 " + chatUser+ "成功建立连接");
+		LOGGER.info("用户 " + chatUser + "成功建立连接");
 		for (String key : ChatTools.getClients().keySet()) {
-			System.out.println("webSocket client:"+key);
+			System.out.println("webSocket client:" + key);
 		}
 	}
 
@@ -46,14 +44,14 @@ public class WebSocketProcess extends Endpoint {
 	public void onClose(Session session, CloseReason closeReason) {
 		ChatTools.getClients().remove(this.chatUser);
 		for (String key : ChatTools.getClients().keySet()) {
-			System.out.println("webSocket client:"+key);
+			System.out.println("webSocket client:" + key);
 		}
 	}
 
 	@Override
 	public void onError(Session session, Throwable error) {
 		error.printStackTrace();
-	}	
+	}
 
 	/* 向全部用户发消息 */
 	public static String sendMessageToUsers(Talk message) {
@@ -83,34 +81,33 @@ public class WebSocketProcess extends Endpoint {
 		return "3";
 	}
 
-	/* 向单一用户发消息 */ 
-	public static String sendMessageToUser(String target, String message) {	
+	/* 向单一用户发消息 */
+	public static String sendMessageToUser(String target, String message) {
 //		if(target.toUpperCase().equals("ALL")) {
 //			return sendMessageToUsers(message);			
 //		}
-		System.out.println(target +"尝试发送"+message);
+		System.out.println(target + "尝试发送" + message);
 		WebSocketProcess client = ChatTools.getClients().get(target);
 //		Result result = new Result();
 //		result.setCode(1);
 //		result.setDescription("单一用户消息发送成功");
-		if(client==null) {
+		if (client == null) {
 			return tools.makeErReturn(ResultCode.USER_LOGINOUT_WS);
 		}
 		try {
 			if (client.session.isOpen()) {
-				sendMessage( client.session, message);
+				sendMessage(client.session, message);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			LOGGER.info("发送消息失败");
 			WebSocketProcess a = new WebSocketProcess();
-			Logging.Log(a.getClass().getName(), "发送失败"+message,target);
+			Logging.Log(a.getClass().getName(), "发送失败" + message, target);
 			return tools.makeErReturn(ResultCode.USER_LOGINOUT_WS);
 		}
 		return tools.makeReturn(message);
 	}
-	
-	
+
 	private static void sendMessage(Session session, String message) {
 		session.getAsyncRemote().sendText(message);
 	}

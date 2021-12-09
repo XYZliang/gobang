@@ -44,7 +44,8 @@ function onMessage(evt) {
     let json=JSON.parse(evt.data);
     if(json.type==="try")
         getYQ(json)
-
+    else if(json.type==="agree")
+        agreeGame(false,json.from,json.room)
 }
 
 function onError(evt) {

@@ -40,7 +40,7 @@ public class Interface {
 	private HttpServletRequest request;
 	@Context
 	private HttpServletResponse response;
-	
+
 	@Resource
 	private final static InterfaceTools tools = new InterfaceTools();
 
@@ -52,16 +52,16 @@ public class Interface {
 //		System.out.println(new Date()+request.getSession().toString());
 //		System.out.println(request.getSession().getAttribute("hello"));
 //		request.getSession().setAttribute("hello","hello");
-		CookieTools.addCookie("hello","jxufe","/",60*60*24*7,response);
+		CookieTools.addCookie("hello", "jxufe", "/", 60 * 60 * 24 * 7, response);
 		return "hello";
 	}
-	
+
 	@GET
 	@Path("/checkCookieAPI")
 	@Consumes("application/json;charset=UTF-8")
 	@Produces("application/json;charset=UTF-8")
 	public String checkCookieAPI(@QueryParam("username") String username) {
-		return Check(username,request);
+		return Check(username, request);
 	}
 
 	@GET
@@ -69,8 +69,8 @@ public class Interface {
 	@Consumes("application/json;charset=UTF-8")
 	@Produces("application/json;charset=UTF-8")
 	public String getAllUsers(@QueryParam("username") String username) {
-		String check = Check(username,request);
-		if(!check.equals("ok")) {
+		String check = Check(username, request);
+		if (!check.equals("ok")) {
 			return check;
 		}
 		List<UserEntity> users = EM.getEntityManager().createNamedQuery("UserEntity.findUserAll", UserEntity.class)
@@ -92,7 +92,7 @@ public class Interface {
 			// System.out.println(userentity.show());
 			tools.commitDB(userentity);
 			String json = tools.makeJSON(userentity);
-			
+
 			return tools.makeReturn(json);
 		} else
 			return tools.makeErReturn(ResultCode.USER_HAS_EXISTED);
@@ -131,11 +131,11 @@ public class Interface {
 			if (userentity.checkPass(PASSWORD)) {
 //				HttpServletRequest req = (HttpServletRequest) request;
 //				userentity.setTOKEN(req.getSession().toString());
-				String token=Token.createToken(NAME);
+				String token = Token.createToken(NAME);
 				userentity.setTOKEN(token);
 				userentity.setLOGINTIME(new Date());
 				tools.commitDB(userentity);
-				CookieTools.addCookie("token",token,"/",60*60*24*7,response);
+				CookieTools.addCookie("token", token, "/", 60 * 60 * 24 * 7, response);
 				return tools.makeReturn(tools.makeJSON(userentity));
 			} else {
 				return tools.makeErReturn(ResultCode.USER_PWD_ERROR);
@@ -155,8 +155,8 @@ public class Interface {
 //		System.out.println(jo);  
 		String image64 = jo.getString("image");
 		String userName = jo.getString("userName");
-		String check = Check(userName,request);
-		if(!check.equals("ok")) {
+		String check = Check(userName, request);
+		if (!check.equals("ok")) {
 			return check;
 		}
 //		System.out.println(image64);
@@ -182,8 +182,8 @@ public class Interface {
 	@Consumes("application/json;charset=UTF-8")
 	@Produces("application/json;charset=UTF-8")
 	public String getUser(@QueryParam("userName") String NAME) {
-		String check = Check(NAME,request);
-		if(!check.equals("ok")) {
+		String check = Check(NAME, request);
+		if (!check.equals("ok")) {
 			return check;
 		}
 		List<UserEntity> result = EM.getEntityManager().createNamedQuery("UserEntity.findUserByName", UserEntity.class)
@@ -213,8 +213,8 @@ public class Interface {
 	public String CPWD(@QueryParam("userName") String NAME, @QueryParam("Opassword") String Opassword,
 			@QueryParam("Npassword") String Npassword, @QueryParam("fromUser") String fromUser) {
 		if (fromUser != null) {
-			String check = Check(fromUser,request);
-			if(!check.equals("ok")) {
+			String check = Check(fromUser, request);
+			if (!check.equals("ok")) {
 				return check;
 			}
 			List<UserEntity> result = EM.getEntityManager()
@@ -237,8 +237,8 @@ public class Interface {
 				return tools.makeReturn();
 			}
 		} else {
-			String check = Check(NAME,request);
-			if(!check.equals("ok")) {
+			String check = Check(NAME, request);
+			if (!check.equals("ok")) {
 				return check;
 			}
 			List<UserEntity> result = EM.getEntityManager()
@@ -268,8 +268,8 @@ public class Interface {
 			@QueryParam("newUserName") String newUserName, @QueryParam("nickname") String nickname,
 			@QueryParam("sex") String sex, @QueryParam("admin") String admin) {
 		if (!userName.equals(fromUser)) {
-			String check = Check(fromUser,request);
-			if(!check.equals("ok")) {
+			String check = Check(fromUser, request);
+			if (!check.equals("ok")) {
 				return check;
 			}
 			List<UserEntity> result = EM.getEntityManager()
@@ -280,10 +280,9 @@ public class Interface {
 			UserEntity userentity = result.get(0);
 			if (userentity.getADMIN() != 1)
 				return tools.makeErReturn(ResultCode.USER_PER_LOW);
-		}
-		else {
-			String check = Check(userName,request);
-			if(!check.equals("ok")) {
+		} else {
+			String check = Check(userName, request);
+			if (!check.equals("ok")) {
 				return check;
 			}
 		}
@@ -329,24 +328,23 @@ public class Interface {
 			return tools.makeReturn();
 		}
 	}
-	
-	public static String Check(String username,HttpServletRequest request) {
-		if(username==null)
-		{
+
+	public static String Check(String username, HttpServletRequest request) {
+		if (username == null) {
 			username = getUsernameFromCookie(request);
-			if(username== null)
+			if (username == null)
 				return tools.makeErReturn(ResultCode.USER_TOKEN_MISS);
 		}
-		if(!Token.checkToken(username, CookieTools.getCookie("token", request))) {
+		if (!Token.checkToken(username, CookieTools.getCookie("token", request))) {
 			return tools.makeErReturn(ResultCode.USER_TOKEN_ERROR);
 		}
 		return "ok";
 	}
-	
+
 	public static String getUsernameFromCookie(HttpServletRequest request) {
-		String text =CookieTools.getCookie("loginName", request);
+		String text = CookieTools.getCookie("loginName", request);
 		String username = null;
-		if(text== null)
+		if (text == null)
 			return null;
 		Base64.Decoder decoder = Base64.getDecoder();
 		byte[] textByte = null;
@@ -357,17 +355,17 @@ public class Interface {
 		}
 		return username;
 	}
-	
+
 	@GET
 	@Path("/makeNewGame")
 	@Consumes("application/json;charset=UTF-8")
 	@Produces("application/json;charset=UTF-8")
 	public String makeNewGame(@QueryParam("Dan") int Dan, @QueryParam("Total") int Total) {
 		String username = getUsernameFromCookie(request);
-		if(username== null)
+		if (username == null)
 			return tools.makeErReturn(ResultCode.USER_TOKEN_ERROR);
-		String check = Check(username,request);
-		if(!check.equals("ok")) {
+		String check = Check(username, request);
+		if (!check.equals("ok")) {
 			return check;
 		}
 		List<UserEntity> result = EM.getEntityManager().createNamedQuery("UserEntity.findUserByName", UserEntity.class)
@@ -378,94 +376,109 @@ public class Interface {
 		else {
 			List<GameEntity> games = EM.getEntityManager().createNamedQuery("GameEntity.findGameAll", GameEntity.class)
 					.getResultList();
-			GameEntity game = games.get(games.size()-1);
-			GameEntity gameEntity=new GameEntity(userentity.getID(),Dan,Total);
-			gameEntity.setID(game.getID()+1);
+			GameEntity game = games.get(games.size() - 1);
+			GameEntity gameEntity = new GameEntity(userentity.getID(), Dan, Total);
+			gameEntity.setID(game.getID() + 1);
 			tools.commitDB(gameEntity);
 			String json = tools.makeJSON(gameEntity);
 			return tools.makeReturn(json);
 		}
 	}
-	
+
 	@GET
 	@Path("/getMyGame")
 	@Consumes("application/json;charset=UTF-8")
 	@Produces("application/json;charset=UTF-8")
 	public String getMyGame(@QueryParam("id") int id) {
 		String username = getUsernameFromCookie(request);
-		if(username== null)
+		if (username == null)
 			return tools.makeErReturn(ResultCode.USER_TOKEN_ERROR);
-		String check = Check(username,request);
-		if(!check.equals("ok")) {
+		String check = Check(username, request);
+		if (!check.equals("ok")) {
 			return check;
 		}
-		List<UserEntity> result = EM.getEntityManager().createNamedQuery("UserEntity.findUserByName", UserEntity.class)
-				.setParameter("NAME", username).getResultList();
-		UserEntity userentity = result.get(0);
-		if (result.isEmpty())
-			return tools.makeErReturn(ResultCode.USER_NOT_EXISTED);
-		else {
-			List<GameEntity> games = EM.getEntityManager().createNamedQuery("GameEntity.findGameByUserid", GameEntity.class)
-					.setParameter("USERID", id).getResultList();
-			String json = tools.makeJSON(games);
-			return tools.makeReturn(json);
+		if ((id+"").equals("")) {
+			List<UserEntity> result = EM.getEntityManager()
+					.createNamedQuery("UserEntity.findUserByName", UserEntity.class).setParameter("NAME", username)
+					.getResultList();
+			UserEntity userentity = result.get(0);
+			if (result.isEmpty())
+				return tools.makeErReturn(ResultCode.USER_NOT_EXISTED);
+			else
+				id = userentity.getID();
 		}
+		List<GameEntity> games = EM.getEntityManager().createNamedQuery("GameEntity.findGameByUserid", GameEntity.class)
+				.setParameter("USERID", id).getResultList();
+		String json = tools.makeJSON(games);
+		return tools.makeReturn(json);
+
 	}
-	
+
 	@GET
 	@Path("/initWS")
 	@Consumes("application/json;charset=UTF-8")
 	@Produces("application/json;charset=UTF-8")
-	public String initWS(){
+	public String initWS() {
 		String username = getUsernameFromCookie(request);
-		if(username== null)
+		if (username == null)
 			return tools.makeErReturn(ResultCode.NEED_LOGIN);
-		String check = Check(username,request);
-		if(!check.equals("ok")) {
+		String check = Check(username, request);
+		if (!check.equals("ok")) {
 			return check;
 		}
 		return ChatTools.setCurUser(request.getSession(), username);
 	}
-	
+
 	@GET
 	@Path("/OLuser")
 	@Consumes("application/json;charset=UTF-8")
 	@Produces("application/json;charset=UTF-8")
-	public String OLuser(){
+	public String OLuser() {
 		String user = "";
 		for (String key : ChatTools.getClients().keySet()) {
-			if(user.length()==0)
+			if (user.length() == 0)
 				user = key;
 			else
-				user=user+";"+key;
+				user = user + ";" + key;
 		}
-		 
+
 		return tools.makeReturn(user);
 	}
+
 	@GET
 	@Path("/talk")
 	@Consumes("application/json;charset=UTF-8")
 	@Produces("application/json;charset=UTF-8")
-	public String talk(@QueryParam("type") String type,@QueryParam("TO") String to,@QueryParam("msg") String message){	
+	public String talk(@QueryParam("type") String type, @QueryParam("TO") String to, @QueryParam("msg") String message,
+			@QueryParam("room") String room, @QueryParam("myid") String myid) {
 		String username = getUsernameFromCookie(request);
-		if(username== null)
+		if (username == null)
 			return tools.makeErReturn(ResultCode.NEED_LOGIN);
-		String check = Check(username,request);
-		if(!check.equals("ok")) {
+		String check = Check(username, request);
+		if (!check.equals("ok")) {
 			return check;
 		}
-		 HashMap<String, Object> msg = new HashMap<>();
+		HashMap<String, Object> msg = new HashMap<>();
+		if (type.equals("agree")) {
+			msg.put("type", type);
+			msg.put("msg", message);
+			msg.put("from", username);
+			msg.put("room", room);
+			int roomId = Integer.parseInt(room);
+			List<GameEntity> games = EM.getEntityManager().createNamedQuery("GameEntity.findGameById", GameEntity.class)
+					.setParameter("ID", roomId).getResultList();
+			GameEntity game = games.get(0);
+			game.setUSER2ID(Integer.parseInt(myid));
+			tools.commitDB(game);
+			return WebSocketProcess.sendMessageToUser(to, new JSONObject(msg).toString());
+//				String json = tools.makeJSON(gameEntity);
+		} else if (type.equals("makeqi")) {
 
-		if(type.equals("agree")) {
-			
-		}
-		else if(type.equals("makeqi")) {
-			
-		}
-		else {
-			 msg.put("type", type);
-			 msg.put("msg", message);
-			 msg.put("from", username);
+		} else {
+			msg.put("type", type);
+			msg.put("msg", message);
+			msg.put("from", username);
+			msg.put("room", room);
 		}
 		return WebSocketProcess.sendMessageToUser(to, new JSONObject(msg).toString());
 	}

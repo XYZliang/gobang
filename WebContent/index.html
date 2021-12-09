@@ -728,7 +728,7 @@
             overflow: hidden;
         }
 
-        .gameHeadImg {
+        .gameHead img {
             width: 100px;
             height: 100px;
         }
@@ -747,13 +747,13 @@
         }
 
         .gameInfoAB {
-            width: 20px;
-            height: 20px;
+            width: 20px!important;
+            height: 20px!important;
         }
 
         .gameInfoAG {
-            width: 20px;
-            height: 20px;
+            width: 20px!important;
+            height: 20px!important;
         }
 
         .gameHeadLeft {
@@ -898,6 +898,7 @@
             color: indianred;
             text-align: center;
             line-height: 40px;
+            margin-top: 20px;
             display: none;
         }
     </style>
@@ -1305,10 +1306,11 @@
     <div class="form" id="getYQWin" style="padding-bottom: 0;}">
         <form id="box8" method="get">
             <h2 class="logintxt" id="YQTxt">用户邀请</h2>
+            <h2 class="logintxt" style="display: none" id="YQID">用户房间</h2>
             <h2 class="logintxt" style="display: none" id="YQFrom">用户邀请</h2>
             <h2 class="logintxt" id="YQTxtx">xx邀请</h2>
             <div class="inputBox">
-                <input onclick="agreeGame()" type="button" value="加入游戏">
+                <input onclick="agreeGame(true)" type="button" value="加入游戏">
             </div>
             <div class="inputBox">
                 <input onclick="document.getElementsByClassName('container')[8].style.top = '-50%'" type="button" value="拒绝邀请">
