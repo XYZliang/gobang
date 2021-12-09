@@ -434,8 +434,17 @@ public class Interface {
 	@Consumes("application/json;charset=UTF-8")
 	@Produces("application/json;charset=UTF-8")
 	public String OLuser() {
+		String username = getUsernameFromCookie(request);
+		if (username == null)
+			return tools.makeErReturn(ResultCode.NEED_LOGIN);
+		String check = Check(username, request);
+		if (!check.equals("ok")) {
+			return check;
+		}
 		String user = "";
 		for (String key : ChatTools.getClients().keySet()) {
+			if(key==username)
+				continue;
 			if (user.length() == 0)
 				user = key;
 			else
@@ -470,7 +479,7 @@ public class Interface {
 			GameEntity game = games.get(0);
 			game.setUSER2ID(Integer.parseInt(myid));
 			tools.commitDB(game);
-			return WebSocketProcess.sendMessageToUser(to, new JSONObject(msg).toString());
+			return WebSocketProcess.sendMessageToUser(username,to, new JSONObject(msg).toString());
 //				String json = tools.makeJSON(gameEntity);
 		} else if (type.equals("ti")) {
 			int roomId = Integer.parseInt(room);
@@ -508,6 +517,6 @@ public class Interface {
 			msg.put("from", username);
 			msg.put("room", room);
 		}
-		return WebSocketProcess.sendMessageToUser(to, new JSONObject(msg).toString());
+		return WebSocketProcess.sendMessageToUser(username,to, new JSONObject(msg).toString());
 	}
 }
