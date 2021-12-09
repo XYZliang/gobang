@@ -252,12 +252,12 @@ function newRoomAdd(userId, roomId,Be) {
         // gameButton1.style.visibility = "hidden"
         // gameButton1.style.width = "0px"
     }
-    else if(Be===true){
+    else{
         gameButton1.innerHTML = "退"
     }
 }
 
-function newRoomT(roomId,exit) {
+function newRoomT(roomId,exit,Texit) {
     if(exit===undefined)
         exit = false
     let room = document.getElementsByClassName("roomDiv")
@@ -275,7 +275,7 @@ function newRoomT(roomId,exit) {
     if (roomDiv === null) {
         showError("系统错误！游戏房间不存在!")
     }
-    if(exit!==true) {
+    if (Texit===true){
         let head = roomDiv.getElementsByClassName("gameHeadImg")[0]
         // head.onerror=function () {
         //     let perImg = document.getElementById("perImg")
@@ -296,9 +296,78 @@ function newRoomT(roomId,exit) {
         gameButton2.style.opacity = "0"
         gameButton2.style.visibility = "hidden"
         gameButton2.style.width = "0"
-        roomDiv.getElementsByClassName("gameButton1")[0].innerHTML = "退"
+        roomDiv.getElementsByClassName("gameButton1")[0].innerHTML = "邀"
+        showError("对方离开了房间","ok")
+        return
+    }
+    if(exit!==true) {
+        let room=getRoom(roomId)
+        let to=findUserById(room.user2ID).name
+        let msg = {
+            'TO': to,
+            'type': 'ti',
+            'room':room.id,
+        }
+        tools.ajaxGet("http://127.0.0.1:8080/gobang/api/talk",msg,function (res){
+            let head = roomDiv.getElementsByClassName("gameHeadImg")[0]
+            // head.onerror=function () {
+            //     let perImg = document.getElementById("perImg")
+            //     perImg.src = "images/system/defaultHead.png"
+            // }
+            head.src = "images/system/noUserHead.png"
+            let sex = roomDiv.getElementsByClassName("gameInfoARight")[0]
+            sex.style.display = "none"
+            sex.getElementsByClassName("gameInfoAB")[0].style.display = "none"
+            sex.getElementsByClassName("gameInfoAG")[0].style.display = "none"
+            let Rinfo = roomDiv.getElementsByClassName("gameInfo2")[0]
+            Rinfo = Rinfo.getElementsByClassName("UserInfoRight")[0]
+            let start = Rinfo.getElementsByClassName("gameStarts")[0]
+            start.style.display = "none"
+            let nick = Rinfo.getElementsByClassName("gameNickname")[0]
+            nick.innerHTML = ""
+            let gameButton2 = roomDiv.getElementsByClassName("gameButton2")[0]
+            gameButton2.style.opacity = "0"
+            gameButton2.style.visibility = "hidden"
+            gameButton2.style.width = "0"
+            roomDiv.getElementsByClassName("gameButton1")[0].innerHTML = "邀"
+            showError("踢出成功！","ok")
+        }, function (res) {
+            if (res.status !== 0) {
+                showError("发送失败：" + makeString(res.desc))
+                return
+            }
+        })
     }
     else{
+        let room=getRoom(roomId)
+        let to=findUserById(room.userid).name
+        let msg = {
+            'TO': to,
+            'type': 'exit',
+            'room':room.id,
+        }
+        tools.ajaxGet("http://127.0.0.1:8080/gobang/api/talk",msg,function (res){
+            let room = document.getElementsByClassName("roomDiv")
+            let roomNum = room.length
+            let roomDiv = null
+            if (roomId === null || roomId === undefined)
+                roomDiv = room[roomNum - 2]
+            else {
+                for (let i = 0; i < room.length-1; i++) {
+                    if (room[i].getElementsByClassName("gameID")[0].innerHTML == roomId) {
+                        roomDiv = room[i]
+                        break
+                    }
+                }
+            }
+            roomDiv.parentNode.removeChild(roomDiv)
+            showError("退出成功！","ok")
+        }, function (res) {
+            if (res.status !== 0) {
+                showError("退出失败：" + makeString(res.desc))
+                return
+            }
+        })
 
     }
 }
@@ -315,10 +384,10 @@ function yaoqing(roomID, word) {
             showError("服务器异常" + res)
         })
     }
-    else if(word.indexOf("踢")){
+    else if(word.indexOf("踢")>= 0){
         newRoomT(roomID)
     }
-    else if(word.indexOf("退")){
+    else if(word.indexOf("退")>= 0){
         newRoomT(roomID,true)
     }
 }
@@ -426,11 +495,26 @@ function agreeGame(Re,username,room){
     }
 }
 
+function disagree(get){
+    if(get===true){
+        showError("对方已拒绝邀请")
+        return
+    }
+    document.getElementsByClassName('container')[9].style.top = '-50%'
+    username=document.getElementById("YQFrom").innerHTML
+    let user=findUserByUsername(username)
+    let msg = {
+        'TO': user.name,
+        'type': 'disagree',
+    }
+    tools.ajaxGet("http://127.0.0.1:8080/gobang/api/talk",msg,null,null)
+}
+
 function getRoom(roomId) {
         let JsonString = b64_to_utf8(localStorage.getItem(utf8_to_b64("房间数据")))
         let rooms = JSON.parse(JsonString);
         for (let i = 0; i < rooms.length; i++) {
-            if (rooms[i].id === roomId) {
+            if (rooms[i].id == roomId) {
                 let room = {
                     "id": rooms[i].id,
                     "userid": rooms[i].userid,
@@ -443,4 +527,27 @@ function getRoom(roomId) {
                 return room
             }
         }
+        return null
+}
+
+function BeT(roomId){
+    let room = document.getElementsByClassName("roomDiv")
+    let roomNum = room.length
+    let roomDiv = null
+    if (roomId === null || roomId === undefined)
+        roomDiv = room[roomNum - 2]
+    else {
+        for (let i = 0; i < room.length-1; i++) {
+            if (room[i].getElementsByClassName("gameID")[0].innerHTML == roomId) {
+                roomDiv = room[i]
+                break
+            }
+        }
+    }
+    if (roomDiv === null) {
+        showError("被踢错误！游戏房间不存在!")
+        return
+    }
+    roomDiv.parentNode.removeChild(roomDiv)
+    showError("您已被房主请出房间")
 }

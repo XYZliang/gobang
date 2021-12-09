@@ -46,6 +46,12 @@ function onMessage(evt) {
         getYQ(json)
     else if(json.type==="agree")
         agreeGame(false,json.from,json.room)
+    else if(json.type==="ti")
+        BeT(json.room)
+    else if(json.type==="disagree")
+        disagree(true)
+    else if(json.type==="exit")
+        newRoomT(json.room,null,true)
 }
 
 function onError(evt) {

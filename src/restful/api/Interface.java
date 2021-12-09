@@ -397,7 +397,7 @@ public class Interface {
 		if (!check.equals("ok")) {
 			return check;
 		}
-		if ((id+"").equals("")) {
+		if ((id + "").equals("")) {
 			List<UserEntity> result = EM.getEntityManager()
 					.createNamedQuery("UserEntity.findUserByName", UserEntity.class).setParameter("NAME", username)
 					.getResultList();
@@ -472,8 +472,36 @@ public class Interface {
 			tools.commitDB(game);
 			return WebSocketProcess.sendMessageToUser(to, new JSONObject(msg).toString());
 //				String json = tools.makeJSON(gameEntity);
-		} else if (type.equals("makeqi")) {
-
+		} else if (type.equals("ti")) {
+			int roomId = Integer.parseInt(room);
+			List<GameEntity> games = EM.getEntityManager().createNamedQuery("GameEntity.findGameById", GameEntity.class)
+					.setParameter("ID", roomId).getResultList();
+			GameEntity game = games.get(0);
+			game.setUSER2ID(0);
+			tools.commitDB(game);
+			msg.put("type", type);
+			msg.put("msg", message);
+			msg.put("from", username);
+			msg.put("room", room);
+			
+		} else if (type.equals("exit")) {
+			int roomId = Integer.parseInt(room);
+			List<GameEntity> games = EM.getEntityManager().createNamedQuery("GameEntity.findGameById", GameEntity.class)
+					.setParameter("ID", roomId).getResultList();
+			GameEntity game = games.get(0);
+			game.setUSER2ID(0);
+			tools.commitDB(game);
+			msg.put("type", type);
+			msg.put("msg", message);
+			msg.put("from", username);
+			msg.put("room", room);
+			
+		}
+		else if (type.equals("makeqi")) {
+			msg.put("type", type);
+			msg.put("msg", message);
+			msg.put("from", username);
+			msg.put("room", room);
 		} else {
 			msg.put("type", type);
 			msg.put("msg", message);
