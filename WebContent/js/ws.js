@@ -41,17 +41,17 @@ function onOpen(evt) {
 
 function onMessage(evt) {
     console.log(evt);
-    let json=JSON.parse(evt.data);
-    if(json.type==="try")
+    let json = JSON.parse(evt.data);
+    if (json.type === "try")
         getYQ(json)
-    else if(json.type==="agree")
-        agreeGame(false,json.from,json.room)
-    else if(json.type==="ti")
+    else if (json.type === "agree")
+        agreeGame(false, json.from, json.room)
+    else if (json.type === "ti")
         BeT(json.room)
-    else if(json.type==="disagree")
+    else if (json.type === "disagree")
         disagree(true)
-    else if(json.type==="exit")
-        newRoomT(json.room,null,true)
+    else if (json.type === "exit")
+        newRoomT(json.room, null, true)
 }
 
 function onError(evt) {

@@ -747,13 +747,13 @@
         }
 
         .gameInfoAB {
-            width: 20px!important;
-            height: 20px!important;
+            width: 20px !important;
+            height: 20px !important;
         }
 
         .gameInfoAG {
-            width: 20px!important;
-            height: 20px!important;
+            width: 20px !important;
+            height: 20px !important;
         }
 
         .gameHeadLeft {
@@ -901,6 +901,95 @@
             margin-top: 20px;
             display: none;
         }
+
+        #gaming {
+            width: 1000px;
+            right: 45%;
+            min-height: 700px;
+            overflow: auto;
+        }
+
+        .gamingInfo {
+            border-radius: 20px;
+            width: 200px;
+            background: rgba(163, 180, 180, 0.6);
+            box-shadow: 0 25px 45px rgba(163, 180, 180, 0.4);
+            border: 1px solid rgba(163, 180, 180, 0.8);
+            border-right: 1px solid rgba(163, 180, 180, 0.5);
+            border-bottom: 1px solid rgba(163, 180, 180, 0.5);
+            height: 680px;
+        }
+
+        #midBox {
+            width: 580px;
+            height: 680px;
+        }
+
+        #Chessboard {
+            width: 100%;
+            height: 680px;
+            /*background-color: red;*/
+            /*margin-top: 50px;*/
+            background-image: url("images/system/Chessboard.png");
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: 520px 650px;
+        }
+
+        #Chessboard table {
+            margin-top: 78px;
+            margin-left: 31px;
+            border-collapse: collapse;
+        }
+
+        .chess {
+            width: 35px;
+            height: 35px;
+            /*background: rgba(255,255,255,0.6);*/
+            border-radius: 17px;
+        }
+        .chess img {
+            width: 25px;
+            height: 25px;
+            margin: 3px;
+            display: none;
+        }
+
+        .gamingInfoHead {
+            margin-top: 100px;
+        }
+
+        .gamingInfoHead div {
+            top: 200px;
+        }
+        svg {
+            transform: rotate(-0.05deg);
+        }
+        circle {
+            transition: stroke-dasharray .2s;
+        }
+        .time-count-x {
+            line-height: 1.5;
+            /*position: relative;*/
+            float: left;
+            margin-left: 45px;
+            margin-top: 25px;
+
+        }
+        .time-second {
+            position: absolute;
+            top: 315px;
+            left: 80px;
+            text-align: center;
+            font-size: 40px;
+            width: 50px;
+            height: 50px;
+            line-height: 50px;
+            display: block;
+        }
+        .gamingTxt {
+            margin: 0 auto;
+        }s
     </style>
 </head>
 <body>
@@ -978,9 +1067,9 @@
         <form id="box4" method="get" style="display: none">
             <h2 class="logintxt">注册</h2>
             <div class="inputBox">
-                <label for="ZCloginName"></label><input autocomplete=”off”
-                                                        id="ZCloginName" placeholder="请输入账号,以字母开头,8-15位"
-                                                        style="font-size: 14px" type="text">
+                <label for="ZCloginName"></label><input autocomplete=”off” id="ZCloginName"
+                                                        placeholder="请输入账号,以字母开头,8-15位" style="font-size: 14px"
+                                                        type="text">
             </div>
             <div class="inputBox">
                 <label for="ZCpwd"></label><input autocomplete=”off” id="ZCpwd"
@@ -1246,7 +1335,7 @@
         <!--        <div class="roomDiv"></div>-->
         <!--        <div class="roomDiv"></div>-->
         <div class="roomDiv" id="newRoom"
-             onclick="javascript:document.getElementsByClassName('container')[7].style.top='50%'"><p id="newRoomTxt">
+             onclick="document.getElementsByClassName('container')[7].style.top='50%'"><p id="newRoomTxt">
             +</p></div>
     </div>
 </div>
@@ -1265,7 +1354,7 @@
                 <input onclick="makeNewRoom()" type="button" value="确认新建">
             </div>
             <div class="inputBox" style="margin-top: 0">
-                <input onclick="javascript:document.getElementsByClassName('container')[7].style.top='-50%'"
+                <input onclick="document.getElementsByClassName('container')[7].style.top='-50%'"
                        type="button" value="取消新建">
             </div>
         </form>
@@ -1297,17 +1386,17 @@
     </div>
     <div id="noOL">当前无在线用户！</div>
     <div class="form" style="padding: 0px;margin: 0 50px;}">
-    <div class="inputBox" style="padding-top:0 ">
-        <input style="width:283px" onclick="openYQ()" type="button" value="取消邀请">
+        <div class="inputBox" style="padding-top:0 ">
+            <input onclick="openYQ()" style="width:283px" type="button" value="取消邀请">
+        </div>
     </div>
-</div>
 </div>
 <div class="container" style="z-index: 1000">
     <div class="form" id="getYQWin" style="padding-bottom: 0;}">
         <form id="box8" method="get">
             <h2 class="logintxt" id="YQTxt">用户邀请</h2>
-            <h2 class="logintxt" style="display: none" id="YQID">用户房间</h2>
-            <h2 class="logintxt" style="display: none" id="YQFrom">用户邀请</h2>
+            <h2 class="logintxt" id="YQID" style="display: none">用户房间</h2>
+            <h2 class="logintxt" id="YQFrom" style="display: none">用户邀请</h2>
             <h2 class="logintxt" id="YQTxtx">xx邀请</h2>
             <div class="inputBox">
                 <input onclick="agreeGame(true)" type="button" value="加入游戏">
@@ -1316,6 +1405,54 @@
                 <input onclick="disagree(false)" type="button" value="拒绝邀请">
             </div>
         </form>
+    </div>
+</div>
+<div class="container" id="gaming" style="top:50%">
+    <div class="gamingInfo" id="leftBox">
+        <div class="gameHead gameHeadLeft gamingInfoHead">
+            <img class="gameHeadImg" src="images/system/defaultHead.png">
+            <div class="gameInfoA" title="性别">
+                <img alt="男" class="gameInfoAB" src="images/system/boyIcon.png"
+                     style="display: block;width: 20px;height: 20px;">
+                <img alt="女" class="gameInfoAG" src="images/system/girlIcon.png"
+                     style="display: none;width: 20px;height: 20px;">
+            </div>
+        </div>
+        <div class="UserInfo">
+            <div class="gameStarts" title="等级"></div>
+            <p class="gameNickname" title="昵称">昵称</p>
+        </div>
+        <div id="timeCountX" class="time-count-x">
+            <svg width="100px" height="100px" viewBox="0 0 440 440" class="center">
+                <defs>
+                    <linearGradient x1="1" y1="0" x2="0" y2="0" id="gradient1">
+                        <stop offset="0%" stop-color="#FEAC5E"></stop>
+                        <stop offset="100%" stop-color="#C779D0"></stop>
+                    </linearGradient>
+                    <linearGradient x1="1" y1="0" x2="0" y2="0" id="gradient2">
+                        <stop offset="0%" stop-color="#4BC0C8"></stop>
+                        <stop offset="100%" stop-color="#C779D0"></stop>
+                    </linearGradient>
+                </defs>
+                <g transform="matrix(0,-1,1,0,0,440)">
+                    <circle cx="220" cy="220" r="170" stroke-width="50" stroke="#f0f1f5#f0f1f5" fill="none" stroke-dasharray="1069 1069"></circle>
+                    <circle cx="220" cy="220" r="170" stroke-width="50" stroke="url('#gradient1')" fill="none" stroke-dasharray="1069 1069"></circle>
+                    <circle cx="220" cy="220" r="170" stroke-width="50" stroke="url('#gradient2')" fill="none" stroke-dasharray="534.5 1069"></circle>
+                </g>
+            </svg>
+            <span id="timeSecond" class="time-second"></span>
+        </div>
+        <div class="gamingTxt">单手剩余时间</div>
+    </div>
+    <div id="midBox">
+        <div id="Chessboard">
+            <table id="ChessboardTable">
+                <tr id="ChessboardEnd"></tr>
+            </table>
+        </div>
+    </div>
+    <div class="gamingInfo" id="rightBox">
+
     </div>
 </div>
 <script src="js/tools/others/jquery.min.js" type="text/javascript"></script>
@@ -1334,6 +1471,7 @@
 <!--webSocket-->
 <script src="js/ws.js"></script>
 <script src="js/tools/others/websocket.js"></script>
+<script src="js/gaming.js"></script>
 <script type="text/javascript">
     const debug = false;
 
@@ -1854,7 +1992,7 @@
                         person.setAttribute("class", "ManInfo ManColor");
                     now = now + 1
                     person.innerHTML += "<th>" + res.data[i].id + "</th>"
-                    person.innerHTML += "<th>" + "<img src=\"images/headIcons/" + res.data[i].name + ".png\" onerror=\"javascript:this.src='images/system/defaultHead.png';\">" + "</th>"
+                    person.innerHTML += "<th>" + "<img src=\"images/headIcons/" + res.data[i].name + ".png\" onerror=\"this.src='images/system/defaultHead.png';\">" + "</th>"
                     person.innerHTML += "<th>" + res.data[i].name + "</th>"
                     person.innerHTML += "<th>" + res.data[i].nickname + "</th>"
                     if (res.data[i].sex === 1)
