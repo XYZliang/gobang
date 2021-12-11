@@ -52,6 +52,8 @@ function onMessage(evt) {
         disagree(true)
     else if (json.type === "exit")
         newRoomT(json.room, null, true)
+    else if (json.type === "openG")
+        runGame(json.room)
 }
 
 function onError(evt) {

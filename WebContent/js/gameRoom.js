@@ -5,8 +5,9 @@ function openRoom() {
             return;
         }
     }
-    if (document.getElementsByClassName("container")[6].style.top !== "-50%") {
+    if (document.getElementsByClassName("container")[6].style.top !== "50%") {
         getInfos(true)
+        document.getElementsByClassName("container")[6].style.top = "50%"
     } else {
         document.getElementsByClassName("container")[6].style.top = "-50%"
     }
@@ -142,7 +143,7 @@ function addNewRoom(userName1, dan, total, id, userName2) {
         "                    <div class=\"gameButton1\" onclick='yaoqing(this.parentNode.parentNode.parentNode.getElementsByClassName(\"gameID\")[0].innerHTML,this.innerHTML)'>\n" +
         "                        邀\n" +
         "                    </div>\n" +
-        "                    <div class=\"gameButton2\">\n" +
+        "                    <div class=\"gameButton2\" onclick='runGame(this.parentNode.parentNode.parentNode.getElementsByClassName(\"gameID\")[0].innerHTML)'>\n" +
         "                        开\n" +
         "                    </div>\n" +
         "                </div>\n" +
@@ -394,7 +395,7 @@ function openYQ(data, roomid) {
         }
 
         let datas = data.split(";")
-        if (datas.length <= 1) {
+        if (datas.length <= 0) {
             document.getElementById('yaoqingDiv').style.display = "none"
             document.getElementById('noOL').style.display = "block"
         } else {
@@ -482,8 +483,7 @@ function agreeGame(Re, username, room) {
         })
     } else {
         showError("对方已接受邀请！", "ok")
-        let auser = findUserByUsername(username)
-        newRoomAdd(auser.id, room, false)
+        openRoom2()
     }
 }
 
@@ -542,4 +542,53 @@ function BeT(roomId) {
     }
     roomDiv.parentNode.removeChild(roomDiv)
     showError("您已被房主请出房间")
+}
+
+function runGame(roomId) {
+    gamingId = parseInt(roomId)
+    let room = getRoom(roomId)
+    let nowUser = findUserByUsername(getUserName())
+    let user1, user2
+    if (room.userid === nowUser.id) {
+        myChess = 1
+        watch = 0
+        user1 = nowUser
+        user2 = findUserById(room.user2ID)
+        let msg = {
+            'TO': user2.name,
+            'type': 'openG',
+            'room': roomId,
+        }
+        tools.ajaxGet("http://127.0.0.1:8080/gobang/api/talk", msg, function (res) {
+            document.getElementsByClassName("container")[9].style.top = "-50%"
+            if (res.status !== 0) {
+                showError("开始游戏失败：" + makeString(res.desc))
+                return
+            }
+            go()
+        }, function (res) {
+            showError("服务器异常" + res)
+            document.getElementsByClassName("container")[9].style.top = "-50%"
+        })
+    } else if (room.user2ID === nowUser.id) {
+        user2 = nowUser
+        user1 = findUserById(room.userid)
+        myChess = 2
+        watch = 0
+        go()
+    } else {
+        watch = 1
+        go()
+    }
+
+    function go() {
+        danTime = room.onetime
+        totalTime = room.totaltime
+        makeChessboard(myChess, user1, user2)
+        showChessboard()
+    }
+}
+
+function goGame(user, roomId) {
+
 }

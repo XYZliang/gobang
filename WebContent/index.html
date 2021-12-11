@@ -948,7 +948,34 @@
             /*background: rgba(255,255,255,0.6);*/
             border-radius: 17px;
         }
+
+        .chess:hover {
+            background: rgba(255, 255, 255, 0.6)
+        }
+
         .chess img {
+            width: 25px;
+            height: 25px;
+            margin: 3px;
+            display: none;
+        }
+
+        .chessB {
+            width: 35px;
+            height: 35px;
+            /*background: rgba(255,255,255,0.6);*/
+            border-radius: 17px;
+        }
+
+        .chessB:hover {
+            background: rgba(0, 0, 0, 0.6);
+        }
+
+        .chessNoHover:hover {
+            background: none !important;
+        }
+
+        .chessB img {
             width: 25px;
             height: 25px;
             margin: 3px;
@@ -962,12 +989,15 @@
         .gamingInfoHead div {
             top: 200px;
         }
+
         svg {
             transform: rotate(-0.05deg);
         }
+
         circle {
             transition: stroke-dasharray .2s;
         }
+
         .time-count-x {
             line-height: 1.5;
             /*position: relative;*/
@@ -976,6 +1006,7 @@
             margin-top: 25px;
 
         }
+
         .time-second {
             position: absolute;
             top: 315px;
@@ -987,9 +1018,52 @@
             line-height: 50px;
             display: block;
         }
+
         .gamingTxt {
+            width: 190px;
             margin: 0 auto;
-        }s
+            float: left;
+            text-align: center;
+        }
+
+        #timeSecond1 {
+            top: 465px;
+        }
+
+        #timeSecond2 {
+            left: unset;
+            right: 90px;
+        }
+
+        #timeSecond3 {
+            left: unset;
+            right: 90px;
+            top: 465px;
+        }
+
+        .gamingR {
+            left: unset;
+            right: 68px;
+        }
+
+        #noCHess {
+            -webkit-transition: all 0.3s ease-out;
+            -moz-transition: all 0.3s ease-out;
+            -o-transition: all 0.3s ease-out;
+            background: rgba(255, 255, 255, 0);
+            display: block;
+            position: absolute;
+            width: 540px;
+            height: 540px;
+            margin: 20px;
+            margin-top: 68px;
+            margin-bottom: 0px;
+            line-height: 540px;
+            font-size: 300px;
+            text-align: center;
+            color: #e10b2b;
+            border-radius: 40px;
+        }
     </style>
 </head>
 <body>
@@ -1407,10 +1481,10 @@
         </form>
     </div>
 </div>
-<div class="container" id="gaming" style="top:50%">
+<div class="container" id="gaming">
     <div class="gamingInfo" id="leftBox">
-        <div class="gameHead gameHeadLeft gamingInfoHead">
-            <img class="gameHeadImg" src="images/system/defaultHead.png">
+        <div class="gameHead gameHeadLeft gamingInfoHead" style="border: 5px solid rgba(0, 0, 0, 0.8);">
+            <img class="gameHeadImg" src="images/system/defaultHead.png" onerror="this.src='images/system/defaultHead.png'">
             <div class="gameInfoA" title="性别">
                 <img alt="男" class="gameInfoAB" src="images/system/boyIcon.png"
                      style="display: block;width: 20px;height: 20px;">
@@ -1422,37 +1496,136 @@
             <div class="gameStarts" title="等级"></div>
             <p class="gameNickname" title="昵称">昵称</p>
         </div>
-        <div id="timeCountX" class="time-count-x">
-            <svg width="100px" height="100px" viewBox="0 0 440 440" class="center">
+        <div class="time-count-x" id="timeCountX">
+            <svg class="center" height="100px" viewBox="0 0 440 440" width="100px">
                 <defs>
-                    <linearGradient x1="1" y1="0" x2="0" y2="0" id="gradient1">
+                    <linearGradient id="gradient1" x1="1" x2="0" y1="0" y2="0">
                         <stop offset="0%" stop-color="#FEAC5E"></stop>
                         <stop offset="100%" stop-color="#C779D0"></stop>
                     </linearGradient>
-                    <linearGradient x1="1" y1="0" x2="0" y2="0" id="gradient2">
+                    <linearGradient id="gradient2" x1="1" x2="0" y1="0" y2="0">
                         <stop offset="0%" stop-color="#4BC0C8"></stop>
                         <stop offset="100%" stop-color="#C779D0"></stop>
                     </linearGradient>
                 </defs>
                 <g transform="matrix(0,-1,1,0,0,440)">
-                    <circle cx="220" cy="220" r="170" stroke-width="50" stroke="#f0f1f5#f0f1f5" fill="none" stroke-dasharray="1069 1069"></circle>
-                    <circle cx="220" cy="220" r="170" stroke-width="50" stroke="url('#gradient1')" fill="none" stroke-dasharray="1069 1069"></circle>
-                    <circle cx="220" cy="220" r="170" stroke-width="50" stroke="url('#gradient2')" fill="none" stroke-dasharray="534.5 1069"></circle>
+                    <circle cx="220" cy="220" fill="none" r="170" stroke="#f0f1f5#f0f1f5" stroke-dasharray="1069 1069"
+                            stroke-width="50"></circle>
+                    <circle cx="220" cy="220" fill="none" r="170" stroke="url('#gradient1')"
+                            stroke-dasharray="1069 1069"
+                            stroke-width="50"></circle>
+                    <circle cx="220" cy="220" fill="none" r="170" stroke="url('#gradient2')"
+                            stroke-dasharray="534.5 1069"
+                            stroke-width="50"></circle>
                 </g>
             </svg>
-            <span id="timeSecond" class="time-second"></span>
+            <span class="time-second" id="timeSecond"></span>
         </div>
         <div class="gamingTxt">单手剩余时间</div>
+
+        <div class="time-count-x" id="timeCountX1">
+            <svg class="center" height="100px" viewBox="0 0 440 440" width="100px">
+                <defs>
+                    <linearGradient id="gradient1" x1="1" x2="0" y1="0" y2="0">
+                        <stop offset="0%" stop-color="#FEAC5E"></stop>
+                        <stop offset="100%" stop-color="#C779D0"></stop>
+                    </linearGradient>
+                    <linearGradient id="gradient2" x1="1" x2="0" y1="0" y2="0">
+                        <stop offset="0%" stop-color="#4BC0C8"></stop>
+                        <stop offset="100%" stop-color="#C779D0"></stop>
+                    </linearGradient>
+                </defs>
+                <g transform="matrix(0,-1,1,0,0,440)">
+                    <circle cx="220" cy="220" fill="none" r="170" stroke="#f0f1f5#f0f1f5" stroke-dasharray="1069 1069"
+                            stroke-width="50"></circle>
+                    <circle cx="220" cy="220" fill="none" r="170" stroke="url('#gradient1')"
+                            stroke-dasharray="1069 1069"
+                            stroke-width="50"></circle>
+                    <circle cx="220" cy="220" fill="none" r="170" stroke="url('#gradient2')"
+                            stroke-dasharray="534.5 1069"
+                            stroke-width="50"></circle>
+                </g>
+            </svg>
+            <span class="time-second" id="timeSecond1"></span>
+        </div>
+        <div class="gamingTxt">总剩余时间</div>
     </div>
     <div id="midBox">
         <div id="Chessboard">
+            <div id="noCHess">6
+            </div>
             <table id="ChessboardTable">
                 <tr id="ChessboardEnd"></tr>
             </table>
         </div>
     </div>
     <div class="gamingInfo" id="rightBox">
+        <div class="gameHead gameHeadLeft gamingInfoHead">
+            <img class="gameHeadImg" src="images/system/defaultHead.png" onerror="this.src='images/system/defaultHead.png'">
+            <div class="gameInfoA  gamingR" title="性别">
+                <img alt="男" class="gameInfoAB" src="images/system/boyIcon.png"
+                     style="display: block;width: 20px;height: 20px;">
+                <img alt="女" class="gameInfoAG" src="images/system/girlIcon.png"
+                     style="display: none;width: 20px;height: 20px;">
+            </div>
+        </div>
+        <div class="UserInfo">
+            <div class="gameStarts" title="等级"></div>
+            <p class="gameNickname" title="昵称">昵称</p>
+        </div>
+        <div class="time-count-x" id="timeCountX2">
+            <svg class="center" height="100px" viewBox="0 0 440 440" width="100px">
+                <defs>
+                    <linearGradient id="gradient1" x1="1" x2="0" y1="0" y2="0">
+                        <stop offset="0%" stop-color="#FEAC5E"></stop>
+                        <stop offset="100%" stop-color="#C779D0"></stop>
+                    </linearGradient>
+                    <linearGradient id="gradient2" x1="1" x2="0" y1="0" y2="0">
+                        <stop offset="0%" stop-color="#4BC0C8"></stop>
+                        <stop offset="100%" stop-color="#C779D0"></stop>
+                    </linearGradient>
+                </defs>
+                <g transform="matrix(0,-1,1,0,0,440)">
+                    <circle cx="220" cy="220" fill="none" r="170" stroke="#f0f1f5#f0f1f5" stroke-dasharray="1069 1069"
+                            stroke-width="50"></circle>
+                    <circle cx="220" cy="220" fill="none" r="170" stroke="url('#gradient1')"
+                            stroke-dasharray="1069 1069"
+                            stroke-width="50"></circle>
+                    <circle cx="220" cy="220" fill="none" r="170" stroke="url('#gradient2')"
+                            stroke-dasharray="534.5 1069"
+                            stroke-width="50"></circle>
+                </g>
+            </svg>
+            <span class="time-second" id="timeSecond2"></span>
+        </div>
+        <div class="gamingTxt">单手剩余时间</div>
 
+        <div class="time-count-x" id="timeCountX3">
+            <svg class="center" height="100px" viewBox="0 0 440 440" width="100px">
+                <defs>
+                    <linearGradient id="gradient1" x1="1" x2="0" y1="0" y2="0">
+                        <stop offset="0%" stop-color="#FEAC5E"></stop>
+                        <stop offset="100%" stop-color="#C779D0"></stop>
+                    </linearGradient>
+                    <linearGradient id="gradient2" x1="1" x2="0" y1="0" y2="0">
+                        <stop offset="0%" stop-color="#4BC0C8"></stop>
+                        <stop offset="100%" stop-color="#C779D0"></stop>
+                    </linearGradient>
+                </defs>
+                <g transform="matrix(0,-1,1,0,0,440)">
+                    <circle cx="220" cy="220" fill="none" r="170" stroke="#f0f1f5#f0f1f5" stroke-dasharray="1069 1069"
+                            stroke-width="50"></circle>
+                    <circle cx="220" cy="220" fill="none" r="170" stroke="url('#gradient1')"
+                            stroke-dasharray="1069 1069"
+                            stroke-width="50"></circle>
+                    <circle cx="220" cy="220" fill="none" r="170" stroke="url('#gradient2')"
+                            stroke-dasharray="534.5 1069"
+                            stroke-width="50"></circle>
+                </g>
+            </svg>
+            <span class="time-second" id="timeSecond3"></span>
+        </div>
+        <div class="gamingTxt">总剩余时间</div>
     </div>
 </div>
 <script src="js/tools/others/jquery.min.js" type="text/javascript"></script>

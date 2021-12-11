@@ -443,7 +443,7 @@ public class Interface {
 		}
 		String user = "";
 		for (String key : ChatTools.getClients().keySet()) {
-			if(key==username)
+			if(key.equals(username))
 				continue;
 			if (user.length() == 0)
 				user = key;
@@ -460,6 +460,9 @@ public class Interface {
 	@Produces("application/json;charset=UTF-8")
 	public String talk(@QueryParam("type") String type, @QueryParam("TO") String to, @QueryParam("msg") String message,
 			@QueryParam("room") String room, @QueryParam("myid") String myid) {
+		if(to == null) {
+			return tools.makeErReturn(ResultCode.PARAM_IS_MISS);
+		}
 		String username = getUsernameFromCookie(request);
 		if (username == null)
 			return tools.makeErReturn(ResultCode.NEED_LOGIN);
@@ -506,14 +509,19 @@ public class Interface {
 			msg.put("room", room);
 			
 		}
-		else if (type.equals("makeqi")) {
+		else if (type.equals("openG")) {
 			msg.put("type", type);
 			msg.put("msg", message);
 			msg.put("from", username);
 			msg.put("room", room);
+			int roomId = Integer.parseInt(room);
+			List<GameEntity> games = EM.getEntityManager().createNamedQuery("GameEntity.findGameById", GameEntity.class)
+					.setParameter("ID", roomId).getResultList();
+			GameEntity game = games.get(0);
+			game.setSTATUS(0);
+			tools.commitDB(game);
 		} else {
 			msg.put("type", type);
-			msg.put("msg", message);
 			msg.put("from", username);
 			msg.put("room", room);
 		}
