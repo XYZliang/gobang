@@ -54,6 +54,8 @@ function onMessage(evt) {
         newRoomT(json.room, null, true)
     else if (json.type === "openG")
         runGame(json.room)
+    else if (json.type === "makeQ")
+        makeQi(parseInt(json.x), parseInt(json.y), parseInt(json.Black), true)
 }
 
 function onError(evt) {

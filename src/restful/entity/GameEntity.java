@@ -133,4 +133,14 @@ public class GameEntity {
 		TOTALTIME = tOTALTIME;
 		STATUS = 1;
 	}
+
+	public void addDATA(String dATA) {
+		if(DATA==null)
+			DATA = "["+dATA;
+		else if (DATA.length()==0)
+			DATA = "["+dATA;
+		else
+			DATA = DATA.substring(0, DATA.length()-1) + "," + dATA;
+		DATA = DATA + "]";
+	}
 }

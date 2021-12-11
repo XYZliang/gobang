@@ -5,6 +5,8 @@ let watch = 0;
 let danTime = 0;
 let totalTime = 0;
 let rightU = true;
+let u1;
+let u2;
 
 function showChessboard() {
     if (document.getElementsByClassName("container")[10].style.top !== "50%") {
@@ -20,20 +22,22 @@ function showChessboard() {
 }
 
 function makeChessboard(Black, user1, user2) {
+    u1 = user1
+    u2 = user2
     document.getElementById("noCHess").style.display = "block"
     document.getElementById("noCHess").style.backgroundColor = "rgba(255,255,255,0.3)"
     let startList = ["startsZer", "startsOne", "startsTwo", "startsThr", "startsFou", "startsFiv"]
     document.getElementById("leftBox").getElementsByClassName("gameNickname")[0].innerHTML = user1.nickname
     document.getElementById("leftBox").getElementsByClassName("gameStarts")[0].classList.add(startList[user1.level])
-    document.getElementById("leftBox").getElementsByClassName("gameHeadImg")[0].src="images/headIcons/" + user1.name + ".png"
-    document.getElementById("leftBox").getElementsByClassName("gameHeadImg")[0].onerror=function () {
+    document.getElementById("leftBox").getElementsByClassName("gameHeadImg")[0].src = "images/headIcons/" + user1.name + ".png"
+    document.getElementById("leftBox").getElementsByClassName("gameHeadImg")[0].onerror = function () {
         let perImg = document.getElementById("leftBox").getElementsByClassName("gameHeadImg")[0]
         perImg.src = "images/system/defaultHead.png"
     }
     document.getElementById("rightBox").getElementsByClassName("gameNickname")[0].innerHTML = user2.nickname
     document.getElementById("rightBox").getElementsByClassName("gameStarts")[0].classList.add(startList[user2.level])
-    document.getElementById("rightBox").getElementsByClassName("gameHeadImg")[0].src="images/headIcons/" + user2.name + ".png"
-    document.getElementById("rightBox").getElementsByClassName("gameHeadImg")[0].onerror=function () {
+    document.getElementById("rightBox").getElementsByClassName("gameHeadImg")[0].src = "images/headIcons/" + user2.name + ".png"
+    document.getElementById("rightBox").getElementsByClassName("gameHeadImg")[0].onerror = function () {
         let perImg = document.getElementById("rightBox").getElementsByClassName("gameHeadImg")[0]
         perImg.src = "images/system/defaultHead.png"
     }
@@ -69,7 +73,7 @@ function makeChessboard(Black, user1, user2) {
 }
 
 // makeChessboard(1)
-function makeQi(x, y, Black) {
+function makeQi(x, y, Black, Re) {
     let chess = document.getElementById("ChessboardTable")
     let hang = chess.getElementsByTagName("tr")
     for (let i = 0; i < 15; i++) {
@@ -79,22 +83,65 @@ function makeQi(x, y, Black) {
                 if (ii + 1 === y) {
                     let img = lie[ii].getElementsByTagName("img")[0]
                     if (img.style.display !== "block") {
-                        if (Black === 1) {
-                            img.src = "images/system/chessB.png"
-                            chessXY[x][y] = 1
+                        if (Re !== true) {
+                            let username
+                            let eleTimeSecEle
+                            if (Black === 1) {
+                                eleTimeSecEle = "timeSecond1"
+                                username = u2.name
+                            } else {
+                                eleTimeSecEle = "timeSecond3"
+                                username = u1.name
+                            }
+                            let eleTimeSec = document.getElementById(eleTimeSecEle).innerHTML;
+                            let msg = {
+                                'TO': username,
+                                'type': 'makeQ',
+                                'room': gamingId,
+                                'x': x,
+                                'y': y,
+                                'Black': Black,
+                                'Rtime': eleTimeSec,
+                            }
+                            tools.ajaxGet("http://127.0.0.1:8080/gobang/api/talk", msg, function (res) {
+                                if (res.status !== 0) {
+                                    showError("开始游戏失败：" + makeString(res.desc))
+                                    return
+                                }
+                                if (Black === 1) {
+                                    img.src = "images/system/chessB.png"
+                                    chessXY[x][y] = 1
+                                } else {
+                                    img.src = "images/system/chessW.png"
+                                    chessXY[x][y] = 2
+                                }
+                                img.style.display = "block"
+                                img.parentNode.classList.add("chessNoHover")
+                                if (Black === 1)
+                                    change(true)
+                                else
+                                    change(false)
+                                checkWin()
+                                return
+                            })
                         } else {
-                            img.src = "images/system/chessW.png"
-                            chessXY[x][y] = 1
+                            if (Black === 1) {
+                                img.src = "images/system/chessB.png"
+                                chessXY[x][y] = 1
+                            } else {
+                                img.src = "images/system/chessW.png"
+                                chessXY[x][y] = 2
+                            }
+                            img.style.display = "block"
+                            img.parentNode.classList.add("chessNoHover")
+                            if (Black === 1)
+                                change(true)
+                            else
+                                change(false)
+                            checkWin()
+                            return
                         }
-                        img.style.display = "block"
-                        img.parentNode.classList.add("chessNoHover")
                     }
-                    if (Black === 1)
-                        change(true)
-                    else
-                        change(false)
-                    checkWin()
-                    return
                 }
             }
         }
@@ -140,7 +187,8 @@ function leftDanTime(fun, time, no, bei, total, ready, cont) {
         if (timerTimeCount) {
             return
         }
-        b = b || 10
+        if(!b<=0)
+            b = b || 10
         total = total || b;
         let a = function () {
             let c = b / total;
@@ -170,9 +218,12 @@ function leftDanTime(fun, time, no, bei, total, ready, cont) {
             b--;
             if (b < 0) {
                 if (no == "2")
-                    change(false,true)
-                else
-                    change(true,true)
+                    change(false, true)
+                else if (no == "1" || no == "3") {
+                    stop("all")
+                    checkWin(no)
+                } else
+                    change(true, true)
                 clearInterval(timerTimeCount);
                 timerTimeCount = null;
             }
@@ -232,27 +283,55 @@ function stop(no) {
     }
 }
 
-function checkWin() {
-    function isChess(a) {
-        if (a != 0)
-            return 1
-        else
-            return 0
-    }
+function checkWin(no) {
+    if (no === null || no === undefined) {
+        function isChess(a) {
+            if (a == 1)
+                return 1
+            else if (a == 2)
+                return 2
+            else
+                return 0
+        }
 
-    for (let i = 0; i <= 15; i++) {
-        for (let j = 0; j <= 15; j++) {
-            if (i + 4 > 15 || j + 4 > 15)
-                continue
-            if (isChess(chessXY[i][j]) * isChess(chessXY[i][j + 1]) * isChess(chessXY[i][j + 2]) * isChess(chessXY[i][j + 3]) * isChess(chessXY[i][j + 4]) === 1 || isChess(chessXY[i][j]) * isChess(chessXY[i + 1][j + 1]) * isChess(chessXY[i + 2][j + 2]) * isChess(chessXY[i + 3][j + 3]) * isChess(chessXY[i + 4][j + 4]) === 1) {
-                stop("all")
-                if (chessXY[i][j] === 2) {
-                    showError("玩家" + findUserById(getRoom(gamingId).user2ID).nickname + "获胜！", "ok")
-                } else {
+        for (let i = 0; i <= 15; i++) {
+            for (let j = 0; j <= 15; j++) {
+                if (i + 4 > 15 || j + 4 > 15)
+                    continue
+                if (isChess(chessXY[i][j]) * isChess(chessXY[i][j + 1]) * isChess(chessXY[i][j + 2]) * isChess(chessXY[i][j + 3]) * isChess(chessXY[i][j + 4]) === 1 || isChess(chessXY[i][j]) * isChess(chessXY[i + 1][j + 1]) * isChess(chessXY[i + 2][j + 2]) * isChess(chessXY[i + 3][j + 3]) * isChess(chessXY[i + 4][j + 4]) === 1) {
+                    stop("all")
                     showError("玩家" + findUserById(getRoom(gamingId).userid).nickname + "获胜！", "ok")
+                    showNo(true)
+                    document.getElementById("leftBar").style.transform = "translateY(-50%);"
                 }
-                showNo(true)
+                if (isChess(chessXY[i][j]) * isChess(chessXY[i][j + 1]) * isChess(chessXY[i][j + 2]) * isChess(chessXY[i][j + 3]) * isChess(chessXY[i][j + 4]) === 32 || isChess(chessXY[i][j]) * isChess(chessXY[i + 1][j + 1]) * isChess(chessXY[i + 2][j + 2]) * isChess(chessXY[i + 3][j + 3]) * isChess(chessXY[i + 4][j + 4]) === 32) {
+                    stop("all")
+                    showError("玩家" + findUserById(getRoom(gamingId).user2ID).nickname + "获胜！", "ok")
+                    showNo(true)
+                    document.getElementById("leftBar").style.transform = "translateY(-50%);"
+                }
             }
+        }
+    } else {
+        stop("all")
+        showNo(true)
+        let msg = {
+            'type': 'outT',
+            'room': gamingId,
+            'Rtime': 0,
+        }
+        if (no == "1" && myChess === 1 || no == "3" && myChess === 2) {
+            tools.ajaxGet("http://127.0.0.1:8080/gobang/api/talk", msg, function (res) {
+                if (res.status !== 0) {
+                    showError("服务器失败：" + makeString(res.desc))
+                    return
+                }
+                if (no == "1")
+                    showError("玩家" + findUserById(getRoom(gamingId).user2ID).nickname + "获胜！", "ok")
+                else
+                    showError("玩家" + findUserById(getRoom(gamingId).userid).nickname + "获胜！", "ok")
+                document.getElementById("leftBar").style.transform = "translateY(-50%);"
+            })
         }
     }
 }
@@ -300,14 +379,14 @@ function showNo(no) {
     }
 }
 
-function change(ToR,OutTime) {
+function change(ToR, OutTime) {
     // if (no == "1" || no == "3") {
     //     let eleTimeSecEle1 = "timeSecond" + no
     //     let eleTimeSec1 = document.getElementById(eleTimeSecEle1)
     //     eleTimeSec1.innerHTML = (parseInt(eleTimeSec1.innerHTML) - 1).toString()
     // }
     if (ToR) {
-        if(OutTime) {
+        if (OutTime) {
             let eleTimeSecEle1 = "timeSecond" + "1"
             let eleTimeSec1 = document.getElementById(eleTimeSecEle1)
             eleTimeSec1.innerHTML = (parseInt(eleTimeSec1.innerHTML) - 1).toString()
@@ -319,7 +398,7 @@ function change(ToR,OutTime) {
         leftDanTime("start", null, "3", null, null, false, true)
         showNo()
     } else {
-        if(OutTime) {
+        if (OutTime) {
             let eleTimeSecEle1 = "timeSecond" + "3"
             let eleTimeSec1 = document.getElementById(eleTimeSecEle1)
             eleTimeSec1.innerHTML = (parseInt(eleTimeSec1.innerHTML) - 1).toString()

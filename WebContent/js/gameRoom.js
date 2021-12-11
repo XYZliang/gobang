@@ -36,16 +36,16 @@ function openRoom2(update) {
         let data = res.data
         for (let i = 0; i < data.length; i++) {
             if (data[i].user2ID === 0) {
-                addNewRoom(getUserName(), data[i].onetime, data[i].totaltime, data[i].id, false)
+                addNewRoom(getUserName(), data[i].onetime, data[i].totaltime, data[i].id, false, true)
             } else {
                 // addNewRoom(getUserName(), data[i].onetime, data[i].totaltime, data[i].id)
                 // newRoomAdd(data[i].user2ID, data[i].id)
-                if (data[i].user === findUserByUsername(getUserName()).id)
-                    addNewRoom(findUserById(data[i].userid).name, data[i].onetime, data[i].totaltime, data[i].id, findUserById(data[i].user2ID).name, false)
-                else if (data[i].user2ID === findUserByUsername(getUserName()).id)
+                if (data[i].userid === findUserByUsername(getUserName()).id)
                     addNewRoom(findUserById(data[i].userid).name, data[i].onetime, data[i].totaltime, data[i].id, findUserById(data[i].user2ID).name, true)
+                else if (data[i].user2ID === findUserByUsername(getUserName()).id)
+                    addNewRoom(findUserById(data[i].userid).name, data[i].onetime, data[i].totaltime, data[i].id, findUserById(data[i].user2ID).name, false)
                 else
-                    addNewRoom(findUserById(data[i].userid).name, data[i].onetime, data[i].totaltime, data[i].id, findUserById(data[i].user2ID).name)
+                    addNewRoom(findUserById(data[i].userid).name, data[i].onetime, data[i].totaltime, data[i].id, findUserById(data[i].user2ID).name, "guankan")
             }
         }
     }, function (res) {
@@ -95,7 +95,7 @@ function findUserById(id) {
     return null
 }
 
-function addNewRoom(userName1, dan, total, id, userName2) {
+function addNewRoom(userName1, dan, total, id, userName2, fangzhu) {
     if (userName1 === null) {
         userName1 = getUserName()
     }
@@ -175,7 +175,7 @@ function addNewRoom(userName1, dan, total, id, userName2) {
     //     })
     // }
     if (user2 !== undefined && user2 !== null) {
-        newRoomAdd(user2.id, id)
+        newRoomAdd(user2.id, id, null, fangzhu)
     }
 }
 
@@ -198,7 +198,7 @@ function makeNewRoom() {
     })
 }
 
-function newRoomAdd(userId, roomId, Be) {
+function newRoomAdd(userId, roomId, Be, fangzhu) {
     let newUser = findUserById(userId)
     let room = document.getElementsByClassName("roomDiv")
     let roomNum = room.length
@@ -238,9 +238,21 @@ function newRoomAdd(userId, roomId, Be) {
     let nick = Rinfo.getElementsByClassName("gameNickname")[0]
     nick.innerHTML = newUser.nickname
     let gameButton2 = roomDiv.getElementsByClassName("gameButton2")[0]
-    gameButton2.style.opacity = "unset"
-    gameButton2.style.visibility = "unset"
-    gameButton2.style.width = "40px"
+    if (fangzhu === null || fangzhu === undefined) {
+        if (newUser.name === getUserName())
+            fangzhu = false
+    }
+    if (fangzhu === true) {
+        gameButton2.style.opacity = "unset"
+        gameButton2.style.visibility = "unset"
+        gameButton2.style.width = "40px"
+    }
+    if (fangzhu === "guankan") {
+        gameButton2.style.opacity = "unset"
+        gameButton2.style.visibility = "unset"
+        gameButton2.style.width = "40px"
+        gameButton2.innerHTML = "观"
+    }
     let gameButton1 = roomDiv.getElementsByClassName("gameButton1")[0]
     let roomOwner = getRoom(roomId)
     let roomOwnerId = roomOwner.userid

@@ -82,11 +82,11 @@ public class WebSocketProcess extends Endpoint {
 	}
 
 	/* 向单一用户发消息 */
-	public static String sendMessageToUser(String from,String target, String message) {
+	public static String sendMessageToUser(String from, String target, String message) {
 //		if(target.toUpperCase().equals("ALL")) {
 //			return sendMessageToUsers(message);			
 //		}
-		System.out.println(from+"尝试发送给"+target + message);
+		System.out.println(from + "尝试发送给" + target + message);
 		WebSocketProcess client = ChatTools.getClients().get(target);
 //		Result result = new Result();
 //		result.setCode(1);

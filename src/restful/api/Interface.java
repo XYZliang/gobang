@@ -25,6 +25,7 @@ import restful.bean.Token.Token;
 import restful.database.EM;
 import restful.entity.GameEntity;
 import restful.entity.UserEntity;
+import restful.utils.AsyncFun;
 import restful.utils.ChatTools;
 import restful.utils.CookieTools;
 import restful.utils.FileUtil;
@@ -410,6 +411,7 @@ public class Interface {
 		List<GameEntity> games = EM.getEntityManager().createNamedQuery("GameEntity.findGameByUserid", GameEntity.class)
 				.setParameter("USERID", id).getResultList();
 		String json = tools.makeJSON(games);
+		System.out.println(tools.makeReturn(json));
 		return tools.makeReturn(json);
 
 	}
@@ -443,7 +445,7 @@ public class Interface {
 		}
 		String user = "";
 		for (String key : ChatTools.getClients().keySet()) {
-			if(key.equals(username))
+			if (key.equals(username))
 				continue;
 			if (user.length() == 0)
 				user = key;
@@ -459,8 +461,9 @@ public class Interface {
 	@Consumes("application/json;charset=UTF-8")
 	@Produces("application/json;charset=UTF-8")
 	public String talk(@QueryParam("type") String type, @QueryParam("TO") String to, @QueryParam("msg") String message,
-			@QueryParam("room") String room, @QueryParam("myid") String myid) {
-		if(to == null) {
+			@QueryParam("room") String room, @QueryParam("myid") String myid, @QueryParam("x") String x,
+			@QueryParam("y") String y, @QueryParam("Black") String Black, @QueryParam("Rtime") String Rtime) {
+		if (to == null && !type.equals("outT")) {
 			return tools.makeErReturn(ResultCode.PARAM_IS_MISS);
 		}
 		String username = getUsernameFromCookie(request);
@@ -482,7 +485,7 @@ public class Interface {
 			GameEntity game = games.get(0);
 			game.setUSER2ID(Integer.parseInt(myid));
 			tools.commitDB(game);
-			return WebSocketProcess.sendMessageToUser(username,to, new JSONObject(msg).toString());
+//			return WebSocketProcess.sendMessageToUser(username, to, new JSONObject(msg).toString());
 //				String json = tools.makeJSON(gameEntity);
 		} else if (type.equals("ti")) {
 			int roomId = Integer.parseInt(room);
@@ -495,7 +498,7 @@ public class Interface {
 			msg.put("msg", message);
 			msg.put("from", username);
 			msg.put("room", room);
-			
+
 		} else if (type.equals("exit")) {
 			int roomId = Integer.parseInt(room);
 			List<GameEntity> games = EM.getEntityManager().createNamedQuery("GameEntity.findGameById", GameEntity.class)
@@ -507,9 +510,8 @@ public class Interface {
 			msg.put("msg", message);
 			msg.put("from", username);
 			msg.put("room", room);
-			
-		}
-		else if (type.equals("openG")) {
+
+		} else if (type.equals("openG")) {
 			msg.put("type", type);
 			msg.put("msg", message);
 			msg.put("from", username);
@@ -520,11 +522,28 @@ public class Interface {
 			GameEntity game = games.get(0);
 			game.setSTATUS(0);
 			tools.commitDB(game);
+		} else if (type.equals("makeQ")) {
+			msg.put("type", type);
+			msg.put("from", username);
+			msg.put("room", room);
+			msg.put("x", x);
+			msg.put("y", y);
+			msg.put("Black", Black);
+			msg.put("Rtime", Rtime);
+			AsyncFun.AsyncSaveGongBangData(new JSONObject(msg).toString(), room);
+		}else if (type.equals("outT")) {
+			msg.put("type", type);
+			msg.put("from", username);
+			msg.put("room", room);
+			msg.put("Black", Black);
+			msg.put("Rtime", Rtime);
+			AsyncFun.AsyncSaveGongBangData(new JSONObject(msg).toString(), room);
+			return tools.makeReturn(new JSONObject(msg).toString());
 		} else {
 			msg.put("type", type);
 			msg.put("from", username);
 			msg.put("room", room);
 		}
-		return WebSocketProcess.sendMessageToUser(username,to, new JSONObject(msg).toString());
+		return WebSocketProcess.sendMessageToUser(username, to, new JSONObject(msg).toString());
 	}
 }

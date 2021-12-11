@@ -1,3 +1,80 @@
+function minifyJson(inJson) {
+    var outJson, // the output string
+        ch,      // the current character
+        at,      // where we're at in the input string
+        advance = function () {
+            at += 1;
+            ch = inJson.charAt(at);
+        },
+        skipWhite = function () {
+            do {
+                advance();
+            } while (ch && (ch <= ' '));
+        },
+        append = function () {
+            outJson += ch;
+        },
+        copyString = function () {
+            while (true) {
+                advance();
+                append();
+                if (!ch || (ch === '"')) {
+                    return;
+                }
+                if (ch === '\\') {
+                    advance();
+                    append();
+                }
+            }
+        },
+        initialize = function () {
+            outJson = "";
+            at = -1;
+        };
+
+    initialize();
+    skipWhite();
+
+    while (ch) {
+        append();
+        if (ch === '"') {
+            copyString();
+        }
+        skipWhite();
+    }
+    return outJson;
+};
+
+function prettyFormat(str) {
+    try {
+        // 设置缩进为2个空格
+        str = JSON.stringify(JSON.parse(str), null, 2);
+        str = str
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;');
+        return str.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+            var cls = 'number';
+            if (/^"/.test(match)) {
+                if (/:$/.test(match)) {
+                    cls = 'key';
+                } else {
+                    cls = 'string';
+                }
+            } else if (/true|false/.test(match)) {
+                cls = 'boolean';
+            } else if (/null/.test(match)) {
+                cls = 'null';
+            }
+            return '<span class="' + cls + '">' + match + '</span>';
+        });
+    } catch (e) {
+        alert("异常信息:" + e);
+    }
+
+
+}
+
 let tools = {
     /* ajax请求get
      * @param url     string   请求的路径
@@ -52,6 +129,17 @@ let tools = {
                     if (isJson) {
                         res = ajax.responseText === "" ? '{}' : ajax.responseText
                         res = res.replace('data":"{', 'data":{')
+                        res = minifyJson(res)
+                        while (true) {
+                            try {
+                                JSON.parse(res)
+                            } catch (e) {
+                                res = res.replaceAll("\"}]\",", "\"}],")
+                                res = minifyJson(res)
+                                continue
+                            }
+                            break
+                        }
                         console.log(res)
                     }
                     res = isJson ? JSON.parse(res) : ajax.responseText;
