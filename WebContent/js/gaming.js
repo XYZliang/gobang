@@ -7,6 +7,11 @@ let totalTime = 0;
 let rightU = true;
 let u1;
 let u2;
+let lastx = -1
+let lasty = -1
+let huix = -1
+let huiy = -1
+let duiUsername = ""
 
 function showChessboard() {
     if (document.getElementsByClassName("container")[10].style.top !== "50%") {
@@ -15,7 +20,7 @@ function showChessboard() {
         document.getElementsByClassName("container")[6].style.top = "150%"
     } else {
         document.getElementsByClassName("container")[10].style.top = "-50%"
-        document.getElementById("leftBar").style.transform = "translateY(-50%)"
+        document.getElementById("leftBar").style.transform = "translate(0%,-50%)"
         document.getElementsByClassName("container")[6].style.top = "50%"
         cleanChessboard()
     }
@@ -26,6 +31,7 @@ function makeChessboard(Black, user1, user2) {
     u2 = user2
     document.getElementById("noCHess").style.display = "block"
     document.getElementById("noCHess").style.backgroundColor = "rgba(255,255,255,0.3)"
+    document.getElementById("noCHess").style.height = "610px"
     let startList = ["startsZer", "startsOne", "startsTwo", "startsThr", "startsFou", "startsFiv"]
     document.getElementById("leftBox").getElementsByClassName("gameNickname")[0].innerHTML = user1.nickname
     document.getElementById("leftBox").getElementsByClassName("gameStarts")[0].classList.add(startList[user1.level])
@@ -62,6 +68,11 @@ function makeChessboard(Black, user1, user2) {
         for (let j = 0; j <= 15; j++) {
             chessXY[i][j] = 0;
         }
+    }
+    if (Black === 1) {
+        duiUsername = u2.name
+    } else {
+        duiUsername = u1.name
     }
 //运行的模式 需要开始的秒数（默认10） 运行的计时器（默认第一个） 倍速（默认1） 总秒数（默认time）
     leftDanTime("start", danTime, "", null, null, true)
@@ -115,6 +126,8 @@ function makeQi(x, y, Black, Re) {
                                     img.src = "images/system/chessW.png"
                                     chessXY[x][y] = 2
                                 }
+                                lastx = x
+                                lasty = y
                                 img.style.display = "block"
                                 img.parentNode.classList.add("chessNoHover")
                                 if (Black === 1)
@@ -187,7 +200,7 @@ function leftDanTime(fun, time, no, bei, total, ready, cont) {
         if (timerTimeCount) {
             return
         }
-        if(!b<=0)
+        if (!b <= 0)
             b = b || 10
         total = total || b;
         let a = function () {
@@ -294,21 +307,136 @@ function checkWin(no) {
                 return 0
         }
 
+        function check(i, j) {
+            if (isChess(chessXY[i][j]) === 0)
+                return false
+
+            function checkShang(P) {
+                if (i - P < 0)
+                    return P - 1
+                if (chessXY[i - P][j] === chessXY[i][j])
+                    return checkShang(P + 1)
+                else
+                    return P
+            }
+
+            if (checkShang(1) >= 5)
+                return true
+
+            function checkXia(P) {
+                if (i + P > 15)
+                    return P - 1
+                if (chessXY[i + P][j] === chessXY[i][j])
+                    return checkXia(P + 1)
+                else
+                    return P
+            }
+
+            if (checkXia(1) >= 5)
+                return true
+
+            function checkZuo(P) {
+                if (j - P < 0)
+                    return P - 1
+                if (chessXY[i][j - P] === chessXY[i][j])
+                    return checkZuo(P + 1)
+                else
+                    return P
+            }
+
+            if (checkZuo(1) >= 5)
+                return true
+
+            function checkYou(P) {
+                if (j + P > 15)
+                    return P - 1
+                if (chessXY[i][j + P] === chessXY[i][j])
+                    return checkYou(P + 1)
+                else
+                    return P
+            }
+
+            if (checkYou(1) >= 5)
+                return true
+
+            function checkYS(P) {
+                if (j + P > 15 || i - P < 0)
+                    return P - 1
+                if (chessXY[i - P][j + P] === chessXY[i][j])
+                    return checkYS(P + 1)
+                else
+                    return P
+            }
+
+            if (checkYS(1) >= 5)
+                return true
+
+            function checkZS(P) {
+                if (j - P < 0 || i - P < 0)
+                    return P - 1
+                if (chessXY[i - P][j - P] === chessXY[i][j])
+                    return checkZS(P + 1)
+                else
+                    return P
+            }
+
+            if (checkZS(1) >= 5)
+                return true
+
+            function checkYX(P) {
+                if (j + P > 15 || i + P > 15)
+                    return P - 1
+                if (chessXY[i + P][j + P] === chessXY[i][j])
+                    return checkYX(P + 1)
+                else
+                    return P
+            }
+
+            if (checkYX(1) >= 5)
+                return true
+
+            function checkZX(P) {
+                if (j - P < 0 || i + P > 15)
+                    return P - 1
+                if (chessXY[i + P][j - P] === chessXY[i][j])
+                    return checkZX(P + 1)
+                else
+                    return P
+            }
+
+            if (checkZX(1) >= 5)
+                return true
+
+            return false
+        }
+
         for (let i = 0; i <= 15; i++) {
             for (let j = 0; j <= 15; j++) {
-                if (i + 4 > 15 || j + 4 > 15)
-                    continue
-                if (isChess(chessXY[i][j]) * isChess(chessXY[i][j + 1]) * isChess(chessXY[i][j + 2]) * isChess(chessXY[i][j + 3]) * isChess(chessXY[i][j + 4]) === 1 || isChess(chessXY[i][j]) * isChess(chessXY[i + 1][j + 1]) * isChess(chessXY[i + 2][j + 2]) * isChess(chessXY[i + 3][j + 3]) * isChess(chessXY[i + 4][j + 4]) === 1) {
+                if (check(i, j)) {
+                    let msg = {
+                        'type': 'Win',
+                        'room': gamingId,
+                        'Black': myChess,
+                    }
                     stop("all")
-                    showError("玩家" + findUserById(getRoom(gamingId).userid).nickname + "获胜！", "ok")
                     showNo(true)
-                    document.getElementById("leftBar").style.transform = "translateY(-50%);"
-                }
-                if (isChess(chessXY[i][j]) * isChess(chessXY[i][j + 1]) * isChess(chessXY[i][j + 2]) * isChess(chessXY[i][j + 3]) * isChess(chessXY[i][j + 4]) === 32 || isChess(chessXY[i][j]) * isChess(chessXY[i + 1][j + 1]) * isChess(chessXY[i + 2][j + 2]) * isChess(chessXY[i + 3][j + 3]) * isChess(chessXY[i + 4][j + 4]) === 32) {
-                    stop("all")
-                    showError("玩家" + findUserById(getRoom(gamingId).user2ID).nickname + "获胜！", "ok")
-                    showNo(true)
-                    document.getElementById("leftBar").style.transform = "translateY(-50%);"
+                    document.getElementById("leftBar").style.transform = 'translate(0%, -50%)'
+                    let b = document.getElementById("chessBott")
+                    document.getElementById("chessBottt").display = "block"
+                    b.style.display = "none"
+                    b.style.opacity = "0";
+                    b.style.visibility = "hidden";
+                    setTimeout(function () {
+                        document.getElementById("chessBott").style.display = "none";
+                    }, 300)
+                    if (isChess(chessXY[i][j]) === 1) {
+                        showError("玩家" + findUserById(getRoom(gamingId).userid).nickname + "获胜！", "ok")
+                        tools.ajaxGet("http://127.0.0.1:8080/gobang/api/talk", msg)
+                    }
+                    if (isChess(chessXY[i][j]) === 2) {
+                        showError("玩家" + findUserById(getRoom(gamingId).user2ID).nickname + "获胜！", "ok")
+                        tools.ajaxGet("http://127.0.0.1:8080/gobang/api/talk", msg)
+                    }
                 }
             }
         }
@@ -330,7 +458,15 @@ function checkWin(no) {
                     showError("玩家" + findUserById(getRoom(gamingId).user2ID).nickname + "获胜！", "ok")
                 else
                     showError("玩家" + findUserById(getRoom(gamingId).userid).nickname + "获胜！", "ok")
-                document.getElementById("leftBar").style.transform = "translateY(-50%);"
+                document.getElementById("leftBar").style.transform = 'translate(0%, -50%)'
+                let b = document.getElementById("chessBott")
+                document.getElementById("chessBottt").display = "block"
+                b.style.display = "none"
+                b.style.opacity = "0";
+                b.style.visibility = "hidden";
+                setTimeout(function () {
+                    document.getElementById("chessBott").style.display = "none";
+                }, 300)
             })
         }
     }
@@ -351,6 +487,13 @@ function startChess() {
             clearInterval(a)
             a = null
             document.getElementById("noCHess").innerHTML = ""
+            let b = document.getElementById("chessBott")
+            document.getElementById("chessBottt").display = "block"
+            b.style.display = "none"
+            b.style.opacity = "1";
+            b.style.visibility = "unset";
+            b.style.display = "block";
+
             return;
         }
         document.getElementById("noCHess").innerHTML = t
@@ -365,10 +508,12 @@ function showNo(no) {
         if (no === true) {
             setTimeout(function () {
                 a.style.backgroundColor = "rgba(255,255,255,0)"
+                a.style.height = "540px";
             }, 10)
         } else {
             setTimeout(function () {
                 a.style.backgroundColor = "rgba(255,255,255,0.3)"
+                a.style.height = "610px";
             }, 10)
         }
     } else {
@@ -410,4 +555,191 @@ function change(ToR, OutTime) {
         leftDanTime("start", null, "1", null, null, false, true)
         showNo()
     }
+}
+
+function ping(arg) {
+    if (arg === true) {
+        showError("对方同意平局", "ok")
+        stop("all")
+        showNo(true)
+        document.getElementById("leftBar").style.transform = 'translate(0%, -50%)'
+        document.getElementById("chessBottt").display = "block"
+        b.style.opacity = "0";
+        b.style.visibility = "hidden";
+        setTimeout(function () {
+            document.getElementById("chessBott").style.display = "none";
+        }, 300)
+    } else if (arg === false) {
+        showError("对方不同意平局")
+    } else {
+        let msg = {
+            'TO': duiUsername,
+            'type': 'ping',
+            'room': gamingId,
+        }
+        tools.ajaxGet("http://127.0.0.1:8080/gobang/api/talk", msg, function (res) {
+            showError("发起平局中，等待对方应答", "ok")
+        })
+    }
+}
+
+function shu(arg) {
+    if (arg === true) {
+        showError("对方已认输，您已获胜", "ok")
+        stop("all")
+        showNo(true)
+        document.getElementById("leftBar").style.transform = 'translate(0%, -50%)'
+        let b = document.getElementById("chessBott")
+        document.getElementById("chessBottt").display = "block"
+        b.style.display = "none"
+        b.style.opacity = "0";
+        b.style.visibility = "hidden";
+        setTimeout(function () {
+            document.getElementById("chessBott").style.display = "none";
+        }, 300)
+    } else {
+        let eleTimeSecEle
+        if (myChess === 1) {
+            eleTimeSecEle = "timeSecond1"
+        } else {
+            eleTimeSecEle = "timeSecond3"
+        }
+        let eleTimeSec = document.getElementById(eleTimeSecEle).innerHTML;
+        let msg = {
+            'TO': duiUsername,
+            'type': 'shu',
+            'room': gamingId,
+            'Rtime': eleTimeSec,
+        }
+        tools.ajaxGet("http://127.0.0.1:8080/gobang/api/talk", msg, function (res) {
+            showError("您已认输，下次再接再厉！")
+            stop("all")
+            showNo(true)
+            document.getElementById("leftBar").style.transform = 'translate(0%, -50%)'
+            let b = document.getElementById("chessBott")
+            document.getElementById("chessBottt").display = "block"
+            b.style.display = "none"
+            b.style.opacity = "0";
+            b.style.visibility = "hidden";
+            setTimeout(function () {
+                document.getElementById("chessBott").style.display = "none";
+            }, 300)
+        })
+    }
+}
+
+function hui(arg) {
+    if (arg === true) {
+        showError("对方同意您悔棋", "ok")
+        removeQi(lastx, lasty)
+        lastx = -2
+        lasty = -2
+    } else if (arg === false) {
+        showError("对方不同意您悔棋")
+    } else {
+        if (lasty === -1 || lastx === -1) {
+            showError("悔棋失败，您还没有落子过哦")
+            return
+        }
+        if (lasty === -2 || lastx === -2) {
+            showError("悔棋失败，您刚刚悔过了哦")
+            return
+        }
+        let msg = {
+            'TO': duiUsername,
+            'type': 'hui',
+            'room': gamingId,
+            'x': lastx,
+            'y': lasty,
+            'Black': myChess,
+        }
+        tools.ajaxGet("http://127.0.0.1:8080/gobang/api/talk", msg)
+    }
+}
+
+function removeQi(x, y) {
+    let chess = document.getElementById("ChessboardTable")
+    let hang = chess.getElementsByTagName("tr")
+    for (let i = 0; i < 15; i++) {
+        if (i + 1 === x) {
+            let lie = hang[i].getElementsByTagName("th")
+            for (let ii = 0; ii < 15; ii++) {
+                if (ii + 1 === y) {
+                    let img = lie[ii].getElementsByTagName("img")[0]
+                    img.style.display = "none"
+                    chessXY[x][y] = 0
+                    img.parentNode.classList.remove("chessNoHover")
+                }
+            }
+        }
+    }
+}
+
+function want(type, x, y) {
+    if (type === "ping") {
+        document.getElementById("wantTxt").innerHTML = "对方请求平局，是否同意？"
+    } else if (type === "hui") {
+        document.getElementById("wantTxt").innerHTML = "对方请求悔棋，是否同意？"
+        huix = x
+        huiy = y
+    } else if (type === "shu") {
+        shu(true)
+    }
+    document.getElementsByClassName("container")[11].style.top = "50%"
+}
+
+function wantBo(ok) {
+    let eleTimeSecEle
+    if (myChess === 1) {
+        eleTimeSecEle = "timeSecond3"
+    } else {
+        eleTimeSecEle = "timeSecond1"
+    }
+    let eleTimeSec = document.getElementById(eleTimeSecEle).innerHTML;
+    let msg = {
+        'TO': duiUsername,
+        'type': '',
+        'room': gamingId,
+        'x': lastx,
+        'y': lasty,
+        'Black': myChess,
+        'Rtime': eleTimeSec,
+    }
+    if (document.getElementById("wantTxt").innerHTML.indexOf("平") >= 0) {
+        if (ok)
+            msg.type = "pingok"
+        else
+            msg.type = "pingdis"
+    } else if (document.getElementById("wantTxt").innerHTML.indexOf("悔") >= 0) {
+        if (ok)
+            msg.type = "huiok"
+        else
+            msg.type = "huidis"
+    } else {
+        document.getElementsByClassName("container")[11].style.top = "50%"
+        return
+    }
+    tools.ajaxGet("http://127.0.0.1:8080/gobang/api/talk", msg, function (res) {
+        if (msg.type === "huiok")
+            removeQi(huix, huiy)
+        else if (msg.type === "pingok") {
+            showError("对方同意平局", "ok")
+            stop("all")
+            showNo(true)
+            document.getElementById("leftBar").style.transform = 'translate(0%, -50%)'
+            let b = document.getElementById("chessBott")
+            document.getElementById("chessBottt").display = "block"
+            b.style.display = "none"
+            b.style.opacity = "0";
+            b.style.visibility = "hidden";
+            setTimeout(function () {
+                document.getElementById("chessBott").style.display = "none";
+            }, 300)
+        }
+        document.getElementsByClassName("container")[11].style.top = "-50%"
+    })
+}
+
+function exitGaming(){
+    document.getElementsByClassName("container")[10].style.top = "-50%"
 }

@@ -53,6 +53,7 @@ public class Interface {
 //		System.out.println(new Date()+request.getSession().toString());
 //		System.out.println(request.getSession().getAttribute("hello"));
 //		request.getSession().setAttribute("hello","hello");
+		tools.addRe(response);
 		CookieTools.addCookie("hello", "jxufe", "/", 60 * 60 * 24 * 7, response);
 		return "hello";
 	}
@@ -62,6 +63,7 @@ public class Interface {
 	@Consumes("application/json;charset=UTF-8")
 	@Produces("application/json;charset=UTF-8")
 	public String checkCookieAPI(@QueryParam("username") String username) {
+		tools.addRe(response);
 		return Check(username, request);
 	}
 
@@ -70,6 +72,7 @@ public class Interface {
 	@Consumes("application/json;charset=UTF-8")
 	@Produces("application/json;charset=UTF-8")
 	public String getAllUsers(@QueryParam("username") String username) {
+		tools.addRe(response);
 		String check = Check(username, request);
 		if (!check.equals("ok")) {
 			return check;
@@ -86,6 +89,8 @@ public class Interface {
 	@Produces("application/json;charset=UTF-8")
 	public String add(@QueryParam("Name") String NAME, @QueryParam("PASSWORD") String PASSWORD,
 			@QueryParam("NICKNAME") String NICKNAME, @QueryParam("SEX") String SEX) {
+		
+		tools.addRe(response);
 		List<UserEntity> result = EM.getEntityManager().createNamedQuery("UserEntity.findUserByName", UserEntity.class)
 				.setParameter("NAME", NAME).getResultList();
 		if (result.isEmpty()) {
@@ -105,6 +110,7 @@ public class Interface {
 	@Consumes("application/json;charset=UTF-8")
 	@Produces("application/json;charset=UTF-8")
 	public String update(UserEntity userentity) {
+		tools.addRe(response);
 		return " ";
 	}
 
@@ -114,6 +120,7 @@ public class Interface {
 	@Consumes("application/json;charset=UTF-8")
 	@Produces("application/json;charset=UTF-8")
 	public String delete(UserEntity userentity) {
+		tools.addRe(response);
 		tools.deleteDB(userentity);
 		return tools.makeReturn();
 	}
@@ -123,6 +130,7 @@ public class Interface {
 	@Consumes("application/json;charset=UTF-8")
 	@Produces("application/json;charset=UTF-8")
 	public String denglu(@QueryParam("userName") String NAME, @QueryParam("password") String PASSWORD) {
+		tools.addRe(response);
 		List<UserEntity> result = EM.getEntityManager().createNamedQuery("UserEntity.findUserByName", UserEntity.class)
 				.setParameter("NAME", NAME).getResultList();
 		if (result.isEmpty())
@@ -152,6 +160,7 @@ public class Interface {
 //			@FormParam("image") String image64,
 //			@FormParam("userName") String userName,
 			Map<String, Object> jsonParam) {
+		tools.addRe(response);
 		JSONObject jo = new JSONObject(jsonParam);
 //		System.out.println(jo);  
 		String image64 = jo.getString("image");
@@ -183,6 +192,7 @@ public class Interface {
 	@Consumes("application/json;charset=UTF-8")
 	@Produces("application/json;charset=UTF-8")
 	public String getUser(@QueryParam("userName") String NAME) {
+		tools.addRe(response);
 		String check = Check(NAME, request);
 		if (!check.equals("ok")) {
 			return check;
@@ -213,6 +223,7 @@ public class Interface {
 	@Produces("application/json;charset=UTF-8")
 	public String CPWD(@QueryParam("userName") String NAME, @QueryParam("Opassword") String Opassword,
 			@QueryParam("Npassword") String Npassword, @QueryParam("fromUser") String fromUser) {
+		tools.addRe(response);
 		if (fromUser != null) {
 			String check = Check(fromUser, request);
 			if (!check.equals("ok")) {
@@ -268,6 +279,7 @@ public class Interface {
 	public String CInfo(@QueryParam("fromUser") String fromUser, @QueryParam("userName") String userName,
 			@QueryParam("newUserName") String newUserName, @QueryParam("nickname") String nickname,
 			@QueryParam("sex") String sex, @QueryParam("admin") String admin) {
+		tools.addRe(response);
 		if (!userName.equals(fromUser)) {
 			String check = Check(fromUser, request);
 			if (!check.equals("ok")) {
@@ -330,7 +342,8 @@ public class Interface {
 		}
 	}
 
-	public static String Check(String username, HttpServletRequest request) {
+	public String Check(String username, HttpServletRequest request) {
+		tools.addRe(response);
 		if (username == null) {
 			username = getUsernameFromCookie(request);
 			if (username == null)
@@ -342,7 +355,8 @@ public class Interface {
 		return "ok";
 	}
 
-	public static String getUsernameFromCookie(HttpServletRequest request) {
+	public String getUsernameFromCookie(HttpServletRequest request) {
+		tools.addRe(response);
 		String text = CookieTools.getCookie("loginName", request);
 		String username = null;
 		if (text == null)
@@ -362,6 +376,7 @@ public class Interface {
 	@Consumes("application/json;charset=UTF-8")
 	@Produces("application/json;charset=UTF-8")
 	public String makeNewGame(@QueryParam("Dan") int Dan, @QueryParam("Total") int Total) {
+		tools.addRe(response);
 		String username = getUsernameFromCookie(request);
 		if (username == null)
 			return tools.makeErReturn(ResultCode.USER_TOKEN_ERROR);
@@ -390,7 +405,8 @@ public class Interface {
 	@Path("/getMyGame")
 	@Consumes("application/json;charset=UTF-8")
 	@Produces("application/json;charset=UTF-8")
-	public String getMyGame(@QueryParam("id") int id) {
+	public String getMyGame(@QueryParam("id") int id,@QueryParam("type") String RoomType) {
+		tools.addRe(response);
 		String username = getUsernameFromCookie(request);
 		if (username == null)
 			return tools.makeErReturn(ResultCode.USER_TOKEN_ERROR);
@@ -399,7 +415,8 @@ public class Interface {
 			return check;
 		}
 		if ((id + "").equals("")) {
-			List<UserEntity> result = EM.getEntityManager()
+			List<UserEntity> result ;
+			result= EM.getEntityManager()
 					.createNamedQuery("UserEntity.findUserByName", UserEntity.class).setParameter("NAME", username)
 					.getResultList();
 			UserEntity userentity = result.get(0);
@@ -408,8 +425,19 @@ public class Interface {
 			else
 				id = userentity.getID();
 		}
-		List<GameEntity> games = EM.getEntityManager().createNamedQuery("GameEntity.findGameByUserid", GameEntity.class)
-				.setParameter("USERID", id).getResultList();
+		List<GameEntity> games = null;
+		if(RoomType.equals("normal")) {
+			games = EM.getEntityManager().createNamedQuery("GameEntity.findGameByUseridAndStatus", GameEntity.class)
+				.setParameter("USERID", id).setParameter("STATUS", 1).getResultList();
+		}
+		else if(RoomType.equals("guan")){
+			games = EM.getEntityManager().createNamedQuery("GameEntity.findGameByStatus", GameEntity.class)
+					.setParameter("STATUS", 0).getResultList();
+		}
+		else if(RoomType.equals("lu")) {
+			games = EM.getEntityManager().createNamedQuery("GameEntity.findGameByUseridAndStatus", GameEntity.class)
+					.setParameter("USERID", id).setParameter("STATUS", -1).getResultList();
+		}
 		String json = tools.makeJSON(games);
 		System.out.println(tools.makeReturn(json));
 		return tools.makeReturn(json);
@@ -421,6 +449,7 @@ public class Interface {
 	@Consumes("application/json;charset=UTF-8")
 	@Produces("application/json;charset=UTF-8")
 	public String initWS() {
+		tools.addRe(response);
 		String username = getUsernameFromCookie(request);
 		if (username == null)
 			return tools.makeErReturn(ResultCode.NEED_LOGIN);
@@ -436,6 +465,7 @@ public class Interface {
 	@Consumes("application/json;charset=UTF-8")
 	@Produces("application/json;charset=UTF-8")
 	public String OLuser() {
+		tools.addRe(response);
 		String username = getUsernameFromCookie(request);
 		if (username == null)
 			return tools.makeErReturn(ResultCode.NEED_LOGIN);
@@ -463,7 +493,8 @@ public class Interface {
 	public String talk(@QueryParam("type") String type, @QueryParam("TO") String to, @QueryParam("msg") String message,
 			@QueryParam("room") String room, @QueryParam("myid") String myid, @QueryParam("x") String x,
 			@QueryParam("y") String y, @QueryParam("Black") String Black, @QueryParam("Rtime") String Rtime) {
-		if (to == null && !type.equals("outT")) {
+		tools.addRe(response);
+		if (to == null && !type.equals("outT") && !type.equals("Win")) {
 			return tools.makeErReturn(ResultCode.PARAM_IS_MISS);
 		}
 		String username = getUsernameFromCookie(request);
@@ -516,12 +547,7 @@ public class Interface {
 			msg.put("msg", message);
 			msg.put("from", username);
 			msg.put("room", room);
-			int roomId = Integer.parseInt(room);
-			List<GameEntity> games = EM.getEntityManager().createNamedQuery("GameEntity.findGameById", GameEntity.class)
-					.setParameter("ID", roomId).getResultList();
-			GameEntity game = games.get(0);
-			game.setSTATUS(0);
-			tools.commitDB(game);
+			AsyncFun.AsyncOpenGame(room);
 		} else if (type.equals("makeQ")) {
 			msg.put("type", type);
 			msg.put("from", username);
@@ -537,12 +563,44 @@ public class Interface {
 			msg.put("room", room);
 			msg.put("Black", Black);
 			msg.put("Rtime", Rtime);
-			AsyncFun.AsyncSaveGongBangData(new JSONObject(msg).toString(), room);
+			AsyncFun.AsyncSaveGongBangData(new JSONObject(msg).toString(), room,-1);
 			return tools.makeReturn(new JSONObject(msg).toString());
+		}else if (type.equals("Win")) {
+			msg.put("type", type);
+			msg.put("from", username);
+			msg.put("room", room);
+			msg.put("Black", Black);
+			AsyncFun.AsyncSaveGongBangData(new JSONObject(msg).toString(), room,-1);
+		}else if (type.equals("pingok")) {
+			msg.put("type", type);
+			msg.put("from", username);
+			msg.put("room", room);
+			msg.put("Black", Black);
+			msg.put("Rtime", Rtime);
+			AsyncFun.AsyncSaveGongBangData(new JSONObject(msg).toString(), room,-1);
+		}else if (type.equals("huiok")) {
+			msg.put("type", type);
+			msg.put("from", username);
+			msg.put("room", room);
+			msg.put("x", x);
+			msg.put("y", y);
+			msg.put("Black", Black);
+			msg.put("Rtime", Rtime);
+			AsyncFun.AsyncSaveGongBangData(new JSONObject(msg).toString(), room,-1);
+		}else if (type.equals("shu")) {
+			msg.put("type", type);
+			msg.put("from", username);
+			msg.put("room", room);
+			msg.put("Rtime", Rtime);
+			AsyncFun.AsyncSaveGongBangData(new JSONObject(msg).toString(), room,-1);
 		} else {
 			msg.put("type", type);
 			msg.put("from", username);
 			msg.put("room", room);
+			msg.put("x", x);
+			msg.put("y", y);
+			msg.put("Black", Black);
+			msg.put("Rtime", Rtime);
 		}
 		return WebSocketProcess.sendMessageToUser(username, to, new JSONObject(msg).toString());
 	}

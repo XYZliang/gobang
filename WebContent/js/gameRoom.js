@@ -1,9 +1,19 @@
-function openRoom() {
+let RoomType;
+function openRoom(type,open) {
     if (!debug) {
         if (!checkLogin()) {
             showError("请先登录！")
             return;
         }
+    }
+    if(type!==undefined)
+        RoomType=type
+    else
+        RoomType="normal"
+    if(open===true){
+        getInfos(true)
+        document.getElementsByClassName("container")[6].style.top = "50%"
+        return;
     }
     if (document.getElementsByClassName("container")[6].style.top !== "50%") {
         getInfos(true)
@@ -17,6 +27,7 @@ function openRoom2(update) {
     document.getElementsByClassName("container")[6].style.top = "50%"
     let id = findUserByUsername(getUserName()).id
     let info = {
+        "type": RoomType,
         "id": id,
     }
     tools.ajaxGet("http://127.0.0.1:8080/gobang/api/getMyGame", info, function (res) {
@@ -238,6 +249,14 @@ function newRoomAdd(userId, roomId, Be, fangzhu) {
     let nick = Rinfo.getElementsByClassName("gameNickname")[0]
     nick.innerHTML = newUser.nickname
     let gameButton2 = roomDiv.getElementsByClassName("gameButton2")[0]
+    if(RoomType==="guan" || RoomType==="lu"){
+        let gameButton1 = roomDiv.getElementsByClassName("gameButton1")[0].style.display = "block"
+        if(RoomType==="guan")
+            gameButton1.innerHTML = "观"
+        else
+            gameButton1.innerHTML = "看"
+        return
+    }
     if (fangzhu === null || fangzhu === undefined) {
         if (newUser.name === getUserName())
             fangzhu = false
@@ -411,12 +430,17 @@ function openYQ(data, roomid) {
             document.getElementById('yaoqingDiv').style.display = "none"
             document.getElementById('noOL').style.display = "block"
         } else {
-            document.getElementById('yaoqingDiv').style.display = "block"
-            document.getElementById('noOL').style.display = "none"
-        }
-        for (let i = 0; i < datas.length; i++) {
-            if (datas[i].name !== getUserName())
-                addOLuser(findUserByUsername(datas[i]), i, roomid)
+            if (datas[0].length > 0) {
+                document.getElementById('yaoqingDiv').style.display = "block"
+                document.getElementById('noOL').style.display = "none"
+                for (let i = 0; i < datas.length; i++) {
+                    if (datas[i].name !== getUserName())
+                        addOLuser(findUserByUsername(datas[i]), i, roomid)
+                }
+            } else {
+                document.getElementById('yaoqingDiv').style.display = "none"
+                document.getElementById('noOL').style.display = "block"
+            }
         }
         document.getElementsByClassName("container")[8].style.top = "50%"
     } else {
@@ -573,14 +597,11 @@ function runGame(roomId) {
         }
         tools.ajaxGet("http://127.0.0.1:8080/gobang/api/talk", msg, function (res) {
             document.getElementsByClassName("container")[9].style.top = "-50%"
-            if (res.status !== 0) {
-                showError("开始游戏失败：" + makeString(res.desc))
-                return
-            }
             go()
         }, function (res) {
-            showError("服务器异常" + res)
-            document.getElementsByClassName("container")[9].style.top = "-50%"
+            if (res.status !== 0) {
+                showError("开始游戏失败：" + makeString(res.desc))
+            }
         })
     } else if (room.user2ID === nowUser.id) {
         user2 = nowUser

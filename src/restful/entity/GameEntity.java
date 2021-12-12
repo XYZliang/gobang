@@ -11,8 +11,10 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "GOBANGGAME")
 @NamedQueries({ @NamedQuery(name = "GameEntity.findGameAll", query = "SELECT u FROM GameEntity u"),
-		@NamedQuery(name = "GameEntity.findGameByUserid", query = "SELECT u FROM GameEntity u where (u.USERID like :USERID) or (u.USER2ID like :USERID)"),
-		@NamedQuery(name = "GameEntity.findGameById", query = "SELECT u FROM GameEntity u where u.ID like :ID"), })
+		@NamedQuery(name = "GameEntity.findGameByUseridAndStatus", query = "SELECT u FROM GameEntity u where (u.USERID like :USERID AND u.STATUS like :STATUS) or (u.USER2ID like :USERID AND u.STATUS like :STATUS)"),
+		@NamedQuery(name = "GameEntity.findGameById", query = "SELECT u FROM GameEntity u where u.ID like :ID"),
+@NamedQuery(name = "GameEntity.findGameByStatus", query = "SELECT u FROM GameEntity u where u.STATUS like :STATUS")
+})
 public class GameEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

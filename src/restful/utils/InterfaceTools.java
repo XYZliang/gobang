@@ -2,6 +2,8 @@ package restful.utils;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -94,5 +96,14 @@ public class InterfaceTools {
 			jsonarray.remove("password");
 		}
 		return jsonArray.toString();
+	}
+	
+	public void addRe(HttpServletResponse response) {
+		response.setCharacterEncoding("utf-8");
+		response.setHeader("Access-Control-Allow-Origin", "allowDomain");
+		response.setHeader("Access-Control-Allow-Credentials", "true");
+		String headers = "Origin, Accept-Language, Accept-Encoding,X-Forwarded-For, Connection, Accept, User-Agent, Host, Referer,Cookie, Content-Type, Cache-Control";
+		response.setHeader("Access-Control-Allow-Headers", headers);
+		response.setHeader("Access-Control-Request-Method", "GET,POST");
 	}
 }

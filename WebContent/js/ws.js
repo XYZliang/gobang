@@ -56,6 +56,16 @@ function onMessage(evt) {
         runGame(json.room)
     else if (json.type === "makeQ")
         makeQi(parseInt(json.x), parseInt(json.y), parseInt(json.Black), true)
+    else if (json.type === "ping" || json.type === "hui" || json.type === "shu")
+        want(json.type, json.x, json.y)
+    else if (json.type === "pingok")
+        ping(true)
+    else if (json.type === "pingdis")
+        ping(true)
+    else if (json.type === "huiok")
+        hui(true)
+    else if (json.type === "huidis")
+        hui(false)
 }
 
 function onError(evt) {

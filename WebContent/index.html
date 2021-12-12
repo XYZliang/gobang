@@ -1064,6 +1064,54 @@
             color: #e10b2b;
             border-radius: 40px;
         }
+
+        #chessBott {
+            -webkit-transition: all 0.3s ease-out;
+            -moz-transition: all 0.3s ease-out;
+            -o-transition: all 0.3s ease-out;
+            opacity: 0;
+            visibility: hidden;
+            display: none;
+        }
+
+        .chessBo {
+            margin-top: 20px;
+            margin-left: 110px;
+            width: 50px;
+            height: 40px;
+            float: left;
+            background-color: white;
+            border-radius: 30px;
+            font-size: 20px;
+            text-align: center;
+            line-height: 40px;
+            cursor: pointer;
+            -webkit-transition: all 0.3s ease-out;
+            -moz-transition: all 0.3s ease-out;
+            -o-transition: all 0.3s ease-out;
+            background: rgba(163, 180, 180, 0.6);
+            box-shadow: 0 25px 45px rgba(163, 180, 180, 0.4);
+            border: 1px solid rgba(163, 180, 180, 0.8);
+            border-right: 1px solid rgba(163, 180, 180, 0.5);
+            border-bottom: 1px solid rgba(163, 180, 180, 0.5);
+        }
+
+        #want {
+            min-width: 401px;
+            top: -50%;
+            display: block;
+            right: 45%;
+            min-height: unset;
+        }
+
+        #wantTxt {
+            height: 40px;
+            font-size: 28px;
+            color: indianred;
+            text-align: center;
+            line-height: 40px;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
@@ -1079,13 +1127,13 @@
 </a> <a class="leftBot" onclick="showWin('denglu')">
     <div class="leftBotFir leftBotCom">登</div>
     <div class="leftBotTwo leftBotCom">录账号</div>
-</a> <a class="leftBot" onclick="openRoom()">
+</a> <a class="leftBot" onclick="openRoom('normal',true)">
     <div class="leftBotFir leftBotCom">开</div>
     <div class="leftBotTwo leftBotCom">始游戏</div>
-</a> <a class="leftBot">
+</a> <a class="leftBot" onclick="openRoom('guan',true)">
     <div class="leftBotFir leftBotCom">观</div>
     <div class="leftBotTwo leftBotCom">战游戏</div>
-</a> <a class="leftBot">
+</a> <a class="leftBot" onclick="openRoom('lu',true)">
     <div class="leftBotFir leftBotCom">录</div>
     <div class="leftBotTwo leftBotCom">像查看</div>
 </a> <a class="leftBot" onclick="showInfo()">
@@ -1558,6 +1606,14 @@
             <table id="ChessboardTable">
                 <tr id="ChessboardEnd"></tr>
             </table>
+            <div id="chessBott">
+                <div class="chessBo" onclick="ping()">平局</div>
+                <div class="chessBo" onclick="shu()">认输</div>
+                <div class="chessBo" onclick="hui()">悔棋</div>
+            </div>
+            <div id="chessBottt" style="display:none">
+                <div class="chessBo" onclick="exitGaming()">退出</div>
+            </div>
         </div>
     </div>
     <div class="gamingInfo" id="rightBox">
@@ -1628,6 +1684,17 @@
             <span class="time-second" id="timeSecond3"></span>
         </div>
         <div class="gamingTxt">总剩余时间</div>
+    </div>
+</div>
+<div class="container" id="want">
+    <div id="wantTxt">对方想要</div>
+    <div class="form" style="padding: 0px;margin: 0 50px;}">
+        <div class="inputBox" style="padding-top:0 ">
+            <input onclick="wantBo(true)" style="width:283px" type="button" value="同意请求">
+        </div>
+        <div class="inputBox" style="padding-top:0 ">
+            <input onclick="wantBo(false)" style="width:283px" type="button" value="拒绝请求">
+        </div>
     </div>
 </div>
 <script src="js/tools/others/jquery.min.js" type="text/javascript"></script>
