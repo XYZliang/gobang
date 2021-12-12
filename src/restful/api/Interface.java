@@ -426,18 +426,22 @@ public class Interface {
 				id = userentity.getID();
 		}
 		List<GameEntity> games = null;
-		if(RoomType.equals("normal")) {
-			games = EM.getEntityManager().createNamedQuery("GameEntity.findGameByUseridAndStatus", GameEntity.class)
-				.setParameter("USERID", id).setParameter("STATUS", 1).getResultList();
-		}
-		else if(RoomType.equals("guan")){
-			games = EM.getEntityManager().createNamedQuery("GameEntity.findGameByStatus", GameEntity.class)
-					.setParameter("STATUS", 0).getResultList();
-		}
-		else if(RoomType.equals("lu")) {
-			games = EM.getEntityManager().createNamedQuery("GameEntity.findGameByUseridAndStatus", GameEntity.class)
-					.setParameter("USERID", id).setParameter("STATUS", -1).getResultList();
-		}
+//		if(RoomType.equals("normal")) {
+//			games = EM.getEntityManager().createNamedQuery("GameEntity.findGameByUseridAndStatus", GameEntity.class)
+//				.setParameter("USERID", id).setParameter("STATUS", 1).getResultList();
+//		}
+//		else if(RoomType.equals("guan")){
+//			games = EM.getEntityManager().createNamedQuery("GameEntity.findGameByStatus", GameEntity.class)
+//					.setParameter("STATUS", 0).getResultList();
+//		}
+//		else if(RoomType.equals("lu")) {
+//			games = EM.getEntityManager().createNamedQuery("GameEntity.findGameByUseridAndStatus", GameEntity.class)
+//					.setParameter("USERID", id).setParameter("STATUS", -1).getResultList();
+//		}
+//		if (games.isEmpty())
+//			return tools.makeReturn();
+		games = EM.getEntityManager().createNamedQuery("GameEntity.findGameByUserid", GameEntity.class)
+				.setParameter("USERID", id).getResultList();
 		String json = tools.makeJSON(games);
 		System.out.println(tools.makeReturn(json));
 		return tools.makeReturn(json);

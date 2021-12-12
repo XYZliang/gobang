@@ -61,7 +61,6 @@ function makeChessboard(Black, user1, user2) {
                 newR.innerHTML += "<th class=\"chess\" onclick=\"makeQi(" + i + "," + ii + "," + Black + ")\"><img src=\"\"></th>"
         }
         ChessboardEnd.parentNode.insertBefore(newR, ChessboardEnd)
-
     }
     for (let i = 0; i <= 15; i++) {
         chessXY[i] = [];
@@ -84,7 +83,7 @@ function makeChessboard(Black, user1, user2) {
 }
 
 // makeChessboard(1)
-function makeQi(x, y, Black, Re) {
+function makeQi(x, y, Black, Re,goto) {
     let chess = document.getElementById("ChessboardTable")
     let hang = chess.getElementsByTagName("tr")
     for (let i = 0; i < 15; i++) {
@@ -136,6 +135,14 @@ function makeQi(x, y, Black, Re) {
                                     change(false)
                                 checkWin()
                                 return
+                            },function(res){
+                                if (res.status === 20005) {
+                                    showError("对方已离线，待上线后可继续游戏。")
+                                    exit()
+                                }
+                                else{
+                                    showError("请求失败：" + makeString(res.desc))
+                                }
                             })
                         } else {
                             if (Black === 1) {
@@ -147,11 +154,13 @@ function makeQi(x, y, Black, Re) {
                             }
                             img.style.display = "block"
                             img.parentNode.classList.add("chessNoHover")
-                            if (Black === 1)
-                                change(true)
-                            else
-                                change(false)
+                            if(!goto===true) {
+                                if (Black === 1)
+                                    change(true)
+                                else
+                                    change(false)
                             checkWin()
+                            }
                             return
                         }
                     }
@@ -418,24 +427,30 @@ function checkWin(no) {
                         'room': gamingId,
                         'Black': myChess,
                     }
-                    stop("all")
-                    showNo(true)
-                    document.getElementById("leftBar").style.transform = 'translate(0%, -50%)'
-                    let b = document.getElementById("chessBott")
-                    document.getElementById("chessBottt").display = "block"
-                    b.style.display = "none"
-                    b.style.opacity = "0";
-                    b.style.visibility = "hidden";
-                    setTimeout(function () {
-                        document.getElementById("chessBott").style.display = "none";
-                    }, 300)
+                    exit()
                     if (isChess(chessXY[i][j]) === 1) {
                         showError("玩家" + findUserById(getRoom(gamingId).userid).nickname + "获胜！", "ok")
-                        tools.ajaxGet("http://127.0.0.1:8080/gobang/api/talk", msg)
+                        tools.ajaxGet("http://127.0.0.1:8080/gobang/api/talk", msg,null,function(res){
+                            if (res.status === 20005) {
+                                showError("对方已离线，待上线后可继续游戏。")
+                                exit()
+                            }
+                            else{
+                                showError("请求失败：" + makeString(res.desc))
+                            }
+                        })
                     }
                     if (isChess(chessXY[i][j]) === 2) {
                         showError("玩家" + findUserById(getRoom(gamingId).user2ID).nickname + "获胜！", "ok")
-                        tools.ajaxGet("http://127.0.0.1:8080/gobang/api/talk", msg)
+                        tools.ajaxGet("http://127.0.0.1:8080/gobang/api/talk", msg,null,function(res){
+                            if (res.status === 20005) {
+                                showError("对方已离线，待上线后可继续游戏。")
+                                exit()
+                            }
+                            else{
+                                showError("请求失败：" + makeString(res.desc))
+                            }
+                        })
                     }
                 }
             }
@@ -458,29 +473,91 @@ function checkWin(no) {
                     showError("玩家" + findUserById(getRoom(gamingId).user2ID).nickname + "获胜！", "ok")
                 else
                     showError("玩家" + findUserById(getRoom(gamingId).userid).nickname + "获胜！", "ok")
-                document.getElementById("leftBar").style.transform = 'translate(0%, -50%)'
-                let b = document.getElementById("chessBott")
-                document.getElementById("chessBottt").display = "block"
-                b.style.display = "none"
-                b.style.opacity = "0";
-                b.style.visibility = "hidden";
-                setTimeout(function () {
-                    document.getElementById("chessBott").style.display = "none";
-                }, 300)
+                exit()
+            },function(res){
+                if (res.status === 20005) {
+                    showError("对方已离线，待上线后可继续游戏。")
+                    exit()
+                }
+                else{
+                    showError("请求失败：" + makeString(res.desc))
+                }
             })
         }
     }
 }
+function havaData(data){
+    if(data===null)
+        return false
+    if(data===undefined)
+        return false
+    if(data=="null")
+        return false
+    return true
+}
 
+function makeQis(data){
+    for(let i=0;i<data.length;i++){
+        if(data[i].type==="makeQ") {
+            makeQi(parseInt(data[i].x), parseInt(data[i].y), parseInt(data[i].Black), true, true)
+        }
+        if(data[i].type==="hui"){
+            removeQi(parseInt(data[i].x),parseInt(data[i].y))
+        }
+    }
+}
+function makeTime(data){
+    let leftT=-1
+    let rightT=-1
+    let last=-1
+    for(let i=data.length-1;i>0;i--){
+        if(parseInt(data[i].Black)===1&&leftT===-1)
+        {
+            leftT=parseInt(data[i].Rtime)
+            if(last===-1)
+                last=parseInt(data[i].Black)
+        }
+        if(parseInt(data[i].Black)===2&&rightT===-1)
+        {
+            rightT=parseInt(data[i].Rtime)
+            if(last===-1)
+                last=parseInt(data[i].Black)
+        }
+        if(leftT!==-1&&rightT!==-1)
+        {
+            break
+        }
+    }
+    if(leftT===-1)
+        leftT=totalTime
+    if(rightT===-1)
+        rightT=totalTime
+    //运行的模式 需要开始的秒数（默认10） 运行的计时器（默认第一个） 倍速（默认1） 总秒数（默认time）
+    leftDanTime("start", leftT, "1", null, totalTime)
+    leftDanTime("start", rightT, "3", null, totalTime)
+    stop("all")
+    return last
+}
 function startChess() {
+    let roomInfo=getRoom(gamingId)
+    totalTime=parseInt(roomInfo.totaltime)
+    danTime=parseInt(roomInfo.onetime)
+    let left
+    if (havaData(roomInfo.data)){
+        makeQis(roomInfo.data)
+        left = makeTime(roomInfo.data)
+    }
     let t = 5
     let a = setInterval(function () {
         if (a === null || a === undefined)
             return
         if (t < 0) {
             //运行的模式 需要开始的秒数（默认10） 运行的计时器（默认第一个） 倍速（默认1） 总秒数（默认time）
-            leftDanTime("start", danTime, "")
-            leftDanTime("start", totalTime, "1")
+
+            if(!havaData(roomInfo.data)){
+                leftDanTime("start", danTime, "")
+                leftDanTime("start", totalTime, "1")
+            }
             if (myChess === 1) {
                 showNo()
             }
@@ -493,8 +570,22 @@ function startChess() {
             b.style.opacity = "1";
             b.style.visibility = "unset";
             b.style.display = "block";
-
-            return;
+            window.onbeforeunload = function(event) {
+                event.returnValue = "对局还在进行中，真的要退出吗？重新上线后可继续游戏。";
+            };
+            if(left===1) {
+                if(u1.name === getUserName())
+                    change(false,undefined,false)
+                else
+                    change(false,undefined,true)
+            }
+            else if(left===2){
+                if(u2.name === getUserName())
+                    change(true,undefined,false)
+                else
+                    change(true,undefined,true)
+            }
+            return
         }
         document.getElementById("noCHess").innerHTML = t
         t--
@@ -523,8 +614,24 @@ function showNo(no) {
         }, 300)
     }
 }
+function showNo2(no) {
+    let a = document.getElementById("noCHess")
+    if (no === true) {
+        a.style.display = "block"
+            setTimeout(function () {
+                a.style.backgroundColor = "rgba(255,255,255,0.3)"
+                a.style.height = "610px";
+            }, 10)
 
-function change(ToR, OutTime) {
+    } else if(no===false){
+        a.style.backgroundColor = "rgba(255,255,255,0)"
+        setTimeout(function () {
+            a.style.display = "none"
+        }, 300)
+    }
+}
+
+function change(ToR, OutTime,open) {
     // if (no == "1" || no == "3") {
     //     let eleTimeSecEle1 = "timeSecond" + no
     //     let eleTimeSec1 = document.getElementById(eleTimeSecEle1)
@@ -541,7 +648,10 @@ function change(ToR, OutTime) {
         stop("1")
         leftDanTime("start", danTime, "2", null, null, false, false)
         leftDanTime("start", null, "3", null, null, false, true)
-        showNo()
+        if(open===undefined)
+            showNo()
+        else
+            showNo2(open)
     } else {
         if (OutTime) {
             let eleTimeSecEle1 = "timeSecond" + "3"
@@ -553,7 +663,10 @@ function change(ToR, OutTime) {
         stop("3")
         leftDanTime("start", danTime, "", null, null, false, false)
         leftDanTime("start", null, "1", null, null, false, true)
-        showNo()
+        if(open===undefined)
+            showNo()
+        else
+            showNo2(open)
     }
 }
 
@@ -579,6 +692,14 @@ function ping(arg) {
         }
         tools.ajaxGet("http://127.0.0.1:8080/gobang/api/talk", msg, function (res) {
             showError("发起平局中，等待对方应答", "ok")
+        },function(res){
+            if (res.status === 20005) {
+                showError("对方已离线，待上线后可继续游戏。")
+                exit()
+            }
+            else{
+                showError("请求失败：" + makeString(res.desc))
+            }
         })
     }
 }
@@ -586,17 +707,7 @@ function ping(arg) {
 function shu(arg) {
     if (arg === true) {
         showError("对方已认输，您已获胜", "ok")
-        stop("all")
-        showNo(true)
-        document.getElementById("leftBar").style.transform = 'translate(0%, -50%)'
-        let b = document.getElementById("chessBott")
-        document.getElementById("chessBottt").display = "block"
-        b.style.display = "none"
-        b.style.opacity = "0";
-        b.style.visibility = "hidden";
-        setTimeout(function () {
-            document.getElementById("chessBott").style.display = "none";
-        }, 300)
+        exit()
     } else {
         let eleTimeSecEle
         if (myChess === 1) {
@@ -613,17 +724,15 @@ function shu(arg) {
         }
         tools.ajaxGet("http://127.0.0.1:8080/gobang/api/talk", msg, function (res) {
             showError("您已认输，下次再接再厉！")
-            stop("all")
-            showNo(true)
-            document.getElementById("leftBar").style.transform = 'translate(0%, -50%)'
-            let b = document.getElementById("chessBott")
-            document.getElementById("chessBottt").display = "block"
-            b.style.display = "none"
-            b.style.opacity = "0";
-            b.style.visibility = "hidden";
-            setTimeout(function () {
-                document.getElementById("chessBott").style.display = "none";
-            }, 300)
+            exit()
+        },function(res){
+            if (res.status === 20005) {
+                showError("对方已离线，待上线后可继续游戏。")
+                exit()
+            }
+            else{
+                showError("请求失败：" + makeString(res.desc))
+            }
         })
     }
 }
@@ -653,7 +762,15 @@ function hui(arg) {
             'y': lasty,
             'Black': myChess,
         }
-        tools.ajaxGet("http://127.0.0.1:8080/gobang/api/talk", msg)
+        tools.ajaxGet("http://127.0.0.1:8080/gobang/api/talk", msg,null,function(res){
+            if (res.status === 20005) {
+                showError("对方已离线，待上线后可继续游戏。")
+                exit()
+            }
+            else{
+                showError("请求失败：" + makeString(res.desc))
+            }
+        })
     }
 }
 
@@ -724,22 +841,35 @@ function wantBo(ok) {
             removeQi(huix, huiy)
         else if (msg.type === "pingok") {
             showError("对方同意平局", "ok")
-            stop("all")
-            showNo(true)
-            document.getElementById("leftBar").style.transform = 'translate(0%, -50%)'
-            let b = document.getElementById("chessBott")
-            document.getElementById("chessBottt").display = "block"
-            b.style.display = "none"
-            b.style.opacity = "0";
-            b.style.visibility = "hidden";
-            setTimeout(function () {
-                document.getElementById("chessBott").style.display = "none";
-            }, 300)
+            exit()
         }
         document.getElementsByClassName("container")[11].style.top = "-50%"
+    },function(res){
+        if (res.status === 20005) {
+            showError("对方已离线，待上线后可继续游戏。")
+            exit()
+        }
+        else{
+            showError("请求失败：" + makeString(res.desc))
+        }
     })
 }
 
 function exitGaming(){
     document.getElementsByClassName("container")[10].style.top = "-50%"
+}
+
+function exit(){
+    stop("all")
+    showNo(true)
+    document.getElementById("leftBar").style.transform = 'translate(0%, -50%)'
+    let b = document.getElementById("chessBott")
+    document.getElementById("chessBottt").display = "block"
+    b.style.display = "none"
+    b.style.opacity = "0";
+    b.style.visibility = "hidden";
+    setTimeout(function () {
+        document.getElementById("chessBott").style.display = "none";
+    }, 300)
+    window.onbeforeunload=null
 }

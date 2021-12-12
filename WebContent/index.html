@@ -47,6 +47,7 @@
         }
 
         #leftBar {
+            z-index:999999999;
             text-align: center;
             display: block;
             height: 600px;
@@ -1127,13 +1128,13 @@
 </a> <a class="leftBot" onclick="showWin('denglu')">
     <div class="leftBotFir leftBotCom">登</div>
     <div class="leftBotTwo leftBotCom">录账号</div>
-</a> <a class="leftBot" onclick="openRoom('normal',true)">
+</a> <a class="leftBot" onclick="openRoom('normal','1')">
     <div class="leftBotFir leftBotCom">开</div>
     <div class="leftBotTwo leftBotCom">始游戏</div>
-</a> <a class="leftBot" onclick="openRoom('guan',true)">
+</a> <a class="leftBot" onclick="openRoom('guan','2')">
     <div class="leftBotFir leftBotCom">观</div>
     <div class="leftBotTwo leftBotCom">战游戏</div>
-</a> <a class="leftBot" onclick="openRoom('lu',true)">
+</a> <a class="leftBot" onclick="openRoom('lu','3')">
     <div class="leftBotFir leftBotCom">录</div>
     <div class="leftBotTwo leftBotCom">像查看</div>
 </a> <a class="leftBot" onclick="showInfo()">
@@ -1741,6 +1742,7 @@
                     let jsonObject = res.data
                     updateUserInfoFromJson(jsonObject)
                     initWebSocket()
+                    openRoom2(true)
                     console.log(jsonObject)
                 }, 500)
             }, function (res) {
