@@ -11,6 +11,11 @@ function openRoom(type,open) {
         RoomType=type
     else
         RoomType="normal"
+    if(RoomType==="normal"){
+        document.getElementById("newRoom").style.display="block"
+    }
+    else
+        document.getElementById("newRoom").style.display="none"
     if(RoomDiv===0){
         document.getElementsByClassName("container")[6].style.top = "50%"
         RoomDiv=open
@@ -68,17 +73,50 @@ function openRoom2(update) {
         }
         let data = res.data
         for (let i = 0; i < data.length; i++) {
-            if (data[i].user2ID === 0) {
-                addNewRoom(getUserName(), data[i].onetime, data[i].totaltime, data[i].id, false, true)
-            } else {
-                // addNewRoom(getUserName(), data[i].onetime, data[i].totaltime, data[i].id)
-                // newRoomAdd(data[i].user2ID, data[i].id)
-                if (data[i].userid === findUserByUsername(getUserName()).id)
-                    addNewRoom(findUserById(data[i].userid).name, data[i].onetime, data[i].totaltime, data[i].id, findUserById(data[i].user2ID).name, true)
-                else if (data[i].user2ID === findUserByUsername(getUserName()).id)
-                    addNewRoom(findUserById(data[i].userid).name, data[i].onetime, data[i].totaltime, data[i].id, findUserById(data[i].user2ID).name, false)
-                else
-                    addNewRoom(findUserById(data[i].userid).name, data[i].onetime, data[i].totaltime, data[i].id, findUserById(data[i].user2ID).name, "guankan")
+            let statusCode
+            if(RoomType==="normal")
+                statusCode = 1
+            else if(RoomType==="guan")
+                statusCode = 0
+            else if(RoomType==="lu")
+                statusCode = -1
+            let cont
+            function checkCode(data,statusCode){
+                if(parseInt(data.status) === statusCode)
+                    return true
+                else if(statusCode===1){
+                    if (parseInt(data.status) === 0) {
+                        if (findUserById(data.userid).name === getUserName()) {
+                            cont = true
+                            return true
+                        }
+                        if (findUserById(data.user2ID).name === getUserName()) {
+                            cont = false
+                            return true
+                        }
+                    }
+                    if (parseInt(data.status) === 1) {
+                        if (findUserById(data.userid).name === getUserName())
+                            return true
+                        if (findUserById(data.user2ID).name === getUserName())
+                            return true
+                    }
+                }
+                return false
+            }
+            if(checkCode(data[i],statusCode)) {
+                if (data[i].user2ID === 0) {
+                    addNewRoom(getUserName(), data[i].onetime, data[i].totaltime, data[i].id, false, true)
+                } else {
+                    // addNewRoom(getUserName(), data[i].onetime, data[i].totaltime, data[i].id)
+                    // newRoomAdd(data[i].user2ID, data[i].id)
+                    if (data[i].userid === findUserByUsername(getUserName()).id)
+                        addNewRoom(findUserById(data[i].userid).name, data[i].onetime, data[i].totaltime, data[i].id, findUserById(data[i].user2ID).name, true,cont)
+                    else if (data[i].user2ID === findUserByUsername(getUserName()).id)
+                        addNewRoom(findUserById(data[i].userid).name, data[i].onetime, data[i].totaltime, data[i].id, findUserById(data[i].user2ID).name, false)
+                    else
+                        addNewRoom(findUserById(data[i].userid).name, data[i].onetime, data[i].totaltime, data[i].id, findUserById(data[i].user2ID).name, "guankan")
+                }
             }
         }
     }, function (res) {
@@ -111,7 +149,7 @@ function findUserById(id) {
     let UsersJsonString = localStorage.getItem(utf8_to_b64("所有用户"));
     let users = JSON.parse(b64_to_utf8(UsersJsonString));
     for (let i = 0; i < users.length; i++) {
-        if (id === users[i].id) {
+        if (id == users[i].id) {
             let user = {
                 "id": users[i].id,
                 "admin": users[i].isadmin,
@@ -128,7 +166,7 @@ function findUserById(id) {
     return null
 }
 
-function addNewRoom(userName1, dan, total, id, userName2, fangzhu) {
+function addNewRoom(userName1, dan, total, id, userName2, fangzhu,cont) {
     if (userName1 === null) {
         userName1 = getUserName()
     }
@@ -185,11 +223,7 @@ function addNewRoom(userName1, dan, total, id, userName2, fangzhu) {
         "                    <p class=\"gameNickname\" title=\"昵称\"></p>\n" +
         "                </div>\n" +
         "            </div>"
-    if(RoomType==="normal"){
-        document.getElementById("newRoom").style.display="none"
-    }
-    else
-        document.getElementById("newRoom").style.display="block"
+
     let roomDivNum = newRoomDiv.parentElement.children.length
     newRoomDiv.parentNode.insertBefore(newRoom, newRoomDiv)
     let nowRoomDiv = newRoomDiv.parentElement.children[roomDivNum - 1]
@@ -213,7 +247,7 @@ function addNewRoom(userName1, dan, total, id, userName2, fangzhu) {
     //     })
     // }
     if (user2 !== undefined && user2 !== null) {
-        newRoomAdd(user2.id, id, null, fangzhu)
+        newRoomAdd(user2.id, id, null, fangzhu,cont)
     }
 }
 
@@ -236,7 +270,7 @@ function makeNewRoom() {
     })
 }
 
-function newRoomAdd(userId, roomId, Be, fangzhu) {
+function newRoomAdd(userId, roomId, Be, fangzhu,cont) {
     let newUser = findUserById(userId)
     let room = document.getElementsByClassName("roomDiv")
     let roomNum = room.length
@@ -279,11 +313,28 @@ function newRoomAdd(userId, roomId, Be, fangzhu) {
     if(RoomType==="guan" || RoomType==="lu"){
         let gameButton1 = roomDiv.getElementsByClassName("gameButton1")[0]
         gameButton1.style.display = "block"
+        gameButton1.style.margin = "0 10px"
         if(RoomType==="guan")
             gameButton1.innerHTML = "观"
         else
             gameButton1.innerHTML = "看"
         return
+    }
+    if(cont===true)
+    {
+        let gameButton2 = roomDiv.getElementsByClassName("gameButton2")[0]
+        gameButton2.style.display = "block"
+        gameButton2.innerHTML = "继"
+        gameButton2.style.margin = "0 10px"
+    }
+    else if(cont===false)
+    {
+        let gameButton2 = roomDiv.getElementsByClassName("gameButton1")[0]
+        gameButton2.style.opacity = "0"
+        gameButton2.style.visibility = "hidden"
+        gameButton2.style.width = "0px"
+        gameButton2.style.margin = "0"
+        fangzhu = false
     }
     if (fangzhu === null || fangzhu === undefined) {
         if (newUser.name === getUserName())
@@ -293,11 +344,13 @@ function newRoomAdd(userId, roomId, Be, fangzhu) {
         gameButton2.style.opacity = "unset"
         gameButton2.style.visibility = "unset"
         gameButton2.style.width = "40px"
+        gameButton2.style.margin = "0 10px"
     }
     if (fangzhu === "guankan") {
         gameButton2.style.opacity = "unset"
         gameButton2.style.visibility = "unset"
         gameButton2.style.width = "40px"
+        gameButton2.style.margin = "0 10px"
         gameButton2.innerHTML = "观"
     }
     let gameButton1 = roomDiv.getElementsByClassName("gameButton1")[0]
@@ -305,12 +358,47 @@ function newRoomAdd(userId, roomId, Be, fangzhu) {
     let roomOwnerId = roomOwner.userid
 
     if (findUserById(roomOwnerId).name === getUserName() || Be === false) {
+        gameButton1.style.opacity = "1"
+        gameButton1.style.visibility = "unset"
+        gameButton1.style.width = "40px"
+        gameButton1.style.margin = "0 10px"
         gameButton1.innerHTML = "踢"
-        // gameButton1.style.opacity = "0"
-        // gameButton1.style.visibility = "hidden"
-        // gameButton1.style.width = "0px"
     } else {
+        gameButton1.style.opacity = "1"
+        gameButton1.style.visibility = "unset"
+        gameButton1.style.width = "40px"
+        gameButton1.style.margin = "0 10px"
         gameButton1.innerHTML = "退"
+    }
+    if(cont===true){
+        gameButton1.style.opacity = "0"
+        gameButton1.style.visibility = "hidden"
+        gameButton1.style.width = "0px"
+        gameButton1.style.margin = "0"
+    }
+    if(gameButton1.style.opacity === "0"){
+        gameButton1.style.opacity = "0"
+        gameButton1.style.visibility = "hidden"
+        gameButton1.style.width = "0px"
+        gameButton1.style.margin = "0"
+    }
+    else{
+        gameButton1.style.opacity = "1"
+        gameButton1.style.visibility = "unset"
+        gameButton1.style.width = "40px"
+        gameButton1.style.margin = "0 10px"
+    }
+    if(gameButton2.style.opacity === "0"){
+        gameButton2.style.opacity = "0"
+        gameButton2.style.visibility = "hidden"
+        gameButton2.style.width = "0px"
+        gameButton2.style.margin = "0"
+    }
+    else{
+        gameButton2.style.opacity = "1"
+        gameButton2.style.visibility = "unset"
+        gameButton2.style.width = "40px"
+        gameButton2.style.margin = "0 10px"
     }
 }
 
