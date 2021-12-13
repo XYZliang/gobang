@@ -1,5 +1,7 @@
 package restful.websocket;
 
+import java.util.Date;
+
 import javax.servlet.http.HttpSession;
 import javax.websocket.CloseReason;
 import javax.websocket.Endpoint;
@@ -15,6 +17,7 @@ import restful.bean.Result.ResultCode;
 import restful.utils.ChatTools;
 import restful.utils.InterfaceTools;
 import restful.utils.Logging;
+import restful.utils.Watcher;
 
 @ServerEndpoint(value = "/ws/action", configurator = GetHttpSessionConfigurator.class)
 public class WebSocketProcess extends Endpoint {
@@ -110,5 +113,51 @@ public class WebSocketProcess extends Endpoint {
 
 	private static void sendMessage(Session session, String message) {
 		session.getAsyncRemote().sendText(message);
+	}
+
+	public static void newWatcher(String name, String room) {
+		String watcherList = Watcher.getClients().get(room);
+		if (watcherList == null) {
+			watcherList = name;
+		} else if (watcherList.equals("")) {
+			watcherList = name;
+		} else {
+			watcherList = watcherList + ";" + name;
+			String[] watcherLists = watcherList.split(";");
+			watcherLists = tools.StringArrayQuChong(watcherLists);
+			watcherList = "";
+			if (watcherLists.length == 0)
+				return;
+			else if (watcherLists.length == 1) {
+				System.out.println(new Date()+"用户"+watcherList+"正在观战房间"+room);
+				Watcher.getClients().put(room, watcherLists[0]);
+				return;
+			} else {
+				for (int i = 0; i < watcherLists.length; i++) {
+					if (i == 0)
+						watcherList = watcherLists[i];
+					else
+						watcherList = watcherList + ";" + watcherLists[i];
+				}
+			}
+		}
+		System.out.println(new Date()+"用户"+watcherList+"正在观战房间"+room);
+		Watcher.getClients().put(room, watcherList);
+	}
+
+	public static void toWatcher(String room, String msg) {
+		String watcherList = Watcher.getClients().get(room);
+		if(watcherList == null)
+			return;
+		String[] users = watcherList.split(";");
+		for (int i = 0; i < users.length; i++) {
+			sendMessageToUser("观战系统", users[i], msg);
+		}
+		return;
+	}
+
+	public static void noWatcher(String room) {
+		Watcher.getClients().remove(room);
+		return;
 	}
 }

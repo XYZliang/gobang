@@ -53,7 +53,7 @@ function onMessage(evt) {
     else if (json.type === "exit")
         newRoomT(json.room, null, true)
     else if (json.type === "openG")
-        runGame(json.room,0)
+        runGame(json.room, 0)
     else if (json.type === "makeQ")
         makeQi(parseInt(json.x), parseInt(json.y), parseInt(json.Black), true)
     else if (json.type === "ping" || json.type === "hui" || json.type === "shu")
@@ -66,6 +66,10 @@ function onMessage(evt) {
         hui(true)
     else if (json.type === "huidis")
         hui(false)
+    else if (json.type === "watch")
+        watchG(false, json)
+    else if (json.type === "rewatch")
+        watchG(true, json)
 }
 
 function onError(evt) {

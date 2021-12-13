@@ -1,6 +1,9 @@
 package restful.utils;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -97,7 +100,7 @@ public class InterfaceTools {
 		}
 		return jsonArray.toString();
 	}
-	
+
 	public void addRe(HttpServletResponse response) {
 		response.setCharacterEncoding("utf-8");
 		response.setHeader("Access-Control-Allow-Origin", "allowDomain");
@@ -105,5 +108,12 @@ public class InterfaceTools {
 		String headers = "Origin, Accept-Language, Accept-Encoding,X-Forwarded-For, Connection, Accept, User-Agent, Host, Referer,Cookie, Content-Type, Cache-Control";
 		response.setHeader("Access-Control-Allow-Headers", headers);
 		response.setHeader("Access-Control-Request-Method", "GET,POST");
+	}
+
+	public String[] StringArrayQuChong(String[] s) {
+		List<String> list = Arrays.asList(s);
+		Set<String> set = new HashSet<String>(list);
+		String[] rid = (String[]) set.toArray(new String[0]);
+		return rid;
 	}
 }

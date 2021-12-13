@@ -15,7 +15,7 @@ public class ChatTools {
 	@Resource
 	private final static InterfaceTools tools = new InterfaceTools();
 
-	public static String setCurUser(HttpSession session, String chatUser) { // 一个参数居然为session
+	public static String setCurUser(HttpSession session, String chatUser) {
 		session.setAttribute("chatUser", chatUser);
 		return tools.makeReturn();
 	}

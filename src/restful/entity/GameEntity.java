@@ -13,9 +13,8 @@ import javax.persistence.Table;
 @NamedQueries({ @NamedQuery(name = "GameEntity.findGameAll", query = "SELECT u FROM GameEntity u"),
 		@NamedQuery(name = "GameEntity.findGameByUseridAndStatus", query = "SELECT u FROM GameEntity u where (u.USERID like :USERID AND u.STATUS like :STATUS) or (u.USER2ID like :USERID AND u.STATUS like :STATUS)"),
 		@NamedQuery(name = "GameEntity.findGameById", query = "SELECT u FROM GameEntity u where u.ID like :ID"),
-@NamedQuery(name = "GameEntity.findGameByStatus", query = "SELECT u FROM GameEntity u where u.STATUS like :STATUS"),
-@NamedQuery(name = "GameEntity.findGameByUserid", query = "SELECT u FROM GameEntity u where u.USERID like :USERID or u.USER2ID like :USERID"),
-})
+		@NamedQuery(name = "GameEntity.findGameByStatus", query = "SELECT u FROM GameEntity u where u.STATUS like :STATUS"),
+		@NamedQuery(name = "GameEntity.findGameByUserid", query = "SELECT u FROM GameEntity u where u.USERID like :USERID or u.USER2ID like :USERID"), })
 public class GameEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -138,12 +137,12 @@ public class GameEntity {
 	}
 
 	public void addDATA(String dATA) {
-		if(DATA==null)
-			DATA = "["+dATA;
-		else if (DATA.length()==0)
-			DATA = "["+dATA;
+		if (DATA == null)
+			DATA = "[" + dATA;
+		else if (DATA.length() == 0)
+			DATA = "[" + dATA;
 		else
-			DATA = DATA.substring(0, DATA.length()-1) + "," + dATA;
+			DATA = DATA.substring(0, DATA.length() - 1) + "," + dATA;
 		DATA = DATA + "]";
 	}
 }

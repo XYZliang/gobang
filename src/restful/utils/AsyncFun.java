@@ -6,12 +6,13 @@ import java.util.concurrent.Executors;
 
 import restful.database.EM;
 import restful.entity.GameEntity;
+import restful.websocket.WebSocketProcess;
 
 public class AsyncFun {
 	private final static InterfaceTools tools = new InterfaceTools();
 
-	public static void saveGongBangData(String json, String Roomid,int s) {
-		ExecutorService fixedThreadPool = Executors.newFixedThreadPool(3);
+	public static void saveGongBangData(String json, String Roomid, int s) {
+		ExecutorService fixedThreadPool = Executors.newFixedThreadPool(1);
 		fixedThreadPool.execute(new Runnable() {
 			@Override
 			public void run() {
@@ -21,7 +22,7 @@ public class AsyncFun {
 						.getResultList();
 				GameEntity game = games.get(0);
 				game.addDATA(json);
-				if(s != -2) {
+				if (s != -2) {
 					game.setSTATUS(s);
 				}
 				tools.commitDB(game);
@@ -31,12 +32,13 @@ public class AsyncFun {
 	}
 
 	public synchronized static void AsyncSaveGongBangData(String json, String Roomid) {
-		saveGongBangData(json, Roomid ,-2);
+		saveGongBangData(json, Roomid, -2);
 	}
-	public synchronized static void AsyncSaveGongBangData(String json, String Roomid,int finish) {
-		saveGongBangData(json, Roomid ,finish);
+
+	public synchronized static void AsyncSaveGongBangData(String json, String Roomid, int finish) {
+		saveGongBangData(json, Roomid, finish);
 	}
-	
+
 	public static void openGame(String Roomid) {
 		ExecutorService fixedThreadPool = Executors.newFixedThreadPool(3);
 		fixedThreadPool.execute(new Runnable() {
@@ -53,7 +55,23 @@ public class AsyncFun {
 			}
 		});
 	}
+
 	public synchronized static void AsyncOpenGame(String Roomid) {
 		openGame(Roomid);
+	}
+
+	public static void ToWatchers(String Roomid, String msg) {
+		ExecutorService fixedThreadPool = Executors.newFixedThreadPool(3);
+		fixedThreadPool.execute(new Runnable() {
+			@Override
+			public void run() {
+				WebSocketProcess.toWatcher(Roomid, msg);
+				fixedThreadPool.shutdown();
+			}
+		});
+	}
+
+	public synchronized static void AsyncToWatcher(String Roomid, String msg) {
+		ToWatchers(Roomid, msg);
 	}
 }

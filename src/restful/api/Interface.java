@@ -89,12 +89,12 @@ public class Interface {
 	@Produces("application/json;charset=UTF-8")
 	public String add(@QueryParam("Name") String NAME, @QueryParam("PASSWORD") String PASSWORD,
 			@QueryParam("NICKNAME") String NICKNAME, @QueryParam("SEX") String SEX) {
-		
+
 		tools.addRe(response);
 		List<UserEntity> result = EM.getEntityManager().createNamedQuery("UserEntity.findUserByName", UserEntity.class)
 				.setParameter("NAME", NAME).getResultList();
 		if (result.isEmpty()) {
-			UserEntity userentity = new UserEntity(NAME, PASSWORD, NICKNAME, SEX);
+			UserEntity userentity = new UserEntity(NAME, NICKNAME,PASSWORD, SEX);
 			// System.out.println(userentity.show());
 			tools.commitDB(userentity);
 			String json = tools.makeJSON(userentity);
@@ -405,7 +405,7 @@ public class Interface {
 	@Path("/getMyGame")
 	@Consumes("application/json;charset=UTF-8")
 	@Produces("application/json;charset=UTF-8")
-	public String getMyGame(@QueryParam("id") int id,@QueryParam("type") String RoomType) {
+	public String getMyGame(@QueryParam("id") int id, @QueryParam("type") String RoomType) {
 		tools.addRe(response);
 		String username = getUsernameFromCookie(request);
 		if (username == null)
@@ -414,18 +414,18 @@ public class Interface {
 		if (!check.equals("ok")) {
 			return check;
 		}
-		if ((id + "").equals("")) {
-			List<UserEntity> result ;
-			result= EM.getEntityManager()
-					.createNamedQuery("UserEntity.findUserByName", UserEntity.class).setParameter("NAME", username)
-					.getResultList();
-			UserEntity userentity = result.get(0);
-			if (result.isEmpty())
-				return tools.makeErReturn(ResultCode.USER_NOT_EXISTED);
-			else
-				id = userentity.getID();
-		}
-		List<GameEntity> games = null;
+//		if ((id + "").equals("")) {
+//			List<UserEntity> result;
+//			result = EM.getEntityManager().createNamedQuery("UserEntity.findUserByName", UserEntity.class)
+//					.setParameter("NAME", username).getResultList();
+//			UserEntity userentity = result.get(0);
+//			if (result.isEmpty())
+//				return tools.makeErReturn(ResultCode.USER_NOT_EXISTED);
+//			else
+//				id = userentity.getID();
+//		}
+		
+		
 //		if(RoomType.equals("normal")) {
 //			games = EM.getEntityManager().createNamedQuery("GameEntity.findGameByUseridAndStatus", GameEntity.class)
 //				.setParameter("USERID", id).setParameter("STATUS", 1).getResultList();
@@ -438,10 +438,13 @@ public class Interface {
 //			games = EM.getEntityManager().createNamedQuery("GameEntity.findGameByUseridAndStatus", GameEntity.class)
 //					.setParameter("USERID", id).setParameter("STATUS", -1).getResultList();
 //		}
-//		if (games.isEmpty())
-//			return tools.makeReturn();
-		games = EM.getEntityManager().createNamedQuery("GameEntity.findGameByUserid", GameEntity.class)
-				.setParameter("USERID", id).getResultList();
+		
+		List<GameEntity> games = null;
+//		games = EM.getEntityManager().createNamedQuery("GameEntity.findGameByUserid", GameEntity.class)
+//				.setParameter("USERID", id).getResultList();
+		games = EM.getEntityManager().createNamedQuery("GameEntity.findGameAll", GameEntity.class).getResultList();
+		if (games.isEmpty())
+			return tools.makeReturn();
 		String json = tools.makeJSON(games);
 		System.out.println(tools.makeReturn(json));
 		return tools.makeReturn(json);
@@ -561,28 +564,30 @@ public class Interface {
 			msg.put("Black", Black);
 			msg.put("Rtime", Rtime);
 			AsyncFun.AsyncSaveGongBangData(new JSONObject(msg).toString(), room);
-		}else if (type.equals("outT")) {
+			AsyncFun.AsyncToWatcher(room, new JSONObject(msg).toString());
+		} else if (type.equals("outT")) {
 			msg.put("type", type);
 			msg.put("from", username);
 			msg.put("room", room);
 			msg.put("Black", Black);
 			msg.put("Rtime", Rtime);
-			AsyncFun.AsyncSaveGongBangData(new JSONObject(msg).toString(), room,-1);
+			AsyncFun.AsyncSaveGongBangData(new JSONObject(msg).toString(), room, -1);
 			return tools.makeReturn(new JSONObject(msg).toString());
-		}else if (type.equals("Win")) {
+		} else if (type.equals("Win")) {
 			msg.put("type", type);
 			msg.put("from", username);
 			msg.put("room", room);
 			msg.put("Black", Black);
-			AsyncFun.AsyncSaveGongBangData(new JSONObject(msg).toString(), room,-1);
-		}else if (type.equals("pingok")) {
+			AsyncFun.AsyncSaveGongBangData(new JSONObject(msg).toString(), room, -1);
+		} else if (type.equals("pingok")) {
 			msg.put("type", type);
 			msg.put("from", username);
 			msg.put("room", room);
 			msg.put("Black", Black);
 			msg.put("Rtime", Rtime);
-			AsyncFun.AsyncSaveGongBangData(new JSONObject(msg).toString(), room,-1);
-		}else if (type.equals("huiok")) {
+			AsyncFun.AsyncToWatcher(room, new JSONObject(msg).toString());
+			AsyncFun.AsyncSaveGongBangData(new JSONObject(msg).toString(), room, -1);
+		} else if (type.equals("huiok")) {
 			msg.put("type", type);
 			msg.put("from", username);
 			msg.put("room", room);
@@ -590,13 +595,15 @@ public class Interface {
 			msg.put("y", y);
 			msg.put("Black", Black);
 			msg.put("Rtime", Rtime);
-			AsyncFun.AsyncSaveGongBangData(new JSONObject(msg).toString(), room,-1);
-		}else if (type.equals("shu")) {
+			AsyncFun.AsyncToWatcher(room, new JSONObject(msg).toString());
+			AsyncFun.AsyncSaveGongBangData(new JSONObject(msg).toString(), room, -1);
+		} else if (type.equals("shu")) {
 			msg.put("type", type);
 			msg.put("from", username);
 			msg.put("room", room);
 			msg.put("Rtime", Rtime);
-			AsyncFun.AsyncSaveGongBangData(new JSONObject(msg).toString(), room,-1);
+			AsyncFun.AsyncToWatcher(room, new JSONObject(msg).toString());
+			AsyncFun.AsyncSaveGongBangData(new JSONObject(msg).toString(), room, -1);
 		} else {
 			msg.put("type", type);
 			msg.put("from", username);
@@ -605,7 +612,65 @@ public class Interface {
 			msg.put("y", y);
 			msg.put("Black", Black);
 			msg.put("Rtime", Rtime);
+
 		}
 		return WebSocketProcess.sendMessageToUser(username, to, new JSONObject(msg).toString());
+	}
+
+	@GET
+	@Path("/watch")
+	@Consumes("application/json;charset=UTF-8")
+	@Produces("application/json;charset=UTF-8")
+	public String watch(@QueryParam("type") String type, @QueryParam("TO") String to,
+			@QueryParam("room") String room, @QueryParam("username") String username,
+			@QueryParam("t1") String t1, @QueryParam("t2") String t2,
+			@QueryParam("t3") String t3, @QueryParam("t4") String t4,
+			@QueryParam("chess") String chess) {
+		if (username == null)
+			username = getUsernameFromCookie(request);
+		if (username == null)
+			return tools.makeErReturn(ResultCode.NEED_LOGIN);
+		String check = Check(username, request);
+		if (!check.equals("ok")) {
+			return check;
+		}
+		WebSocketProcess.newWatcher(username, room);
+		HashMap<String, Object> msg = new HashMap<>();
+		if(type.equals("watch"))
+		{
+			msg.put("type", type);
+			msg.put("from", username);
+			msg.put("room", room);
+		}
+		else if(type.equals("rewatch")){
+			msg.put("type", type);
+			msg.put("from", username);
+			msg.put("room", room);
+			msg.put("t1", t1);
+			msg.put("t2", t2);
+			msg.put("t3", t3);
+			msg.put("t4", t4);
+			msg.put("t4", t4);
+			msg.put("chess", chess);
+		}
+		return WebSocketProcess.sendMessageToUser(username, to, new JSONObject(msg).toString());
+	}
+	
+	@GET
+	@Path("/watchTest")
+	@Consumes("application/json;charset=UTF-8")
+	@Produces("application/json;charset=UTF-8")
+	public String watchTest(@QueryParam("type") String type, @QueryParam("TO") String to,
+			@QueryParam("room") String room, @QueryParam("username") String username,@QueryParam("msg") String msg) {
+		if (username == null)
+			username = getUsernameFromCookie(request);
+		if (username == null)
+			return tools.makeErReturn(ResultCode.NEED_LOGIN);
+		String check = Check(username, request);
+		if (!check.equals("ok")) {
+			return check;
+		}
+		AsyncFun.AsyncToWatcher(room, msg);
+		return tools.makeReturn();
 	}
 }

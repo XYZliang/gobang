@@ -92,6 +92,7 @@ public class MD5Encryption {
 	 * <p>
 	 */
 	public static String getSaltMD5(String password, String salt) {
+		System.out.println(password);
 		String Salt = salt;
 		password = md5Hex(password + Salt);
 		char[] cs = new char[48];
@@ -101,6 +102,8 @@ public class MD5Encryption {
 			cs[i + 1] = c;
 			cs[i + 2] = password.charAt(i / 3 * 2 + 1);
 		}
+		System.out.println(salt);
+		System.out.println(String.valueOf(cs));
 		return String.valueOf(cs);
 	}
 

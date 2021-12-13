@@ -12,12 +12,23 @@ let lasty = -1
 let huix = -1
 let huiy = -1
 let duiUsername = ""
+let video = false
+let beix=undefined
 
 function showChessboard() {
     if (document.getElementsByClassName("container")[10].style.top !== "50%") {
         document.getElementsByClassName("container")[10].style.top = "50%"
         document.getElementById("leftBar").style.transform = "translate(-100%,-50%)"
         document.getElementsByClassName("container")[6].style.top = "150%"
+        let b = document.getElementById("chessBott")
+        let c = document.getElementById("chessBott2")
+        document.getElementById("chessBottt").style.display = "none"
+        b.style.display = "block"
+        b.style.opacity = "1";
+        b.style.visibility = "unset";
+        c.style.display = "block"
+        c.style.opacity = "1";
+        c.style.visibility = "unset";
     } else {
         document.getElementsByClassName("container")[10].style.top = "-50%"
         document.getElementById("leftBar").style.transform = "translate(0%,-50%)"
@@ -68,22 +79,25 @@ function makeChessboard(Black, user1, user2) {
             chessXY[i][j] = 0;
         }
     }
-    if (Black === 1) {
-        duiUsername = u2.name
-    } else {
-        duiUsername = u1.name
-    }
+    if (watch !== 1) {
+        if (Black === 1) {
+            duiUsername = u2.name
+        } else {
+            duiUsername = u1.name
+        }
 //运行的模式 需要开始的秒数（默认10） 运行的计时器（默认第一个） 倍速（默认1） 总秒数（默认time）
-    leftDanTime("start", danTime, "", null, null, true)
-    leftDanTime("start", totalTime, "1", null, null, true)
-    leftDanTime("start", danTime, "2", null, null, true)
-    leftDanTime("start", totalTime, "3", null, null, true)
-    stop("all")
-    startChess()
+        leftDanTime("start", danTime, "", null, null, true)
+        leftDanTime("start", totalTime, "1", null, null, true)
+        leftDanTime("start", danTime, "2", null, null, true)
+        leftDanTime("start", totalTime, "3", null, null, true)
+        stop("all")
+        startChess()
+    } else
+        startChess()
 }
 
 // makeChessboard(1)
-function makeQi(x, y, Black, Re,goto) {
+function makeQi(x, y, Black, Re, goto) {
     let chess = document.getElementById("ChessboardTable")
     let hang = chess.getElementsByTagName("tr")
     for (let i = 0; i < 15; i++) {
@@ -135,12 +149,11 @@ function makeQi(x, y, Black, Re,goto) {
                                     change(false)
                                 checkWin()
                                 return
-                            },function(res){
+                            }, function (res) {
                                 if (res.status === 20005) {
                                     showError("对方已离线，待上线后可继续游戏。")
                                     exit()
-                                }
-                                else{
+                                } else {
                                     showError("请求失败：" + makeString(res.desc))
                                 }
                             })
@@ -154,12 +167,12 @@ function makeQi(x, y, Black, Re,goto) {
                             }
                             img.style.display = "block"
                             img.parentNode.classList.add("chessNoHover")
-                            if(!goto===true) {
+                            if (!goto === true) {
                                 if (Black === 1)
                                     change(true)
                                 else
                                     change(false)
-                            checkWin()
+                                checkWin()
                             }
                             return
                         }
@@ -180,7 +193,7 @@ let timeT2 = []
 let timeT3 = []
 
 //运行的模式 需要开始的秒数（默认10） 运行的计时器（默认第一个） 倍速（默认1） 总秒数（默认time）
-function leftDanTime(fun, time, no, bei, total, ready, cont) {
+function leftDanTime(fun, time, no, bei, total, ready, cont, watch) {
     if (no === null || no === undefined)
         no = ""
     let eleCirclesEle = "#timeCountX" + no + " circle"
@@ -239,6 +252,12 @@ function leftDanTime(fun, time, no, bei, total, ready, cont) {
                 return
             b--;
             if (b < 0) {
+                if (time == 0) {
+                    clearInterval(timerTimeCount);
+                    timerTimeCount = null;
+                    return;
+                }
+                // if(watch!==true) {
                 if (no == "2")
                     change(false, true)
                 else if (no == "1" || no == "3") {
@@ -246,13 +265,17 @@ function leftDanTime(fun, time, no, bei, total, ready, cont) {
                     checkWin(no)
                 } else
                     change(true, true)
+                // }
                 clearInterval(timerTimeCount);
                 timerTimeCount = null;
             }
         };
         a();
         stop(no)
-        bei = bei || 1
+        if(beix===undefined)
+            bei=1
+        else
+            bei=beix
         timerTimeCount = setInterval(a, 1000 / bei)
         if (no === "") {
             timeT.push(timerTimeCount)
@@ -422,36 +445,28 @@ function checkWin(no) {
         for (let i = 0; i <= 15; i++) {
             for (let j = 0; j <= 15; j++) {
                 if (check(i, j)) {
-                    let msg = {
-                        'type': 'Win',
-                        'room': gamingId,
-                        'Black': myChess,
-                    }
-                    exit()
                     if (isChess(chessXY[i][j]) === 1) {
                         showError("玩家" + findUserById(getRoom(gamingId).userid).nickname + "获胜！", "ok")
-                        tools.ajaxGet("http://127.0.0.1:8080/gobang/api/talk", msg,null,function(res){
-                            if (res.status === 20005) {
-                                showError("对方已离线，待上线后可继续游戏。")
-                                exit()
-                            }
-                            else{
-                                showError("请求失败：" + makeString(res.desc))
-                            }
-                        })
                     }
                     if (isChess(chessXY[i][j]) === 2) {
                         showError("玩家" + findUserById(getRoom(gamingId).user2ID).nickname + "获胜！", "ok")
-                        tools.ajaxGet("http://127.0.0.1:8080/gobang/api/talk", msg,null,function(res){
+                    }
+                    if (myChess == chessXY[i][j] && isWin === 0) {
+                        let msg = {
+                            'type': 'Win',
+                            'room': gamingId,
+                            'Black': myChess,
+                        }
+                        tools.ajaxGet("http://127.0.0.1:8080/gobang/api/talk", msg, null, function (res) {
                             if (res.status === 20005) {
                                 showError("对方已离线，待上线后可继续游戏。")
                                 exit()
-                            }
-                            else{
+                            } else {
                                 showError("请求失败：" + makeString(res.desc))
                             }
                         })
                     }
+                    exit()
                 }
             }
         }
@@ -463,90 +478,96 @@ function checkWin(no) {
             'room': gamingId,
             'Rtime': 0,
         }
+        if (no == "1")
+            showError("玩家" + findUserById(getRoom(gamingId).user2ID).nickname + "获胜！", "ok")
+        else
+            showError("玩家" + findUserById(getRoom(gamingId).userid).nickname + "获胜！", "ok")
+
         if (no == "1" && myChess === 1 || no == "3" && myChess === 2) {
             tools.ajaxGet("http://127.0.0.1:8080/gobang/api/talk", msg, function (res) {
                 if (res.status !== 0) {
                     showError("服务器失败：" + makeString(res.desc))
                     return
                 }
-                if (no == "1")
-                    showError("玩家" + findUserById(getRoom(gamingId).user2ID).nickname + "获胜！", "ok")
-                else
-                    showError("玩家" + findUserById(getRoom(gamingId).userid).nickname + "获胜！", "ok")
                 exit()
-            },function(res){
+            }, function (res) {
                 if (res.status === 20005) {
                     showError("对方已离线，待上线后可继续游戏。")
                     exit()
-                }
-                else{
+                } else {
                     showError("请求失败：" + makeString(res.desc))
                 }
             })
         }
     }
 }
-function havaData(data){
-    if(data===null)
+
+function havaData(data) {
+    if (data === null)
         return false
-    if(data===undefined)
+    if (data === undefined)
         return false
-    if(data=="null")
+    if (data == "null")
         return false
     return true
 }
 
-function makeQis(data){
-    for(let i=0;i<data.length;i++){
-        if(data[i].type==="makeQ") {
+function makeQis(data) {
+    for (let i = 0; i < data.length; i++) {
+        if (data[i].type === "makeQ") {
             makeQi(parseInt(data[i].x), parseInt(data[i].y), parseInt(data[i].Black), true, true)
         }
-        if(data[i].type==="hui"){
-            removeQi(parseInt(data[i].x),parseInt(data[i].y))
+        if (data[i].type === "hui") {
+            removeQi(parseInt(data[i].x), parseInt(data[i].y))
         }
     }
 }
-function makeTime(data){
-    let leftT=-1
-    let rightT=-1
-    let last=-1
-    for(let i=data.length-1;i>0;i--){
-        if(parseInt(data[i].Black)===1&&leftT===-1)
-        {
-            leftT=parseInt(data[i].Rtime)
-            if(last===-1)
-                last=parseInt(data[i].Black)
+
+function makeTime(data) {
+    let leftT = -1
+    let rightT = -1
+    let last = -1
+    for (let i = data.length - 1; i >= 0; i--) {
+        if (parseInt(data[i].Black) === 1 && leftT === -1) {
+            leftT = parseInt(data[i].Rtime)
+            if (last === -1)
+                last = parseInt(data[i].Black)
         }
-        if(parseInt(data[i].Black)===2&&rightT===-1)
-        {
-            rightT=parseInt(data[i].Rtime)
-            if(last===-1)
-                last=parseInt(data[i].Black)
+        if (parseInt(data[i].Black) === 2 && rightT === -1) {
+            rightT = parseInt(data[i].Rtime)
+            if (last === -1)
+                last = parseInt(data[i].Black)
         }
-        if(leftT!==-1&&rightT!==-1)
-        {
+        if (leftT !== -1 && rightT !== -1) {
             break
         }
     }
-    if(leftT===-1)
-        leftT=totalTime
-    if(rightT===-1)
-        rightT=totalTime
+    if (leftT === -1)
+        leftT = totalTime
+    if (rightT === -1)
+        rightT = totalTime
     //运行的模式 需要开始的秒数（默认10） 运行的计时器（默认第一个） 倍速（默认1） 总秒数（默认time）
     leftDanTime("start", leftT, "1", null, totalTime)
     leftDanTime("start", rightT, "3", null, totalTime)
     stop("all")
     return last
 }
+
 function startChess() {
-    let roomInfo=getRoom(gamingId)
-    totalTime=parseInt(roomInfo.totaltime)
-    danTime=parseInt(roomInfo.onetime)
+    let roomInfo = getRoom(gamingId)
+    totalTime = parseInt(roomInfo.totaltime)
+    danTime = parseInt(roomInfo.onetime)
     let left
-    if (havaData(roomInfo.data)){
+    if (havaData(roomInfo.data) && video === false) {
         makeQis(roomInfo.data)
         left = makeTime(roomInfo.data)
     }
+    if (left === 1)
+        left = 2
+    else if (left === 2)
+        left = 1
+    if (watch === 1)
+        return
     let t = 5
     let a = setInterval(function () {
         if (a === null || a === undefined)
@@ -554,7 +575,7 @@ function startChess() {
         if (t < 0) {
             //运行的模式 需要开始的秒数（默认10） 运行的计时器（默认第一个） 倍速（默认1） 总秒数（默认time）
 
-            if(!havaData(roomInfo.data)){
+            if (!havaData(roomInfo.data)) {
                 leftDanTime("start", danTime, "")
                 leftDanTime("start", totalTime, "1")
             }
@@ -565,25 +586,26 @@ function startChess() {
             a = null
             document.getElementById("noCHess").innerHTML = ""
             let b = document.getElementById("chessBott")
-            document.getElementById("chessBottt").display = "block"
-            b.style.display = "none"
-            b.style.opacity = "1";
-            b.style.visibility = "unset";
-            b.style.display = "block";
-            window.onbeforeunload = function(event) {
+            if(video!==true) {
+                document.getElementById("chessBottt").display = "block"
+                b.style.display = "none"
+                b.style.opacity = "1";
+                b.style.visibility = "unset";
+                b.style.display = "block";
+            }
+            window.onbeforeunload = function (event) {
                 event.returnValue = "对局还在进行中，真的要退出吗？重新上线后可继续游戏。";
             };
-            if(left===1) {
-                if(u1.name === getUserName())
-                    change(false,undefined,false)
+            if (left === 1) {
+                if (u1.name === getUserName())
+                    change(false, undefined, false)
                 else
-                    change(false,undefined,true)
-            }
-            else if(left===2){
-                if(u2.name === getUserName())
-                    change(true,undefined,false)
+                    change(false, undefined, true)
+            } else if (left === 2) {
+                if (u2.name === getUserName())
+                    change(true, undefined, false)
                 else
-                    change(true,undefined,true)
+                    change(true, undefined, true)
             }
             return
         }
@@ -594,7 +616,14 @@ function startChess() {
 
 function showNo(no) {
     let a = document.getElementById("noCHess")
-    if (a.style.display !== "block" || no === true) {
+    if(video || watch===1)
+    {
+        a.style.display = "block"
+        a.style.backgroundColor = "rgba(255,255,255,0)"
+        a.style.height = "540px";
+        return
+    }
+    if (a.style.display !== "block" || no === true || watch === 1) {
         a.style.display = "block"
         if (no === true) {
             setTimeout(function () {
@@ -614,16 +643,24 @@ function showNo(no) {
         }, 300)
     }
 }
+
 function showNo2(no) {
     let a = document.getElementById("noCHess")
-    if (no === true) {
+    if(video || watch===1)
+    {
         a.style.display = "block"
-            setTimeout(function () {
-                a.style.backgroundColor = "rgba(255,255,255,0.3)"
-                a.style.height = "610px";
-            }, 10)
+        a.style.backgroundColor = "rgba(255,255,255,0)"
+        a.style.height = "540px";
+        return
+    }
+    if (no === true || watch === 1) {
+        a.style.display = "block"
+        setTimeout(function () {
+            a.style.backgroundColor = "rgba(255,255,255,0.3)"
+            a.style.height = "610px";
+        }, 10)
 
-    } else if(no===false){
+    } else if (no === false) {
         a.style.backgroundColor = "rgba(255,255,255,0)"
         setTimeout(function () {
             a.style.display = "none"
@@ -631,27 +668,30 @@ function showNo2(no) {
     }
 }
 
-function change(ToR, OutTime,open) {
+function change(ToR, OutTime, open, guan) {
     // if (no == "1" || no == "3") {
     //     let eleTimeSecEle1 = "timeSecond" + no
     //     let eleTimeSec1 = document.getElementById(eleTimeSecEle1)
     //     eleTimeSec1.innerHTML = (parseInt(eleTimeSec1.innerHTML) - 1).toString()
     // }
-    if (ToR) {
+    if (ToR && guan !== 1) {
         if (OutTime) {
             let eleTimeSecEle1 = "timeSecond" + "1"
             let eleTimeSec1 = document.getElementById(eleTimeSecEle1)
             eleTimeSec1.innerHTML = (parseInt(eleTimeSec1.innerHTML) - 1).toString()
             // leftDanTime("start",danTime,"",null,null,0,false)
         }
+
         stop("")
         stop("1")
-        leftDanTime("start", danTime, "2", null, null, false, false)
-        leftDanTime("start", null, "3", null, null, false, true)
-        if(open===undefined)
-            showNo()
-        else
-            showNo2(open)
+        if (guan !== true) {
+            leftDanTime("start", danTime, "2", null, null, false, false)
+            leftDanTime("start", null, "3", null, null, false, true)
+            if (open === undefined)
+                showNo()
+            else
+                showNo2(open)
+        }
     } else {
         if (OutTime) {
             let eleTimeSecEle1 = "timeSecond" + "3"
@@ -659,14 +699,17 @@ function change(ToR, OutTime,open) {
             eleTimeSec1.innerHTML = (parseInt(eleTimeSec1.innerHTML) - 1).toString()
             // leftDanTime("start",danTime,"2",null,null,0,false)
         }
+
         stop("2")
         stop("3")
-        leftDanTime("start", danTime, "", null, null, false, false)
-        leftDanTime("start", null, "1", null, null, false, true)
-        if(open===undefined)
-            showNo()
-        else
-            showNo2(open)
+        if (guan !== true) {
+            leftDanTime("start", danTime, "", null, null, false, false)
+            leftDanTime("start", null, "1", null, null, false, true)
+            if (open === undefined)
+                showNo()
+            else
+                showNo2(open)
+        }
     }
 }
 
@@ -692,12 +735,11 @@ function ping(arg) {
         }
         tools.ajaxGet("http://127.0.0.1:8080/gobang/api/talk", msg, function (res) {
             showError("发起平局中，等待对方应答", "ok")
-        },function(res){
+        }, function (res) {
             if (res.status === 20005) {
                 showError("对方已离线，待上线后可继续游戏。")
                 exit()
-            }
-            else{
+            } else {
                 showError("请求失败：" + makeString(res.desc))
             }
         })
@@ -725,12 +767,11 @@ function shu(arg) {
         tools.ajaxGet("http://127.0.0.1:8080/gobang/api/talk", msg, function (res) {
             showError("您已认输，下次再接再厉！")
             exit()
-        },function(res){
+        }, function (res) {
             if (res.status === 20005) {
                 showError("对方已离线，待上线后可继续游戏。")
                 exit()
-            }
-            else{
+            } else {
                 showError("请求失败：" + makeString(res.desc))
             }
         })
@@ -762,12 +803,11 @@ function hui(arg) {
             'y': lasty,
             'Black': myChess,
         }
-        tools.ajaxGet("http://127.0.0.1:8080/gobang/api/talk", msg,null,function(res){
+        tools.ajaxGet("http://127.0.0.1:8080/gobang/api/talk", msg, null, function (res) {
             if (res.status === 20005) {
                 showError("对方已离线，待上线后可继续游戏。")
                 exit()
-            }
-            else{
+            } else {
                 showError("请求失败：" + makeString(res.desc))
             }
         })
@@ -844,32 +884,252 @@ function wantBo(ok) {
             exit()
         }
         document.getElementsByClassName("container")[11].style.top = "-50%"
-    },function(res){
+    }, function (res) {
         if (res.status === 20005) {
             showError("对方已离线，待上线后可继续游戏。")
             exit()
-        }
-        else{
+        } else {
             showError("请求失败：" + makeString(res.desc))
         }
     })
 }
 
-function exitGaming(){
+function exitGaming() {
     document.getElementsByClassName("container")[10].style.top = "-50%"
 }
 
-function exit(){
+function exit() {
     stop("all")
     showNo(true)
     document.getElementById("leftBar").style.transform = 'translate(0%, -50%)'
     let b = document.getElementById("chessBott")
-    document.getElementById("chessBottt").display = "block"
+    document.getElementById("chessBottt").style.display = "block"
     b.style.display = "none"
     b.style.opacity = "0";
     b.style.visibility = "hidden";
+    let c = document.getElementById("chessBott2")
+    c.style.display = "none"
+    c.style.opacity = "0";
+    c.style.visibility = "hidden";
     setTimeout(function () {
         document.getElementById("chessBott").style.display = "none";
     }, 300)
-    window.onbeforeunload=null
+    window.onbeforeunload = null
+    myChess = 1;
+    gamingId = 0;
+    watch = 0;
+    danTime = 0;
+    totalTime = 0;
+    rightU = true;
+    u1 = undefined;
+    u2 = undefined;
+    lastx = -1
+    lasty = -1
+    huix = -1
+    huiy = -1
+    duiUsername = ""
+    video = false
+    beix = undefined
+}
+
+function watchG(Re, data) {
+    if (!Re) {
+        let chess = 1
+        if (timeT.length >= 0)
+            chess = 1
+        else
+            chess = 2
+        let msg = {
+            'TO': data.from,
+            'type': 'rewatch',
+            'room': data.room,
+            't1': document.getElementById("timeSecond").innerHTML,
+            't2': document.getElementById("timeSecond1").innerHTML,
+            't3': document.getElementById("timeSecond2").innerHTML,
+            't4': document.getElementById("timeSecond3").innerHTML,
+            'chess': chess,
+        }
+        tools.ajaxGet("http://127.0.0.1:8080/gobang/api/watch", msg)
+    } else {
+        watch = 1
+        stop("all")
+        let chess = parseInt(data.chess)
+        if(chess===1) {
+            leftDanTime("start", parseInt(data.t1)-1, "", null, danTime, undefined, undefined, true)
+            leftDanTime("start", parseInt(data.t2)-1, "1", null, totalTime, undefined, undefined, true)
+        }leftDanTime("start", parseInt(data.t3), "2", null, danTime, undefined, undefined, true)
+        leftDanTime("start", parseInt(data.t4), "3", null, totalTime, undefined, undefined, true)
+        else{
+            leftDanTime("start", parseInt(data.t1), "", null, danTime, undefined, undefined, true)
+            leftDanTime("start", parseInt(data.t2), "1", null, totalTime, undefined, undefined, true)
+            leftDanTime("start", parseInt(data.t3)-1, "2", null, danTime, undefined, undefined, true)
+            leftDanTime("start", parseInt(data.t4)-1, "3", null, totalTime, undefined, undefined, true)
+        }
+        document.getElementById("noCHess").innerHTML = ""
+        if (chess === 1)
+            change(false, undefined, false, true)
+        else
+            change(true, undefined, false, true)
+    }
+}
+
+let u1Data = []
+let u2Data = []
+
+function makeData(data) {
+    for (let i = 0; i <= totalTime; i++) {
+        u1Data[i] = [];
+        for (let j = 0; j <= 2; j++) {
+            u1Data[i][j] = -1;
+        }
+    }
+    for (let i = 0; i <= totalTime; i++) {
+        u2Data[i] = [];
+        for (let j = 0; j <= 2; j++) {
+            u2Data[i][j] = -1;
+        }
+    }
+    for (let i = 0; i < data.length; i++) {
+        if (data[i].type === "makeQ") {
+            if (data[i].Black === "1") {
+                u1Data[parseInt(data[i].Rtime)][0] = 1
+                u1Data[parseInt(data[i].Rtime)][1] = parseInt(data[i].x)
+                u1Data[parseInt(data[i].Rtime)][2] = parseInt(data[i].y)
+            } else {
+                u2Data[parseInt(data[i].Rtime)][0] = 2
+                u2Data[parseInt(data[i].Rtime)][1] = parseInt(data[i].x)
+                u2Data[parseInt(data[i].Rtime)][2] = parseInt(data[i].y)
+            }
+        } else if (data[i].type === "shu") {
+            if (data[i].Black === "1")
+                u1Data[parseInt(data[i].Rtime)][0] = 3
+            else
+                u2Data[parseInt(data[i].Rtime)][0] = 3
+        } else if (data[i].type === "ping") {
+            if (data[i].Black === "1")
+                u1Data[parseInt(data[i].Rtime)][0] = 4
+            else
+                u2Data[parseInt(data[i].Rtime)][0] = 4
+        }
+    }
+}
+
+function runVideo(roomId) {
+    video = true
+    gamingId = roomId
+    document.getElementById("noCHess").innerHTML = ""
+    showChessboard()
+    let b = document.getElementById("chessBott")
+    document.getElementById("chessBottt").style.display = "block"
+    b.style.display = "none"
+    b.style.opacity = "0";
+    b.style.visibility = "hidden";
+    cleanChessboard()
+    let roomInfo = getRoom(gamingId)
+    totalTime = parseInt(roomInfo.totaltime)
+    danTime = parseInt(roomInfo.onetime)
+    makeData(roomInfo.data)
+    u1 = findUserById(roomInfo.userid)
+    u2 = findUserById(roomInfo.user2ID)
+    makeChessboard(1, u1, u2)
+
+    $("#timeSecond1").bind("DOMNodeInserted", function () {
+        let t = parseInt(document.getElementById("timeSecond1").innerHTML)
+        if (u1Data[t][0] === 1) {
+            makeQi(u1Data[t][1], u1Data[t][2], 1, true)
+        } else if (u1Data[t][0] === 3) {
+            if (u1.name === getUserName())
+                showError("您已认输，下次再接再厉！", "ok")
+            else
+                showError("对方已认输，您已获胜", "ok")
+            exit()
+        } else if (u1Data[t][0] === 4) {
+            showError("双方同意和局", "ok")
+            exit()
+        }
+    });
+    $("#timeSecond3").bind("DOMNodeInserted", function () {
+        let t = parseInt(document.getElementById("timeSecond3").innerHTML)
+        if (u2Data[t][0] === 2) {
+            makeQi(u2Data[t][1], u2Data[t][2], 2, true)
+            // change(true,undefined,false,true)
+        } else if (u2Data[t][0] === 3) {
+            if (u1.name === getUserName())
+                showError("您已认输，下次再接再厉！", "ok")
+            else
+                showError("对方已认输，您已获胜", "ok")
+            exit()
+        } else if (u2Data[t][0] === 4) {
+            showError("双方同意和局", "ok")
+            exit()
+        }
+    });
+    setTimeout(function () {
+        leftDanTime("start", danTime, "")
+        leftDanTime("start", totalTime, "1")
+    }, 7000)
+}
+
+function setBei(a)
+{
+    beix = a
+    let leftT=false
+    if(timeT.length>0)
+        leftT=true
+    stop("all")
+    if(leftT){
+        leftDanTime("start", danTime, "", beix, null, false, true)
+        leftDanTime("start", null, "1", beix, null, false, true)
+    }
+    else {
+        leftDanTime("start", danTime, "2", beix, null, false, true)
+        leftDanTime("start", null, "3", beix, null, false, true)
+    }
+}
+let zanT=false
+function zan(a){
+    let bot=document.getElementById("chessBott2").getElementsByClassName("chessBo")[0]
+    if (a==="暂停"){
+        if(timeT.length>0)
+            zanT=true
+        else
+            zanT=false
+        bot.innerHTML="开始"
+        stop("all")
+    }
+    if (a==="开始"){
+        if(zanT){
+            leftDanTime("start", danTime, "", beix, null, false, true)
+            leftDanTime("start", null, "1", beix, null, false, true)
+        }
+        else {
+            leftDanTime("start", danTime, "2", beix, null, false, true)
+            leftDanTime("start", null, "3", beix, null, false, true)
+        }
+        bot.innerHTML="暂停"
+    }
+}
+
+function bei(a){
+    let bot=document.getElementById("chessBott2").getElementsByClassName("chessBo")[1]
+    if (a==="1X"){
+        setBei(2)
+        bot.innerHTML="2X"
+    }
+    else if (a==="2X"){
+        setBei(4)
+        bot.innerHTML="4X"
+    }
+    else if (a==="4X"){
+        setBei(8)
+        bot.innerHTML="8X"
+    }
+    else if (a==="8X"){
+        setBei(0.5)
+        bot.innerHTML="0.5X"
+    }
+    else if (a==="0.5X"){
+        setBei(1)
+        bot.innerHTML="1X"
+    }
 }

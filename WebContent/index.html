@@ -47,7 +47,7 @@
         }
 
         #leftBar {
-            z-index:999999999;
+            z-index: 999999999;
             text-align: center;
             display: block;
             height: 600px;
@@ -847,7 +847,7 @@
         }
 
         .gameButton1:hover {
-            width: 50px!important;
+            width: 50px !important;
             color: rgb(231, 0, 0);
             background-color: rgba(255, 255, 255, 0.6);
         }
@@ -1613,7 +1613,13 @@
                 <div class="chessBo" onclick="shu()">认输</div>
                 <div class="chessBo" onclick="hui()">悔棋</div>
             </div>
-            <div id="chessBottt" style="display:none">
+            <div id="chessBott2">
+                <div class="chessBo" onclick="zan(this.innerHTML)">暂停</div>
+                <div class="chessBo" onclick="bei(this.innerHTML)">1X</div>
+                <div class="chessBo" onclick="exit()">停止</div>
+            </div>
+
+            <div id="chessBottt" style="display:none;margin-left: 160px;">
                 <div class="chessBo" onclick="exitGaming()">退出</div>
             </div>
         </div>
@@ -1743,7 +1749,7 @@
                     let jsonObject = res.data
                     updateUserInfoFromJson(jsonObject)
                     initWebSocket()
-                    openRoom2(true)
+                    getInfos(null, true)
                     console.log(jsonObject)
                 }, 500)
             }, function (res) {
@@ -2209,7 +2215,7 @@
         return decodeURIComponent(escape(window.atob(str)));
     }
 
-    function getInfos(getRoom) {
+    function getInfos(getRoom, init) {
         let all
         tools.ajaxGet("http://127.0.0.1:8080/gobang/api/getAllUsers", null, function (res) {
             all = res
@@ -2222,6 +2228,10 @@
                 userList[i].parentNode.removeChild(userList[i])
             }
             localStorage.setItem(utf8_to_b64("所有用户"), utf8_to_b64(JSON.stringify(res.data)));
+            if (init === true) {
+                openRoom2(true)
+                return;
+            }
             if (getRoom === true) {
                 openRoom2()
                 return;
