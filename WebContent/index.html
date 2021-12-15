@@ -2148,9 +2148,14 @@
             console.log(res)
             if (res.status === 0) {
                 openChange()
+                changePassOpwd.value=""
+                changePassPwd.value=""
                 if (adminDo === false) {
                     showError("修改成功！请重新登录", "ok")
                     loginOut(false)
+                }
+                else{
+                    showError("修改成功！", "ok")
                 }
             } else {
                 showError("修改失败！" + makeString(res.desc) + makeString(res.data))
@@ -2183,6 +2188,10 @@
             console.log(res)
             if (res.status === 0) {
                 openChangeInfo()
+                InfoSex.value=""
+                InfoName.value=""
+                InfoLoginName.value=""
+                InfoAdmin.value=""
                 if (adminDo === false) {
                     showError("修改成功!即将刷新！", "ok")
                     setTimeout(function () {

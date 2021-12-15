@@ -280,6 +280,8 @@ public class Interface {
 			@QueryParam("newUserName") String newUserName, @QueryParam("nickname") String nickname,
 			@QueryParam("sex") String sex, @QueryParam("admin") String admin) {
 		tools.addRe(response);
+		if(fromUser == null)
+			fromUser = getUsernameFromCookie(request);
 		if (!userName.equals(fromUser)) {
 			String check = Check(fromUser, request);
 			if (!check.equals("ok")) {

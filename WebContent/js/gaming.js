@@ -841,6 +841,7 @@ function want(type, x, y) {
         huiy = y
     } else if (type === "shu") {
         shu(true)
+        return
     }
     document.getElementsByClassName("container")[11].style.top = "50%"
 }
@@ -957,9 +958,9 @@ function watchG(Re, data) {
         if(chess===1) {
             leftDanTime("start", parseInt(data.t1)-1, "", null, danTime, undefined, undefined, true)
             leftDanTime("start", parseInt(data.t2)-1, "1", null, totalTime, undefined, undefined, true)
-        }leftDanTime("start", parseInt(data.t3), "2", null, danTime, undefined, undefined, true)
+        leftDanTime("start", parseInt(data.t3), "2", null, danTime, undefined, undefined, true)
         leftDanTime("start", parseInt(data.t4), "3", null, totalTime, undefined, undefined, true)
-        else{
+        }else{
             leftDanTime("start", parseInt(data.t1), "", null, danTime, undefined, undefined, true)
             leftDanTime("start", parseInt(data.t2), "1", null, totalTime, undefined, undefined, true)
             leftDanTime("start", parseInt(data.t3)-1, "2", null, danTime, undefined, undefined, true)
