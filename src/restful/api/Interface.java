@@ -94,7 +94,7 @@ public class Interface {
 		List<UserEntity> result = EM.getEntityManager().createNamedQuery("UserEntity.findUserByName", UserEntity.class)
 				.setParameter("NAME", NAME).getResultList();
 		if (result.isEmpty()) {
-			UserEntity userentity = new UserEntity(NAME, NICKNAME,PASSWORD, SEX);
+			UserEntity userentity = new UserEntity(NAME, NICKNAME, PASSWORD, SEX);
 			// System.out.println(userentity.show());
 			tools.commitDB(userentity);
 			String json = tools.makeJSON(userentity);
@@ -280,7 +280,7 @@ public class Interface {
 			@QueryParam("newUserName") String newUserName, @QueryParam("nickname") String nickname,
 			@QueryParam("sex") String sex, @QueryParam("admin") String admin) {
 		tools.addRe(response);
-		if(fromUser == null)
+		if (fromUser == null)
 			fromUser = getUsernameFromCookie(request);
 		if (!userName.equals(fromUser)) {
 			String check = Check(fromUser, request);
@@ -426,8 +426,7 @@ public class Interface {
 //			else
 //				id = userentity.getID();
 //		}
-		
-		
+
 //		if(RoomType.equals("normal")) {
 //			games = EM.getEntityManager().createNamedQuery("GameEntity.findGameByUseridAndStatus", GameEntity.class)
 //				.setParameter("USERID", id).setParameter("STATUS", 1).getResultList();
@@ -440,7 +439,7 @@ public class Interface {
 //			games = EM.getEntityManager().createNamedQuery("GameEntity.findGameByUseridAndStatus", GameEntity.class)
 //					.setParameter("USERID", id).setParameter("STATUS", -1).getResultList();
 //		}
-		
+
 		List<GameEntity> games = null;
 //		games = EM.getEntityManager().createNamedQuery("GameEntity.findGameByUserid", GameEntity.class)
 //				.setParameter("USERID", id).getResultList();
@@ -616,18 +615,19 @@ public class Interface {
 			msg.put("Rtime", Rtime);
 
 		}
-		return WebSocketProcess.sendMessageToUser(username, to, new JSONObject(msg).toString());
+		if (to == null) {
+			return tools.makeReturn(new JSONObject(msg).toString());
+		} else
+			return WebSocketProcess.sendMessageToUser(username, to, new JSONObject(msg).toString());
 	}
 
 	@GET
 	@Path("/watch")
 	@Consumes("application/json;charset=UTF-8")
 	@Produces("application/json;charset=UTF-8")
-	public String watch(@QueryParam("type") String type, @QueryParam("TO") String to,
-			@QueryParam("room") String room, @QueryParam("username") String username,
-			@QueryParam("t1") String t1, @QueryParam("t2") String t2,
-			@QueryParam("t3") String t3, @QueryParam("t4") String t4,
-			@QueryParam("chess") String chess) {
+	public String watch(@QueryParam("type") String type, @QueryParam("TO") String to, @QueryParam("room") String room,
+			@QueryParam("username") String username, @QueryParam("t1") String t1, @QueryParam("t2") String t2,
+			@QueryParam("t3") String t3, @QueryParam("t4") String t4, @QueryParam("chess") String chess) {
 		if (username == null)
 			username = getUsernameFromCookie(request);
 		if (username == null)
@@ -638,13 +638,11 @@ public class Interface {
 		}
 		WebSocketProcess.newWatcher(username, room);
 		HashMap<String, Object> msg = new HashMap<>();
-		if(type.equals("watch"))
-		{
+		if (type.equals("watch")) {
 			msg.put("type", type);
 			msg.put("from", username);
 			msg.put("room", room);
-		}
-		else if(type.equals("rewatch")){
+		} else if (type.equals("rewatch")) {
 			msg.put("type", type);
 			msg.put("from", username);
 			msg.put("room", room);
@@ -657,13 +655,13 @@ public class Interface {
 		}
 		return WebSocketProcess.sendMessageToUser(username, to, new JSONObject(msg).toString());
 	}
-	
+
 	@GET
 	@Path("/watchTest")
 	@Consumes("application/json;charset=UTF-8")
 	@Produces("application/json;charset=UTF-8")
 	public String watchTest(@QueryParam("type") String type, @QueryParam("TO") String to,
-			@QueryParam("room") String room, @QueryParam("username") String username,@QueryParam("msg") String msg) {
+			@QueryParam("room") String room, @QueryParam("username") String username, @QueryParam("msg") String msg) {
 		if (username == null)
 			username = getUsernameFromCookie(request);
 		if (username == null)

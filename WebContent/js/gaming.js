@@ -13,7 +13,7 @@ let huix = -1
 let huiy = -1
 let duiUsername = ""
 let video = false
-let beix=undefined
+let beix = undefined
 
 function showChessboard() {
     if (document.getElementsByClassName("container")[10].style.top !== "50%") {
@@ -272,10 +272,10 @@ function leftDanTime(fun, time, no, bei, total, ready, cont, watch) {
         };
         a();
         stop(no)
-        if(beix===undefined)
-            bei=1
+        if (beix === undefined)
+            bei = 1
         else
-            bei=beix
+            bei = beix
         timerTimeCount = setInterval(a, 1000 / bei)
         if (no === "") {
             timeT.push(timerTimeCount)
@@ -445,11 +445,12 @@ function checkWin(no) {
         for (let i = 0; i <= 15; i++) {
             for (let j = 0; j <= 15; j++) {
                 if (check(i, j)) {
+                    let isWin = 0
                     if (isChess(chessXY[i][j]) === 1) {
-                        showError("玩家" + findUserById(getRoom(gamingId).userid).nickname + "获胜！", "ok")
+                        showError("玩家" + document.getElementsByClassName("gamingInfo")[0].getElementsByClassName("gameNickname")[0].innerHTML + "获胜！", "ok")
                     }
                     if (isChess(chessXY[i][j]) === 2) {
-                        showError("玩家" + findUserById(getRoom(gamingId).user2ID).nickname + "获胜！", "ok")
+                        showError("玩家" + document.getElementsByClassName("gamingInfo")[1].getElementsByClassName("gameNickname")[0].innerHTML + "获胜！", "ok")
                     }
                     if (myChess == chessXY[i][j] && isWin === 0) {
                         let msg = {
@@ -462,7 +463,7 @@ function checkWin(no) {
                                 showError("对方已离线，待上线后可继续游戏。")
                                 exit()
                             } else {
-                                showError("请求失败：" + makeString(res.desc))
+                                stop("all")
                             }
                         })
                     }
@@ -586,7 +587,7 @@ function startChess() {
             a = null
             document.getElementById("noCHess").innerHTML = ""
             let b = document.getElementById("chessBott")
-            if(video!==true) {
+            if (video !== true) {
                 document.getElementById("chessBottt").display = "block"
                 b.style.display = "none"
                 b.style.opacity = "1";
@@ -616,8 +617,7 @@ function startChess() {
 
 function showNo(no) {
     let a = document.getElementById("noCHess")
-    if(video || watch===1)
-    {
+    if (video || watch === 1) {
         a.style.display = "block"
         a.style.backgroundColor = "rgba(255,255,255,0)"
         a.style.height = "540px";
@@ -646,8 +646,7 @@ function showNo(no) {
 
 function showNo2(no) {
     let a = document.getElementById("noCHess")
-    if(video || watch===1)
-    {
+    if (video || watch === 1) {
         a.style.display = "block"
         a.style.backgroundColor = "rgba(255,255,255,0)"
         a.style.height = "540px";
@@ -719,9 +718,7 @@ function ping(arg) {
         stop("all")
         showNo(true)
         document.getElementById("leftBar").style.transform = 'translate(0%, -50%)'
-        document.getElementById("chessBottt").display = "block"
-        b.style.opacity = "0";
-        b.style.visibility = "hidden";
+        exit()
         setTimeout(function () {
             document.getElementById("chessBott").style.display = "none";
         }, 300)
@@ -955,16 +952,16 @@ function watchG(Re, data) {
         watch = 1
         stop("all")
         let chess = parseInt(data.chess)
-        if(chess===1) {
-            leftDanTime("start", parseInt(data.t1)-1, "", null, danTime, undefined, undefined, true)
-            leftDanTime("start", parseInt(data.t2)-1, "1", null, totalTime, undefined, undefined, true)
-        leftDanTime("start", parseInt(data.t3), "2", null, danTime, undefined, undefined, true)
-        leftDanTime("start", parseInt(data.t4), "3", null, totalTime, undefined, undefined, true)
-        }else{
+        if (chess === 1) {
+            leftDanTime("start", parseInt(data.t1) - 1, "", null, danTime, undefined, undefined, true)
+            leftDanTime("start", parseInt(data.t2) - 1, "1", null, totalTime, undefined, undefined, true)
+            leftDanTime("start", parseInt(data.t3), "2", null, danTime, undefined, undefined, true)
+            leftDanTime("start", parseInt(data.t4), "3", null, totalTime, undefined, undefined, true)
+        } else {
             leftDanTime("start", parseInt(data.t1), "", null, danTime, undefined, undefined, true)
             leftDanTime("start", parseInt(data.t2), "1", null, totalTime, undefined, undefined, true)
-            leftDanTime("start", parseInt(data.t3)-1, "2", null, danTime, undefined, undefined, true)
-            leftDanTime("start", parseInt(data.t4)-1, "3", null, totalTime, undefined, undefined, true)
+            leftDanTime("start", parseInt(data.t3) - 1, "2", null, danTime, undefined, undefined, true)
+            leftDanTime("start", parseInt(data.t4) - 1, "3", null, totalTime, undefined, undefined, true)
         }
         document.getElementById("noCHess").innerHTML = ""
         if (chess === 1)
@@ -1071,66 +1068,61 @@ function runVideo(roomId) {
     }, 7000)
 }
 
-function setBei(a)
-{
+function setBei(a) {
     beix = a
-    let leftT=false
-    if(timeT.length>0)
-        leftT=true
+    let leftT = false
+    if (timeT.length > 0)
+        leftT = true
     stop("all")
-    if(leftT){
+    if (leftT) {
         leftDanTime("start", danTime, "", beix, null, false, true)
         leftDanTime("start", null, "1", beix, null, false, true)
-    }
-    else {
+    } else {
         leftDanTime("start", danTime, "2", beix, null, false, true)
         leftDanTime("start", null, "3", beix, null, false, true)
     }
 }
-let zanT=false
-function zan(a){
-    let bot=document.getElementById("chessBott2").getElementsByClassName("chessBo")[0]
-    if (a==="暂停"){
-        if(timeT.length>0)
-            zanT=true
+
+let zanT = false
+
+function zan(a) {
+    let bot = document.getElementById("chessBott2").getElementsByClassName("chessBo")[0]
+    if (a === "暂停") {
+        if (timeT.length > 0)
+            zanT = true
         else
-            zanT=false
-        bot.innerHTML="开始"
+            zanT = false
+        bot.innerHTML = "开始"
         stop("all")
     }
-    if (a==="开始"){
-        if(zanT){
+    if (a === "开始") {
+        if (zanT) {
             leftDanTime("start", danTime, "", beix, null, false, true)
             leftDanTime("start", null, "1", beix, null, false, true)
-        }
-        else {
+        } else {
             leftDanTime("start", danTime, "2", beix, null, false, true)
             leftDanTime("start", null, "3", beix, null, false, true)
         }
-        bot.innerHTML="暂停"
+        bot.innerHTML = "暂停"
     }
 }
 
-function bei(a){
-    let bot=document.getElementById("chessBott2").getElementsByClassName("chessBo")[1]
-    if (a==="1X"){
+function bei(a) {
+    let bot = document.getElementById("chessBott2").getElementsByClassName("chessBo")[1]
+    if (a === "1X") {
         setBei(2)
-        bot.innerHTML="2X"
-    }
-    else if (a==="2X"){
+        bot.innerHTML = "2X"
+    } else if (a === "2X") {
         setBei(4)
-        bot.innerHTML="4X"
-    }
-    else if (a==="4X"){
+        bot.innerHTML = "4X"
+    } else if (a === "4X") {
         setBei(8)
-        bot.innerHTML="8X"
-    }
-    else if (a==="8X"){
+        bot.innerHTML = "8X"
+    } else if (a === "8X") {
         setBei(0.5)
-        bot.innerHTML="0.5X"
-    }
-    else if (a==="0.5X"){
+        bot.innerHTML = "0.5X"
+    } else if (a === "0.5X") {
         setBei(1)
-        bot.innerHTML="1X"
+        bot.innerHTML = "1X"
     }
 }

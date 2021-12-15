@@ -61,7 +61,7 @@ function onMessage(evt) {
     else if (json.type === "pingok")
         ping(true)
     else if (json.type === "pingdis")
-        ping(true)
+        ping(false)
     else if (json.type === "huiok")
         hui(true)
     else if (json.type === "huidis")

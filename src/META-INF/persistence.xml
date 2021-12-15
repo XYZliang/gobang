@@ -10,8 +10,10 @@
 		<properties>
 			<property name="hibernate.connection.driver_class"
 				value="dm.jdbc.driver.DmDriver" />
-			<property name="hibernate.connection.url"
+				<property name="hibernate.connection.url"
 				value="jdbc:dm://119.29.1.6:5236/GOBANG" />
+<!-- 				<property name="hibernate.connection.url"
+				value="jdbc:dm://127.0.0.1:5236/GOBANG" /> -->
 			<property name="hibernate.connection.username"
 				value="SYSDBA" />
 			<property name="hibernate.connection.password"

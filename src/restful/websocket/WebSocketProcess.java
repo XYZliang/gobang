@@ -129,7 +129,7 @@ public class WebSocketProcess extends Endpoint {
 			if (watcherLists.length == 0)
 				return;
 			else if (watcherLists.length == 1) {
-				System.out.println(new Date()+"用户"+watcherList+"正在观战房间"+room);
+				System.out.println(new Date() + "用户" + watcherList + "正在观战房间" + room);
 				Watcher.getClients().put(room, watcherLists[0]);
 				return;
 			} else {
@@ -141,13 +141,13 @@ public class WebSocketProcess extends Endpoint {
 				}
 			}
 		}
-		System.out.println(new Date()+"用户"+watcherList+"正在观战房间"+room);
+		System.out.println(new Date() + "用户" + watcherList + "正在观战房间" + room);
 		Watcher.getClients().put(room, watcherList);
 	}
 
 	public static void toWatcher(String room, String msg) {
 		String watcherList = Watcher.getClients().get(room);
-		if(watcherList == null)
+		if (watcherList == null)
 			return;
 		String[] users = watcherList.split(";");
 		for (int i = 0; i < users.length; i++) {
