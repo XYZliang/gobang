@@ -3,7 +3,7 @@
 
 //错误代码
 let Error = ['0', '0', '0', '0', '0', '0', '0', '0', '0'];
-let ErrorTxt = ['用户名必须以字母开头', '用户名长度需为8-15位', '密码长度需为8-15位', '两次输入的密码不一样', '还没有输入用户名哦', '还没输入密码哦', '请再次输入密码哦', '请输入昵称哦', '请输入姓名哦', '请选择性别哦', '性别输入不合法']
+let ErrorTxt = ['用户名必须以字母开头', '用户名长度需为7-15位', '密码长度需为7-15位', '两次输入的密码不一样', '还没有输入用户名哦', '还没输入密码哦', '请再次输入密码哦', '请输入昵称哦', '请输入姓名哦', '请选择性别哦', '性别输入不合法']
 let ErrorStatus = false;
 
 //消除字符串首尾多余的空格
@@ -58,7 +58,7 @@ document.getElementById("ZCloginName").addEventListener("keyup", function () { /
     } else {
         Error[0] = "1"
     }
-    if ((str.length >= 8 && str.length <= 15) || str.length === 0) {
+    if ((str.length >= 7 && str.length <= 15) || str.length === 0) {
         Error[1] = "0"
         Error[4] = "0"
     } else {
@@ -68,7 +68,7 @@ document.getElementById("ZCloginName").addEventListener("keyup", function () { /
 })
 document.getElementById("ZCpwd").addEventListener("keyup", function () { //密码
     let str = noTuiGe(ZCpwd.value);
-    if ((str.length >= 8 && str.length <= 15) || str.length === 0) {
+    if ((str.length >= 7 && str.length <= 15) || str.length === 0) {
         Error[2] = "0"
         Error[5] = "0"
     } else {

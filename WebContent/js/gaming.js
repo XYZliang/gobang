@@ -445,6 +445,7 @@ function checkWin(no) {
         for (let i = 0; i <= 15; i++) {
             for (let j = 0; j <= 15; j++) {
                 if (check(i, j)) {
+                    stop("all")
                     let isWin = 0
                     if (isChess(chessXY[i][j]) === 1) {
                         showError("玩家" + document.getElementsByClassName("gamingInfo")[0].getElementsByClassName("gameNickname")[0].innerHTML + "获胜！", "ok")
@@ -464,6 +465,7 @@ function checkWin(no) {
                                 exit()
                             } else {
                                 stop("all")
+                                exit()
                             }
                         })
                     }
@@ -474,6 +476,7 @@ function checkWin(no) {
     } else {
         stop("all")
         showNo(true)
+        exit()
         let msg = {
             'type': 'outT',
             'room': gamingId,
@@ -882,13 +885,6 @@ function wantBo(ok) {
             exit()
         }
         document.getElementsByClassName("container")[11].style.top = "-50%"
-    }, function (res) {
-        if (res.status === 20005) {
-            showError("对方已离线，待上线后可继续游戏。")
-            exit()
-        } else {
-            showError("请求失败：" + makeString(res.desc))
-        }
     })
 }
 
